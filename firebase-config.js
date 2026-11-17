@@ -8,7 +8,7 @@ export default {
   storageBucket: "agrisphere-ai-aacf6.firebasestorage.app",
   messagingSenderId: "147538102181",
   appId: "1:147538102181:web:3794edb1af6fec317d0a4c",
-  // AI রোগ শনাক্ত (Firebase AI Logic): App Check-এর reCAPTCHA v3 সাইট কী এখানে বসান
-  recaptchaSiteKey: "6LdyzCQuAAAAAPetw3iEaEvl0ZadtVzbgqU5bzQk",
+  // AI রোগ শনাক্ত (Firebase AI Logic): App Check-এর reCAPTCHA Enterprise সাইট কী এখানে বসান
+  recaptchaSiteKey: "",
   aiModel: ""
 };

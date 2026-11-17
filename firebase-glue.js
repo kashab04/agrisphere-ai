@@ -25,7 +25,9 @@ window.AGRI_CONTACT = (cfg && cfg.contactEmail) || '';
         import(B2 + 'firebase-app.js'), import(B2 + 'firebase-ai.js'), import(B2 + 'firebase-app-check.js')
       ]);
       const app2 = init2(cfg, 'ai');
-      if (cfg.recaptchaSiteKey) AC.initializeAppCheck(app2, { provider: new AC.ReCaptchaV3Provider(cfg.recaptchaSiteKey), isTokenAutoRefreshEnabled: true });
+      // শুধু আপনার নিজের ডিভাইসে ডিবাগ টোকেন দিয়ে পরীক্ষার জন্য: ব্রাউজারে localStorage.agri_appcheck_debug = '<টোকেন>' বসান
+      try { const dbg = localStorage.getItem('agri_appcheck_debug'); if (dbg) self.FIREBASE_APPCHECK_DEBUG_TOKEN = dbg; } catch (e) {}
+      if (cfg.recaptchaSiteKey || self.FIREBASE_APPCHECK_DEBUG_TOKEN) AC.initializeAppCheck(app2, { provider: new AC.ReCaptchaEnterpriseProvider(cfg.recaptchaSiteKey || 'debug'), isTokenAutoRefreshEnabled: true });
       return { AI, ai: AI.getAI(app2, { backend: new AI.GoogleAIBackend() }) };
     })().catch(e => { aiP = null; throw e; }));
     window.AgriCloud = {
