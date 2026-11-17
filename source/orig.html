@@ -552,7 +552,7 @@ V.yieldmax=()=>{
   ${statT('লাভ-ক্ষতিহীন দাম',tk(y.be)+'/কেজি','এর নিচে বিক্রি করলে লোকসান')}
  </div>
  <div class="grid two">
-  <section class="card"><h2>পাঁচ ফসলের তুলনা</h2><p class="lead">${dec(p.land)} একর জমিতে নিট লাভ। ফসলে চাপ দিলে সেটি নির্বাচিত হবে।</p>
+  <section class="card"><h2>ফসলের তুলনা</h2><p class="lead">${dec(p.land)} একর জমিতে নিট লাভ। ফসলে চাপ দিলে সেটি নির্বাচিত হবে।</p>
    <div class="rank">${all.map((a,i)=>`<button class="rrow ${i===0?'best':''}" data-a="pickCrop" data-v="${a.k}" aria-pressed="${a.k===p.crop}">
      <span class="nm">${CROPS[a.k].bn}<span class="row"><span class="pill ${RISK[CROPS[a.k].risk][1]}">ঝুঁকি ${RISK[CROPS[a.k].risk][0]}</span>${i===0?'<span class="pill ok">সবচেয়ে বেশি লাভ</span>':''}</span></span>
      <span class="bar" aria-hidden="true"><i style="width:${Math.max(3,Math.abs(a.profit)/maxP*100)}%"></i></span>
