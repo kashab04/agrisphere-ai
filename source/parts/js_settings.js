@@ -174,3 +174,42 @@ function wxNote(n){
  if(f&&f.live){const t=new Date(f.at);return 'তথ্যসূত্র: Open-Meteo (আসল পূর্বাভাস) · হালনাগাদ '+bn(String(t.getHours()).padStart(2,'0'))+':'+bn(String(t.getMinutes()).padStart(2,'0'));}
  return wxBusy[n]?'আসল পূর্বাভাস আনা হচ্ছে…':'ইন্টারনেট সংযোগ না থাকায় আনুমানিক পূর্বাভাস দেখানো হচ্ছে।';
 }
+
+// ছবি থেকে আসল AI রোগ শনাক্ত (Gemini, Firebase AI Logic)
+const aiShrink=src=>new Promise((res,rej)=>{const im=new Image();im.onload=()=>{const M=1024,k=Math.min(1,M/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=Math.round(im.width*k);c.height=Math.round(im.height*k);c.getContext('2d').drawImage(im,0,0,c.width,c.height);res(c.toDataURL('image/jpeg',.85).split(',')[1]);};im.onerror=rej;im.src=src;});
+const AI_PROMPT=(crop,dist)=>`তুমি বাংলাদেশের একজন অভিজ্ঞ কৃষি সম্প্রসারণ কর্মকর্তা। ছবিটি একজন কৃষকের তোলা ফসলের পাতা বা গাছের। কৃষক জানিয়েছেন তাঁর ফসল: ${crop}, জেলা: ${dist}।
+ছবি দেখে শুধু JSON ফেরত দাও, অন্য কোনো লেখা নয়। সব লেখা সহজ বাংলায়, কৃষক যেন বোঝেন। নিশ্চিত না হলে অনুমান না করে status "unclear" দাও।
+{"is_plant":true/false,"status":"healthy|disease|pest|deficiency|unclear","name_bn":"রোগ/পোকা/ঘাটতির নাম বা 'সুস্থ দেখাচ্ছে'","name_en":"","confidence":0-100,"severity":"low|medium|high","cause":"১-২ বাক্য","symptoms":"ছবিতে যা দেখা যাচ্ছে","steps":["এখনই করণীয় ৩-৪টি"],"organic":"জৈব বা সাংস্কৃতিক উপায়","chemical":"রাসায়নিক বিকল্প শুধু ক্রিয়াশীল উপাদানের নামসহ, কোনো মাত্রা নয়; শেষে লেবেল ও কৃষি অফিসারের পরামর্শ নিতে বলো","prevention":"ভবিষ্যতে এড়ানোর উপায়"}
+ছবিতে পাতা বা ফসল না থাকলে is_plant false দাও।`;
+let aiLast=0;
+async function aiRun(){
+ const g=S.g;if(!g||!g.photo)return;
+ if(!(window.AgriCloud&&AgriCloud.ready&&AgriCloud.diagnose)){g.ai={err:'noai'};render();return;}
+ if(Date.now()-aiLast<4000){g.ai={err:'wait'};render();return;}
+ aiLast=Date.now();g.ai={busy:true};g.scanning=true;render();
+ const mine=g.photo;
+ try{
+  const b64=await aiShrink(g.photo);
+  const raw=await AgriCloud.diagnose(b64,'image/jpeg',AI_PROMPT(CROPS[S.profile.crop].bn,S.profile.district));
+  const d=JSON.parse(String(raw).replace(/^```json|```$/g,'').trim());
+  if(S.g.photo===mine){S.g.ai={d};}
+ }catch(e){console.warn('AI',e);if(S.g.photo===mine)S.g.ai={err:'fail'};}
+ if(S.g.photo===mine){S.g.scanning=false;if(S.route==='guardian')render();}
+}
+A.aiRetry=()=>{aiLast=0;aiRun();};
+function aiCard(g,p){
+ const a=g.ai||{busy:true},t=x=>esc(x==null?'':x),L=(h,x)=>x?`<div><h3>${h}</h3><p>${t(x)}</p></div>`:'';
+ if(a.busy)return `<section class="card"><h2>ছবি বিশ্লেষণ</h2><p class="muted">AI আপনার ছবি দেখছে, কয়েক সেকেন্ড লাগবে…</p></section>`;
+ if(a.err){const m=a.err==='wait'?'একটু পরে আবার চেষ্টা করুন।':a.err==='noai'?'এই মুহূর্তে ছবি বিশ্লেষণ করা যাচ্ছে না। ইন্টারনেট সংযোগ দেখুন বা লগইন করে আবার চেষ্টা করুন।':'ছবি বিশ্লেষণ করা গেল না। ইন্টারনেট দেখে আবার চেষ্টা করুন।';
+  return `<section class="card"><h2>ছবি বিশ্লেষণ</h2><p class="muted">${m}</p><div class="row" style="margin-top:10px"><button class="btn primary" data-a="aiRetry">আবার চেষ্টা করুন</button></div><p class="small muted" style="margin-top:10px">অথবা বাঁ পাশ থেকে একটি নমুনা পাতা বেছে রোগের তথ্য দেখুন।</p></section>`;}
+ const d=a.d||{};
+ if(d.is_plant===false)return `<section class="card"><h2>পাতা বোঝা যাচ্ছে না</h2><p class="muted">ছবিতে ফসলের পাতা দেখা যাচ্ছে না। দিনের আলোতে, পাতার কাছ থেকে পরিষ্কার ছবি তুলে আবার দিন।</p></section>`;
+ const sev={low:['কম',''],medium:['মাঝারি','warn'],high:['বেশি','bad']}[d.severity]||['',''];
+ const ok=d.status==='healthy',un=d.status==='unclear';
+ const steps=Array.isArray(d.steps)?d.steps.filter(Boolean):[];
+ return `<section class="card"><div class="row" style="justify-content:space-between;align-items:flex-start;margin-bottom:8px"><div><h2 style="margin:0">${t(d.name_bn||(un?'নিশ্চিত বলা যাচ্ছে না':'ফলাফল'))}</h2><span class="muted small">${t(d.name_en)}</span></div>${ok?'<span class="pill ok">সুস্থ</span>':sev[0]&&!un?`<span class="pill ${sev[1]}">${sev[0]}</span>`:''}</div>
+  ${typeof d.confidence==='number'&&!un?`<div class="conf" style="margin-bottom:12px"><span class="small muted nowrap">নিশ্চয়তা</span><div class="meter"><i style="width:${Math.max(0,Math.min(100,d.confidence))}%"></i></div><b>${pct(d.confidence)}</b></div>`:''}
+  <div class="kv">${L('কারণ',d.cause)}${L('ছবিতে যা দেখা যাচ্ছে',d.symptoms)}${steps.length?`<div><h3>এখনই যা করবেন</h3><ol class="steps">${steps.map(x=>`<li>${t(x)}</li>`).join('')}</ol></div>`:''}${L('জৈব ও সাংস্কৃতিক উপায়',d.organic)}${L('রাসায়নিক বিকল্প',d.chemical)}${L('ভবিষ্যতে করণীয়',d.prevention)}</div>
+  <div class="row" style="margin-top:14px"><button class="btn" data-a="officer">কৃষি অফিসারকে ছবি পাঠান</button></div>
+  <p class="tiny muted" style="margin-top:10px">AI বিশ্লেষণ (Google Gemini)। এটি প্রাথমিক ধারণা। ওষুধ ব্যবহারের আগে লেবেল পড়ুন এবং উপজেলা কৃষি অফিসারের পরামর্শ নিন।</p></section>`;
+}

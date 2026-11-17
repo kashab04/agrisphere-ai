@@ -680,7 +680,7 @@ V.guardian=()=>{
    <input type="file" id="gphoto" accept="image/*" data-c="gphoto" aria-label="পাতার ছবি আপলোড">
    ${note('এটি প্রাথমিক ধারণা। নিশ্চিত হতে স্থানীয় কৃষি অফিসারের পরামর্শ নিন।')}
   </section>
-  <section class="card"><div class="row" style="justify-content:space-between;align-items:flex-start;margin-bottom:8px"><div><h2 style="margin:0">${dz.bn}</h2><span class="muted small">${dz.en}</span></div><span class="pill ${dz.sev[1]}">${dz.sev[0]}</span></div>
+  ${g.photo?aiCard(g,p):`  <section class="card"><div class="row" style="justify-content:space-between;align-items:flex-start;margin-bottom:8px"><div><h2 style="margin:0">${dz.bn}</h2><span class="muted small">${dz.en}</span></div><span class="pill ${dz.sev[1]}">${dz.sev[0]}</span></div>
    ${g.scanning?'<p class="muted">ফলাফল তৈরি হচ্ছে…</p>':`
    <div class="conf" style="margin-bottom:12px"><span class="small muted nowrap">নিশ্চয়তা</span><div class="meter"><i style="width:${dz.conf}%"></i></div><b>${pct(dz.conf)}</b></div>
    <div class="kv">
@@ -693,7 +693,7 @@ V.guardian=()=>{
    ${humidRisk?`<div class="alert-card mid" style="margin-top:14px"><span class="pill warn">আবহাওয়া</span><div><b>${p.district}-এ আগামী দিনে বৃষ্টির সম্ভাবনা বেশি</b><div class="small">আর্দ্র আবহাওয়ায় এই রোগ দ্রুত ছড়ায়। <a href="#climate"><b>পূর্বাভাস দেখুন</b></a></div></div></div>`:''}
    <div class="row" style="margin-top:14px"><button class="btn" data-a="officer">কৃষি অফিসারকে ছবি পাঠান</button></div>
    ${note('ওষুধ ব্যবহারের আগে লেবেল পড়ুন এবং উপজেলা কৃষি অফিসারের পরামর্শ নিন।')}`}
-  </section>
+  </section>`}
  </div></div>`;
 };
 
@@ -977,7 +977,7 @@ document.addEventListener('change',e=>{
  if(c==='gphoto'||c==='lphoto'){
   const f=e.target.files&&e.target.files[0];if(!f)return;
   const rd=new FileReader();rd.onload=()=>{
-   if(c==='gphoto'){S.g={key:S.profile.crop,photo:rd.result,scanning:true};render();setTimeout(()=>{S.g.scanning=false;if(S.route==='guardian')render();},1100);}
+   if(c==='gphoto'){S.g={key:S.profile.crop,photo:rd.result,scanning:false,ai:null};render();aiRun();}
    else{S.lphoto=rd.result;toast('ছবি যোগ হয়েছে');}
   };rd.readAsDataURL(f);
  }

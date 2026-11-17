@@ -89,3 +89,17 @@ Rangpur-এ আগামী দিনে বৃষ্টির সম্ভা�
 তথ্যসূত্র: Open-Meteo (আসল পূর্বাভাস) · হালনাগাদ=>Source: Open-Meteo (live forecast) · updated
 আসল পূর্বাভাস আনা হচ্ছে…=>Fetching live forecast…
 ইন্টারনেট সংযোগ না থাকায় আনুমানিক পূর্বাভাস দেখানো হচ্ছে।=>No internet connection, so an estimated forecast is shown.
+ছবি বিশ্লেষণ=>Photo analysis
+AI আপনার ছবি দেখছে, কয়েক সেকেন্ড লাগবে…=>AI is looking at your photo; this takes a few seconds…
+আবার চেষ্টা করুন=>Try again
+একটু পরে আবার চেষ্টা করুন।=>Please try again in a moment.
+এই মুহূর্তে ছবি বিশ্লেষণ করা যাচ্ছে না। ইন্টারনেট সংযোগ দেখুন বা লগইন করে আবার চেষ্টা করুন।=>Photo analysis is not available right now. Check your internet connection or log in and try again.
+ছবি বিশ্লেষণ করা গেল না। ইন্টারনেট দেখে আবার চেষ্টা করুন।=>Could not analyse the photo. Check your internet and try again.
+অথবা বাঁ পাশ থেকে একটি নমুনা পাতা বেছে রোগের তথ্য দেখুন।=>Or pick a sample leaf to see disease information.
+পাতা বোঝা যাচ্ছে না=>Leaf not recognised
+ছবিতে ফসলের পাতা দেখা যাচ্ছে না। দিনের আলোতে, পাতার কাছ থেকে পরিষ্কার ছবি তুলে আবার দিন।=>No crop leaf is visible in the photo. Take a clear close-up in daylight and try again.
+নিশ্চিত বলা যাচ্ছে না=>Cannot say for sure
+সুস্থ=>Healthy
+ছবিতে যা দেখা যাচ্ছে=>What the photo shows
+ভবিষ্যতে করণীয়=>Prevention
+AI বিশ্লেষণ (Google Gemini)। এটি প্রাথমিক ধারণা। ওষুধ ব্যবহারের আগে লেবেল পড়ুন এবং উপজেলা কৃষি অফিসারের পরামর্শ নিন।=>AI analysis (Google Gemini). This is a first indication. Read the label before using any chemical and consult the Upazila Agriculture Officer.
