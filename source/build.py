@@ -94,7 +94,6 @@ rep(" if(c==='land'){S.prefill=null;render();}",
 img = json.dumps(json.loads(P('assets.json')), ensure_ascii=False)
 s = s.replace('__IMG__', img)
 s = s.replace('<title>AgriSphere AI</title>', '<title>কৃষিসখা</title>', 1)
-s = s.replace('AI Builders Congress · Team 01 · AgriSphere AI', 'AI Builders Congress · Team 01 · ডোমেইন: AgriSphere AI', 1)
 s = s.replace('[AgriSphere] ', '[কৃষিসখা] ')
 _a = " const avg=d.r.reduce((a,b)=>a+b,0)/7;"
 assert _a in s
