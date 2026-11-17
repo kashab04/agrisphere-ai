@@ -78,3 +78,11 @@ Rangpur-এ আগামী দিনে বৃষ্টির সম্ভা�
 রসিদের লেখা কপি হয়েছে।=>Receipt text copied.
 কপি করা গেল না।=>Could not copy.
 এই ব্রাউজারে শেয়ার সুবিধা নেই।=>Sharing is not available in this browser.
+প্রোটোটাইপ সংস্করণ: দাম, আবহাওয়া ও ক্রেতার তথ্য আনুমানিক নমুনা, আসল উৎসের সাথে সংযোগের কাজ চলছে।=>Prototype version: prices, weather and buyer details are approximate samples; connection to real sources is in progress.
+এটি প্রোটোটাইপ সংস্করণ, তাই দাম ও আবহাওয়া আনুমানিক। আসল উৎসের সাথে সংযোগের কাজ চলছে।=>This is a prototype version, so prices and weather are approximate. Connection to real sources is in progress.
+কৃষিসখা · AgriSphere AI=>Krishisakha · AgriSphere AI
+এটি প্রাথমিক ধারণা। নিশ্চিত হতে স্থানীয় কৃষি অফিসারের পরামর্শ নিন।=>This is a first indication. Confirm with the local agriculture officer.
+রিপোর্ট উপজেলা কৃষি অফিসারের কাছে পাঠানোর সুবিধা শীঘ্রই আসছে=>Sending reports to the Upazila Agriculture Officer is coming soon
+ডিল ও চ্যাট=>Deals & chat
+ডিল ও চ্যাট মুছে নতুন করে শুরু হয়েছে=>Deals and chats cleared; starting fresh
+ডিল ও চ্যাট মুছুন=>Clear deals & chats

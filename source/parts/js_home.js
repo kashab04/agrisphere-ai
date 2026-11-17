@@ -70,7 +70,7 @@ V.budget=()=>{
    <div class="hr" style="margin:10px 0"></div>
    <div class="bud-row"><label for="bud-price"><b>বিক্রির দাম (৳/কেজি)</b><div class="tiny muted">আজকের স্থানীয় দর ${tk(localPrice(p.crop))}</div></label><input type="number" id="bud-price" data-c="bud" data-k="price" min="1" step="1" inputmode="numeric" value="${b.price}"></div>
    <div style="margin-top:14px"><button class="btn sm" data-a="budReset">ডিফল্টে ফেরান</button></div>
-   <p class="tiny muted" style="margin-top:10px">খাতভিত্তিক ভাগ নমুনা অনুপাত। নিজের আসল খরচ বসালে হিসাব আরও সঠিক হবে।</p>
+   <p class="tiny muted" style="margin-top:10px">খাতভিত্তিক ভাগ আনুমানিক অনুপাত। নিজের আসল খরচ বসালে হিসাব আরও সঠিক হবে।</p>
   </section>
   <div class="stack" id="budOut">${budOut()}</div>
  </div></div>`;

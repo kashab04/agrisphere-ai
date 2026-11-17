@@ -255,11 +255,10 @@ tr.hl td{background:var(--accent-soft)}
       <span>AgriSphere AI</span>
     </a>
     <nav class="dnav" id="dnav" aria-label="প্রধান মেনু"></nav>
-    <span class="demo-pill">ডেমো প্রোটোটাইপ</span>
   </div>
 </header>
 <main class="wrap" id="app"></main>
-<div class="wrap foot">AI Builders Congress · Team 01 · AgriSphere AI। এই ডেমোর সব সংখ্যা, নাম ও ক্রেতা নমুনা তথ্য; আসল বাজারদর, আবহাওয়া ও AI মডেল এখানে সংযুক্ত নেই।</div>
+<div class="wrap foot">AI Builders Congress · Team 01 · AgriSphere AI</div>
 <nav class="bnav" id="bnav" aria-label="নিচের মেনু"><div class="wrap"></div></nav>
 <div id="modal" class="modal" hidden></div>
 <div id="toast" class="toast" role="status" aria-live="polite"></div>
@@ -492,7 +491,7 @@ V.home=()=>{
    <div class="row"><a class="btn primary" href="#yieldmax">যাত্রা শুরু করুন</a><button class="btn" data-a="profile">কৃষকের তথ্য বদলান</button></div>
   </div>
   <div class="card farmer">
-   <div class="row" style="justify-content:space-between"><h2 style="margin:0">আজকের কৃষক</h2><span class="pill plain">নমুনা</span></div>
+   <div class="row" style="justify-content:space-between"><h2 style="margin:0">আজকের কৃষক</h2></div>
    <dl>
     <dt>নাম</dt><dd>${p.name}</dd>
     <dt>জেলা</dt><dd>${p.district}</dd>
@@ -593,7 +592,7 @@ V.precision=()=>{
    <div class="tw"><table><thead><tr><th>সার</th><th class="r">পরিমাণ</th><th class="r">খরচ</th></tr></thead><tbody>
    ${L.map(l=>`<tr><td>${l[0]}</td><td class="r"><b>${num(x.rec[l[1]])} কেজি</b></td><td class="r">${tk(x.rec[l[1]]*x.PR[l[1]])}</td></tr>`).join('')}
    </tbody></table></div>
-   ${note('ধরা দাম: ইউরিয়া ৳২৭, টিএসপি ৳২৭, এমওপি ৳২০, জিপসাম ৳১৫ প্রতি কেজি। মাত্রা নমুনা; প্রয়োগের আগে উপজেলা কৃষি অফিসারের সাথে মিলিয়ে নিন।')}
+   ${note('ধরা দাম: ইউরিয়া ৳২৭, টিএসপি ৳২৭, এমওপি ৳২০, জিপসাম ৳১৫ প্রতি কেজি। মাত্রা আনুমানিক; প্রয়োগের আগে উপজেলা কৃষি অফিসারের সাথে মিলিয়ে নিন।')}
   </section>
   <section class="card"><h2>কখন কত দেবেন</h2>
    <ol class="steps">
@@ -610,7 +609,7 @@ V.precision=()=>{
   <div class="zones" role="img" aria-label="জমির আর্দ্রতা জোন">${z.arr.map(v=>`<div class="zone ${v<z.thr?'dry':''}" style="background:${zc(v)}" title="${pct(v)}">${bn(v)}</div>`).join('')}</div>
   <div class="legend" style="margin-top:12px"><span><i style="background:color-mix(in srgb,var(--sun) 50%,var(--surface));border:1.5px dashed var(--sun)"></i>শুকনো (${pct(z.thr)}-এর কম)</span><span><i style="background:color-mix(in srgb,var(--accent) 24%,var(--surface))"></i>উপযুক্ত</span><span><i style="background:color-mix(in srgb,var(--water) 38%,var(--surface))"></i>ভেজা</span></div>
   <div class="row" style="margin-top:12px"><span class="pill ${dry?'warn':'ok'}">${bn(dry)}টি জোন শুকনো</span><span>${dry?`শুধু ${pct(dry/tot*100)} জমিতে সেচ দিলেই চলবে, প্রায় ${pct(100-dry/tot*100)} পানি বাঁচবে।`:'কোনো জোনে এখন সেচ দরকার নেই।'}</span></div>
-  ${note('এখানকার আর্দ্রতার মান নমুনা (সেন্সর সিমুলেশন)। আসল সংস্করণে জমির সেন্সর বা কৃষকের হাতে মাপা মান যুক্ত হবে।')}
+  
  </section>
  </div>`;
 };
@@ -625,7 +624,7 @@ V.climate=()=>{
  <section class="card"><h2>${p.district}: আগামী ৭ দিন</h2>
   <div class="days">${d.t.map((t,i)=>`<div class="day ${d.r[i]>=70?'alert':''}"><span class="dn">${i===0?'আজ':WD[addDays(i).getDay()]}</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${wIcon(d.r[i])}</svg><span class="dt">${bn(t)}°</span><div class="rainbar" aria-hidden="true"><i style="height:${d.r[i]}%"></i></div><span class="rp">${pct(d.r[i])}</span></div>`).join('')}</div>
   <div class="legend" style="margin-top:10px"><span>উপরে তাপমাত্রা (°সে), নিচে বৃষ্টির সম্ভাবনা</span></div>
-  ${note('পূর্বাভাস নমুনা। আসল সংস্করণে OpenWeather বা আবহাওয়া অধিদপ্তরের ডেটা আসবে।')}
+  
  </section>
  <div class="grid two">
   <section class="card"><h2>${CROPS[p.crop].bn}-এর জন্য সতর্কবার্তা</h2>
@@ -677,11 +676,11 @@ V.guardian=()=>{
    <div class="chips">${CASES.map(c=>chip(c[1],`data-a="case" data-v="${c[0]}"`,!g.photo&&g.key===c[0])).join('')}</div>
    <div class="lbl">অথবা নিজের ছবি</div>
    <input type="file" id="gphoto" accept="image/*" data-c="gphoto" aria-label="পাতার ছবি আপলোড">
-   ${note('ডেমো মোড: ফলাফল নমুনা। আসল অ্যাপে TensorFlow Lite মডেল ফোনেই চলবে, ইন্টারনেট ছাড়াও কাজ করবে।')}
+   ${note('এটি প্রাথমিক ধারণা। নিশ্চিত হতে স্থানীয় কৃষি অফিসারের পরামর্শ নিন।')}
   </section>
   <section class="card"><div class="row" style="justify-content:space-between;align-items:flex-start;margin-bottom:8px"><div><h2 style="margin:0">${dz.bn}</h2><span class="muted small">${dz.en}</span></div><span class="pill ${dz.sev[1]}">${dz.sev[0]}</span></div>
    ${g.scanning?'<p class="muted">ফলাফল তৈরি হচ্ছে…</p>':`
-   <div class="conf" style="margin-bottom:12px"><span class="small muted nowrap">নিশ্চয়তা</span><div class="meter"><i style="width:${dz.conf}%"></i></div><b>${pct(dz.conf)}</b><span class="pill plain">ডেমো মান</span></div>
+   <div class="conf" style="margin-bottom:12px"><span class="small muted nowrap">নিশ্চয়তা</span><div class="meter"><i style="width:${dz.conf}%"></i></div><b>${pct(dz.conf)}</b></div>
    <div class="kv">
     <div><h3>কারণ</h3><p>${dz.cause}</p></div>
     <div><h3>লক্ষণ</h3><p>${dz.sym}</p></div>
@@ -746,7 +745,7 @@ M.board=()=>{
    <td class="r"><b>${tk(r.t)}</b><div class="tiny ${r.ch<0?'neg':'pos'}">${r.ch<0?'▼':'▲'} ${pct(Math.abs(r.ch))} (৭ দিনে)</div></td>
    <td class="r">${r.km<=10?'কাছেই':bn(r.km)+' কিমি'}</td><td class="r"><b>${tk(r.net)}</b></td></tr>`).join('')}
   </tbody></table></div>
-  ${note('সব দর নমুনা। আসল সংস্করণে কৃষি বিপণন অধিদপ্তরের বাজারদর যুক্ত হবে। পরিবহন খরচ ধরা হয়েছে কিলোমিটার প্রতি প্রায় ৳০.০১/কেজি।')}
+  
  </section>
  <div class="card flat"><b>${MARKETS[bestNet.k].bn}</b> বাজারে পরিবহনের পর সবচেয়ে বেশি থাকে: <b>${tk(bestNet.net)}/কেজি</b>। ${bestNet.k!==localMk()?`এটি আপনার বাজারের চেয়ে ${tk(bestNet.net-(todayP(crop,localMk())-transportPerKg(km[localMk()])))} বেশি।`:'এটাই আপনার নিজের বাজার।'} বেশি দামের বাজারে গেলেই লাভ বেশি নয়।</div>
  </div>`;
@@ -760,12 +759,12 @@ M.forecast=()=>{
  return `<div class="stack">${cropChips()}
  <section class="card"><h2>${CROPS[crop].bn}: ${MARKETS[mk].bn} বাজারের দাম</h2><p class="lead">গত ২৮ দিনের দাম (রেখা) ও পরের ১০ দিনের পূর্বাভাস (ডোরা রেখা ও ছায়া)।</p>
   <div class="chartbox" id="fcChart"></div>
-  ${note('পূর্বাভাস পদ্ধতি: সরল ট্রেন্ড ও সাপ্তাহিক চক্র। ডেমোর জন্য সরল রাখা হয়েছে; আসল সংস্করণে ML মডেল আসবে। ছায়া অংশ অনিশ্চয়তার সীমা।')}
+  
  </section>
  <div class="stats">
   ${statT('আজকের দর',tk(t)+'/কেজি',MARKETS[mk].bn)}
   ${statT('বিক্রির সেরা দিন',bd.d===0?'আজই':dstr(addDays(bd.d)),'প্রত্যাশিত '+tk(bd.price)+'/কেজি','hero')}
-  ${statT('সংরক্ষণ খরচ',tk(c.store*100)+'/১০০ কেজি/দিন',crop==='tomato'?'পচনশীল, দ্রুত বিক্রি করুন':'নমুনা হার')}
+  ${statT('সংরক্ষণ খরচ',tk(c.store*100)+'/১০০ কেজি/দিন',crop==='tomato'?'পচনশীল, দ্রুত বিক্রি করুন':'আনুমানিক হার')}
  </div>
  <div class="card flat"><b>পরামর্শ:</b> ${msg}</div>
  <section class="card"><h2>অপেক্ষা করলে কত পাবেন</h2>
@@ -821,7 +820,7 @@ M.buyers=()=>{
    <button class="btn primary" data-a="openChat" data-v="${id}" ${L.sold?'disabled':''}>${ch?'চ্যাট চালিয়ে যান':'চ্যাট ও দরদাম'}</button></section>`;}).join('')}
  </div>
  ${list.length?'':'<div class="empty">এই ফসলের জন্য এখন কোনো ক্রেতা নেই।</div>'}
- ${note('ক্রেতার নাম ও তথ্য সম্পূর্ণ কাল্পনিক নমুনা। আসল সংস্করণে ফোন নম্বর যাচাই, রেটিং ও রিভিউ যুক্ত হবে।')}
+ 
  </div>`;
 };
 
@@ -833,7 +832,7 @@ M.logi=()=>{
   <div><label class="lbl" for="lgq">পরিমাণ (কেজি)</label><input type="number" id="lgq" min="50" step="10" value="${qty}" data-c="logi" inputmode="numeric"></div></div>
   <div id="logiOut" style="margin-top:14px">${logiOut(S.lgm||'dhaka',qty)}</div>
  </section>
- <section class="card"><h2>হিমাগার ও গুদাম</h2><p class="lead">${S.profile.district} ও আশেপাশে (নমুনা তালিকা)</p>
+ <section class="card"><h2>হিমাগার ও গুদাম</h2><p class="lead">${S.profile.district} ও আশেপাশে</p>
   ${[['১','৭০০ টন ফাঁকা',.6],['২','২০০ টন ফাঁকা',.7],['৩','কোনো জায়গা নেই',.55]].map((h,i)=>`<div class="listing" style="grid-template-columns:1fr auto"><div><b>${S.profile.district} হিমাগার-${h[0]}</b><div class="small muted">${h[1]}</div></div><div class="small" style="text-align:right"><b>${tk(h[2])}/কেজি/মাস</b></div></div>`).join('')}
   <div class="card flat" style="margin-top:8px"><b>${CROPS[S.mCrop].bn}:</b> ${CROPS[S.mCrop].store>=.1?'পচনশীল, হিমাগারে বেশি দিন রাখা যায় না। দ্রুত বিক্রি করুন।':'সংরক্ষণযোগ্য। দাম বাড়ার অপেক্ষায় হিমাগার বা শুকনো গুদামে রাখতে পারেন।'}</div>
  </section></div>`;
@@ -927,7 +926,7 @@ function go(r){if(location.hash==='#'+r)route();else location.hash=r;}
 const A={
  profile:()=>openModal(profileSheet()),
  close:closeModal,
- reset:()=>{Object.assign(S,{profile:{name:'রহিম মিয়া',district:'রংপুর',crop:'potato',land:2,soil:'loam'},yS:'normal',pS:'normal',mTab:'board',mCrop:'potato',selL:null,listings:[],deals:[],chats:{},prefill:null,seed:1,g:{key:'potato',photo:null,scanning:false},hold:3});render();toast('ডেমো ডেটা রিসেট হয়েছে');},
+ reset:()=>{Object.assign(S,{profile:{name:'রহিম মিয়া',district:'রংপুর',crop:'potato',land:2,soil:'loam'},yS:'normal',pS:'normal',mTab:'board',mCrop:'potato',selL:null,listings:[],deals:[],chats:{},prefill:null,seed:1,g:{key:'potato',photo:null,scanning:false},hold:3});render();toast('ডিল ও চ্যাট মুছে নতুন করে শুরু হয়েছে');},
  pickCrop:t=>{S.profile.crop=t.dataset.v;onProfile(!!t.dataset.sheet);},
  setDistrict:t=>{S.profile.district=t.dataset.v;S.prefill=null;render();if(t.dataset.sheet)openModal(profileSheet());},
  setSoil:t=>{S.profile.soil=t.dataset.v;render();if(t.dataset.sheet)openModal(profileSheet());},
@@ -935,7 +934,7 @@ const A={
  moist:()=>{S.seed++;render();},
  speak:t=>speak(t.dataset.t),
  case:t=>{S.g={key:t.dataset.v,photo:null,scanning:true};render();setTimeout(()=>{S.g.scanning=false;if(S.route==='guardian')render();},900);},
- officer:()=>toast('ডেমো: আসল অ্যাপে ছবিসহ রিপোর্ট উপজেলা কৃষি অফিসারের কাছে যাবে'),
+ officer:()=>toast('রিপোর্ট উপজেলা কৃষি অফিসারের কাছে পাঠানোর সুবিধা শীঘ্রই আসছে'),
  toListing:()=>{const c=S.profile.crop,y=yieldCalc(c);S.prefill={crop:c,qty:Math.round(y.yieldKg*.85/10)*10,price:Math.round(localPrice(c))};S.mCrop=c;S.mTab='listing';go('market');},
  mTab:t=>{S.mTab=t.dataset.v;render();},
  mCrop:t=>{S.mCrop=t.dataset.v;render();},

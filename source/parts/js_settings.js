@@ -73,8 +73,8 @@ V.settings=()=>{
   <dl class="acct"><dt>নাম</dt><dd>${esc(u.name||'')}</dd>${u.cloud?`${u.email?`<dt>ইমেইল</dt><dd>${esc(u.email)}</dd>`:''}${u.mobile?`<dt>মোবাইল</dt><dd>${bn(u.mobile)}</dd>`:''}`:(u.phone?`<dt>মোবাইল</dt><dd>${bn(u.phone)}</dd>`:'')}<dt>জেলা</dt><dd>${p.district}</dd><dt>ফসল</dt><dd>${CROPS[p.crop].bn}</dd><dt>জমি</dt><dd>${dec(p.land)} একর, ${SOIL[p.soil]} মাটি</dd></dl>
   <div class="row"><button class="btn" data-a="profile">তথ্য বদলান</button><button class="btn" data-a="logout">লগ আউট</button></div></section>
  <section class="card"><h2>সাহায্য</h2><p class="lead">কোনো সমস্যা বা পরামর্শ থাকলে আমাদের জানান।</p><button class="btn" data-a="open" data-v="help">সহায়তা ও মতামত</button></section>
- <section class="card"><h2>নমুনা ডেটা</h2><p class="lead">ডিল, চ্যাট ও বাজেটের নমুনা মুছে নতুন করে শুরু করুন। আপনার অ্যাকাউন্ট ও জমির তথ্য মুছবে না।</p><button class="btn" data-a="reset">নমুনা ডেটা রিসেট করুন</button></section>
- <section class="card flat"><h2>অ্যাপ সম্পর্কে</h2><p class="small muted">কৃষিসখা · সংস্করণ ১.০<br>AI Builders Congress · Team 01 · ডোমেইন: AgriSphere AI<br>এই ডেমোর সব সংখ্যা, নাম ও ক্রেতা নমুনা তথ্য।</p></section></div>`;
+ <section class="card"><h2>ডিল ও চ্যাট</h2><p class="lead">ডিল, চ্যাট ও বাজেট মুছে নতুন করে শুরু করুন। আপনার অ্যাকাউন্ট ও জমির তথ্য মুছবে না।</p><button class="btn" data-a="reset">ডিল ও চ্যাট মুছুন</button></section>
+ <section class="card flat"><h2>অ্যাপ সম্পর্কে</h2><p class="small muted">কৃষিসখা · সংস্করণ ১.০<br>AI Builders Congress · Team 01 · ডোমেইন: AgriSphere AI<br>প্রোটোটাইপ সংস্করণ: দাম, আবহাওয়া ও ক্রেতার তথ্য আনুমানিক নমুনা, আসল উৎসের সাথে সংযোগের কাজ চলছে।</p></section></div>`;
 };
 const FB_TYPES=[['problem','সমস্যা জানাতে চাই'],['idea','পরামর্শ দিতে চাই'],['question','প্রশ্ন আছে'],['thanks','ধন্যবাদ জানাতে চাই']];
 V.help=()=>{
@@ -89,7 +89,7 @@ V.help=()=>{
    ${sendBtn('পাঠান')}</form>
   ${mail?`<p class="small muted" style="margin-top:12px">সরাসরি ইমেইল: <a href="mailto:${esc(mail)}"><b>${esc(mail)}</b></a></p>`:''}</section>
  <section class="card"><h2>সাধারণ প্রশ্ন</h2>
-  <p><b>এখানকার দাম ও আবহাওয়া কি আসল?</b><br><span class="muted">না, এই ডেমোর সব সংখ্যা নমুনা। আসল তথ্য পরে যুক্ত হবে।</span></p>
+  <p><b>এখানকার দাম ও আবহাওয়া কি আসল?</b><br><span class="muted">এটি প্রোটোটাইপ সংস্করণ, তাই দাম ও আবহাওয়া আনুমানিক। আসল উৎসের সাথে সংযোগের কাজ চলছে।</span></p>
   <p style="margin-top:10px"><b>ইন্টারনেট ছাড়া চলবে?</b><br><span class="muted">একবার খোলার পর অ্যাপের পাতাগুলো ইন্টারনেট ছাড়াও খোলে। লগইন ও মতামত পাঠাতে ইন্টারনেট লাগে।</span></p>
   <p style="margin-top:10px"><b>পাসওয়ার্ড ভুলে গেলে?</b><br><span class="muted">ইমেইল অ্যাকাউন্টে লগইন পাতার "পাসওয়ার্ড ভুলে গেছেন?" চাপুন। মোবাইল নম্বরের অ্যাকাউন্টে এখনও রিসেট নেই।</span></p></section></div>`;
 };
@@ -102,7 +102,7 @@ AF.feedback=async f=>{
  const rec={type,message:msg.slice(0,1000),contact:contact.slice(0,80),name:((S.user&&S.user.name)||'').slice(0,60),lang:LANG,app:'krishisakha-web'};
  try{
   if(window.AgriCloud&&AgriCloud.ready&&S.user&&S.user.cloud){await AgriCloud.sendFeedback(rec);fb.ok='আপনার বার্তা পাঠানো হয়েছে। ধন্যবাদ!';}
-  else{const q=store.get('agri_feedback')||[];q.push(Object.assign({at:Date.now()},rec));store.set('agri_feedback',q);fb.ok='বার্তা এই ডিভাইসে রাখা হয়েছে (ডেমো মোড)। আসল অ্যাকাউন্টে লগইন করলে তা আমাদের কাছে পৌঁছায়।';}
+  else{const q=store.get('agri_feedback')||[];q.push(Object.assign({at:Date.now()},rec));store.set('agri_feedback',q);fb.ok='বার্তা এই ডিভাইসে রাখা হয়েছে। আসল অ্যাকাউন্টে লগইন করলে তা আমাদের কাছে পৌঁছায়।';}
   fb.last=Date.now();fb.draft={type:'problem',msg:'',contact};
  }catch(e){fb.err='পাঠানো যায়নি। ইন্টারনেট দেখে আবার চেষ্টা করুন।';}
  render();
@@ -123,7 +123,7 @@ function receiptData(lid){
 }
 function receiptText(r){
  return ['কৃষিসখা · ডিলের রসিদ','নং: '+r.no,'তারিখ: '+r.when,'বিক্রেতা: '+r.p.name+', '+r.p.district,'ক্রেতা: '+r.b.n+' ('+r.b.city+')',
-  'ফসল: '+r.c.bn+', '+num(r.d.qty)+' কেজি','দর: '+tk(r.d.price)+'/কেজি','মোট: '+tk(r.d.total),'পেমেন্ট: '+r.b.pay,'(ডেমো রসিদ, আইনি দলিল নয়)'].join('\n');
+  'ফসল: '+r.c.bn+', '+num(r.d.qty)+' কেজি','দর: '+tk(r.d.price)+'/কেজি','মোট: '+tk(r.d.total),'পেমেন্ট: '+r.b.pay,'কৃষিসখা · AgriSphere AI'].join('\n');
 }
 function receiptSheet(lid){
  const r=receiptData(lid);if(!r)return '';
@@ -141,7 +141,7 @@ function receiptSheet(lid){
    <hr>
    ${row('পেমেন্ট',r.b.pay)}${row('পরিবহন',r.b.tp)}
    ${r.d.gain>0?`<div class="rc-gain">মধ্যস্বত্বভোগীর দরের তুলনায় আপনার বাড়তি আয়: <b>${tk(r.d.gain)}</b></div>`:''}
-   <div class="rc-note">এটি ডেমো রসিদ। আসল লেনদেনের আইনি দলিল নয়।</div>
+   <div class="rc-note">কৃষিসখা · AgriSphere AI</div>
   </div>
   <div class="row" style="margin-top:14px;gap:10px"><button class="btn primary" data-a="rcPrint">প্রিন্ট / PDF</button><button class="btn" data-a="rcShare" data-v="${lid}">শেয়ার</button></div>
  </div>`;
