@@ -107,3 +107,10 @@ AI বিশ্লেষণ (Google Gemini)। এটি প্রাথমি�
 অতিথি হিসেবে দেখুন=>View as guest
 উদাহরণ পাতা=>Example leaf
 উদাহরণ ছবি বেছে নিন। রোগের=>choose an example photo. The disease
+ক্রেতার ঠিকানা=>Buyer address
+ক্রেতার ফোন=>Buyer phone
+কাঁচাবাজার রোড, বগুড়া সদর, বগুড়া=>Kachabazar Road, Bogura Sadar, Bogura
+তেজগাঁও শিল্প এলাকা, ঢাকা=>Tejgaon Industrial Area, Dhaka
+মাহিগঞ্জ বাজার, রংপুর সদর, রংপুর=>Mahiganj Bazar, Rangpur Sadar, Rangpur
+অফিস: বনানী, ঢাকা=>Office: Banani, Dhaka
+চরপাড়া মোড়, ময়মনসিংহ সদর, ময়মনসিংহ=>Charpara Mor, Mymensingh Sadar, Mymensingh

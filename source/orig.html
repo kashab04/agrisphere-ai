@@ -372,11 +372,11 @@ const DIS={
 };
 const CASES=[['potato','আলুর পাতা'],['tomato','টমেটোর পাতা'],['rice','ধানের পাতা'],['onion','পেঁয়াজের পাতা'],['maize','ভুট্টার পাতা'],['healthy','সুস্থ পাতা']];
 const BUY={
- b1:{n:'আল-আমিন ট্রেডার্স',type:'পাইকার',city:'বগুড়া',crops:['potato','rice','maize'],m:.97,min:1000,rate:4.6,deals:128,ver:true,pay:'নগদ, মাল তোলার সময়',tp:'জমি থেকে নিজেরাই তুলে নেব, পরিবহন খরচ আমাদের।'},
- b2:{n:'গ্রিন বাস্কেট ফুডস',type:'খুচরা চেইনের সরবরাহকারী',city:'ঢাকা',crops:['potato','tomato','onion'],m:1.03,min:2000,rate:4.4,deals:76,ver:true,pay:'ডেলিভারির ২ দিনের মধ্যে',tp:'পরিবহন ভাগাভাগি করা যায়, ৫০০ কেজির বেশি হলে আমরা গাড়ি পাঠাব।'},
- b3:{n:'সততা এগ্রো',type:'পাইকার',city:'রংপুর',crops:['rice','maize','onion','potato'],m:.95,min:500,rate:4.2,deals:54,ver:true,pay:'নগদ, মাল বুঝে নিয়ে',tp:'আপনার পরিবহন, আমরা গুদামে বুঝে নেব।'},
- b4:{n:'ফ্রেশ কার্ট',type:'অনলাইন গ্রোসারি',city:'ঢাকা',crops:['tomato','potato','onion'],m:1.06,min:800,rate:4.1,deals:22,ver:false,pay:'ডেলিভারির ৭ দিন পর',tp:'পরিবহন আপনাকে দিতে হবে।'},
- b5:{n:'নবান্ন ফিড মিলস',type:'ফিড কোম্পানি',city:'ময়মনসিংহ',crops:['maize','rice'],m:1.04,min:3000,rate:4.5,deals:41,ver:true,pay:'ব্যাংক হিসাবে ৩ দিনে',tp:'বড় পরিমাণে আমরা ট্রাক পাঠাব।'}
+ b1:{addr:'কাঁচাবাজার রোড, বগুড়া সদর, বগুড়া',ph:'০১৭১১-●●●●●●',n:'আল-আমিন ট্রেডার্স',type:'পাইকার',city:'বগুড়া',crops:['potato','rice','maize'],m:.97,min:1000,rate:4.6,deals:128,ver:true,pay:'নগদ, মাল তোলার সময়',tp:'জমি থেকে নিজেরাই তুলে নেব, পরিবহন খরচ আমাদের।'},
+ b2:{addr:'তেজগাঁও শিল্প এলাকা, ঢাকা',ph:'০১৮১২-●●●●●●',n:'গ্রিন বাস্কেট ফুডস',type:'খুচরা চেইনের সরবরাহকারী',city:'ঢাকা',crops:['potato','tomato','onion'],m:1.03,min:2000,rate:4.4,deals:76,ver:true,pay:'ডেলিভারির ২ দিনের মধ্যে',tp:'পরিবহন ভাগাভাগি করা যায়, ৫০০ কেজির বেশি হলে আমরা গাড়ি পাঠাব।'},
+ b3:{addr:'মাহিগঞ্জ বাজার, রংপুর সদর, রংপুর',ph:'০১৯১৩-●●●●●●',n:'সততা এগ্রো',type:'পাইকার',city:'রংপুর',crops:['rice','maize','onion','potato'],m:.95,min:500,rate:4.2,deals:54,ver:true,pay:'নগদ, মাল বুঝে নিয়ে',tp:'আপনার পরিবহন, আমরা গুদামে বুঝে নেব।'},
+ b4:{addr:'অফিস: বনানী, ঢাকা',ph:'০১৬১৪-●●●●●●',n:'ফ্রেশ কার্ট',type:'অনলাইন গ্রোসারি',city:'ঢাকা',crops:['tomato','potato','onion'],m:1.06,min:800,rate:4.1,deals:22,ver:false,pay:'ডেলিভারির ৭ দিন পর',tp:'পরিবহন আপনাকে দিতে হবে।'},
+ b5:{addr:'চরপাড়া মোড়, ময়মনসিংহ সদর, ময়মনসিংহ',ph:'০১৭১৫-●●●●●●',n:'নবান্ন ফিড মিলস',type:'ফিড কোম্পানি',city:'ময়মনসিংহ',crops:['maize','rice'],m:1.04,min:3000,rate:4.5,deals:41,ver:true,pay:'ব্যাংক হিসাবে ৩ দিনে',tp:'বড় পরিমাণে আমরা ট্রাক পাঠাব।'}
 };
 const VEH=[['পিকআপ',1000,28],['মিনি ট্রাক',3000,40],['ট্রাক',10000,70]];
 
@@ -813,7 +813,7 @@ M.buyers=()=>{
  ${S.deals.filter(d=>d.lid===L.id).map(d=>`<div class="deal-strip"><b>ডিল সম্পন্ন: ${BUY[d.buyer].n}</b><span>${tk(d.price)}/কেজি, মোট ${tk(d.total)}</span><span class="pos"><b>মধ্যস্বত্বভোগীর তুলনায় বাড়তি ${tk(d.gain)}</b></span><button class="btn primary sm" data-a="receipt" data-v="${d.lid}">রসিদ দেখুন</button><button class="btn sm" data-a="toLogi">পরিবহন হিসাব করুন</button></div>`).join('')}
  <div class="grid">
   ${list.map(id=>{const b=BUY[id],off=offerFor(id,L),dv=(off-lp)/lp*100,ok=L.qty>=b.min,ch=S.chats[id];return `<section class="card buyer">
-   <div class="top2"><div><div class="nm">${b.n}</div><div class="small muted">${b.type}, ${b.city}</div></div>${b.ver?'<span class="pill ok">যাচাইকৃত</span>':'<span class="pill warn">যাচাই বাকি</span>'}</div>
+   <div class="top2"><div><div class="nm">${b.n}</div><div class="small muted">${b.type}, ${b.city}</div><div class="tiny muted">📍 ${b.addr}</div><div class="tiny muted">📞 ${b.ph}</div></div>${b.ver?'<span class="pill ok">যাচাইকৃত</span>':'<span class="pill warn">যাচাই বাকি</span>'}</div>
    <div><div class="offer">${tk(off)}<span class="small muted" style="font-family:var(--font-body);font-weight:500">/কেজি</span></div>
    <div class="small">বাজারদরের তুলনায় <b class="${dv<0?'neg':'pos'}">${dv>=0?'+':'−'}${pct(Math.abs(dv))}</b>, আড়তদারের চেয়ে <b class="pos">+${tk(off-mid)}/কেজি</b></div></div>
    <div class="row small muted"><span>★ ${dec(b.rate)} (${bn(b.deals)} ডিল)</span><span>·</span><span>সর্বনিম্ন ${num(b.min)} কেজি ${ok?'':'<b class="neg">(আপনার পরিমাণ কম)</b>'}</span></div>
@@ -873,7 +873,7 @@ function chatSheet(id){
  if(ch.counter)chips.push(`<button class="chip" data-a="chatQuick" data-p="${ch.counter}">রাজি, ${tk(ch.counter)}</button>`);
  chips.push(`<button class="chip" data-a="chatQuick" data-p="${L.price}">${tk(L.price)}/কেজি চাই</button>`,`<button class="chip" data-a="chatQuick" data-t="পরিবহন কে দেবে?">পরিবহন কে দেবে?</button>`,`<button class="chip" data-a="chatQuick" data-t="টাকা কবে পাব?">টাকা কবে পাব?</button>`);
  return `<div class="sheet chat" role="dialog" aria-modal="true" aria-label="${b.n} এর সাথে চ্যাট">
-  <div class="chat-h"><div class="row" style="justify-content:space-between;flex-wrap:nowrap"><div style="min-width:0"><b>${b.n}</b> ${b.ver?'<span class="pill ok">যাচাইকৃত</span>':'<span class="pill warn">যাচাই বাকি</span>'}<div class="small muted">${CROPS[L.crop].bn} ${num(L.qty)} কেজি · প্রস্তাব ${tk(offerFor(id,L))}/কেজি</div></div><button class="x" data-a="close" aria-label="বন্ধ করুন">×</button></div>
+  <div class="chat-h"><div class="row" style="justify-content:space-between;flex-wrap:nowrap"><div style="min-width:0"><b>${b.n}</b> ${b.ver?'<span class="pill ok">যাচাইকৃত</span>':'<span class="pill warn">যাচাই বাকি</span>'}<div class="small muted">${CROPS[L.crop].bn} ${num(L.qty)} কেজি · প্রস্তাব ${tk(offerFor(id,L))}/কেজি</div><div class="tiny muted">📍 ${b.addr} · 📞 ${b.ph}</div></div><button class="x" data-a="close" aria-label="বন্ধ করুন">×</button></div>
    <div class="row"><button class="btn sm" disabled>ভয়েস কল <span class="pill plain">শীঘ্রই</span></button><button class="btn sm" disabled>ভিডিও কল <span class="pill plain">শীঘ্রই</span></button></div></div>
   <div class="chat-b" id="chatb">${msgs}${ch.typing?'<div class="typing">লিখছেন…</div>':''}</div>
   <div class="chat-f">

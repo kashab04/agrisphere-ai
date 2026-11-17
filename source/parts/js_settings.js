@@ -122,7 +122,7 @@ function receiptData(lid){
   when:bn(t.getDate())+' '+MONTHS_R[t.getMonth()]+' '+bn(t.getFullYear())+', '+bn(String(hh%12||12))+':'+bn(mm)+(hh<12?' সকাল':' বিকাল')};
 }
 function receiptText(r){
- return ['কৃষিসখা · ডিলের রসিদ','নং: '+r.no,'তারিখ: '+r.when,'বিক্রেতা: '+r.p.name+', '+r.p.district,'ক্রেতা: '+r.b.n+' ('+r.b.city+')',
+ return ['কৃষিসখা · ডিলের রসিদ','নং: '+r.no,'তারিখ: '+r.when,'বিক্রেতা: '+r.p.name+', '+r.p.district,'ক্রেতা: '+r.b.n+', '+r.b.addr+', ফোন '+r.b.ph,
   'ফসল: '+r.c.bn+', '+num(r.d.qty)+' কেজি','দর: '+tk(r.d.price)+'/কেজি','মোট: '+tk(r.d.total),'পেমেন্ট: '+r.b.pay,'কৃষিসখা · AgriSphere AI'].join('\n');
 }
 function receiptSheet(lid){
@@ -134,7 +134,7 @@ function receiptSheet(lid){
    <div class="rc-top"><div class="rc-brand">কৃষিসখা</div><div class="rc-ok">ডিল নিশ্চিত ✓</div></div>
    ${row('রসিদ নং',r.no)}${row('তারিখ ও সময়',r.when)}
    <hr>
-   ${row('বিক্রেতা (কৃষক)',r.p.name+', '+r.p.district)}${row('ক্রেতা',r.b.n+' ('+r.b.city+')'+(r.b.ver?' · যাচাইকৃত':''))}
+   ${row('বিক্রেতা (কৃষক)',r.p.name+', '+r.p.district)}${row('ক্রেতা',r.b.n+(r.b.ver?' · যাচাইকৃত':''))}${row('ক্রেতার ঠিকানা',r.b.addr)}${row('ক্রেতার ফোন',r.b.ph)}
    <hr>
    ${row('ফসল',r.c.bn)}${row('পরিমাণ',num(r.d.qty)+' কেজি')}${row('দর',tk(r.d.price)+'/কেজি')}
    <div class="rc-total"><span>মোট মূল্য</span><b>${tk(r.d.total)}</b></div>
