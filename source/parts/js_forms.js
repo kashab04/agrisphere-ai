@@ -236,7 +236,7 @@ const loginCloud=()=>{
 };
 V.signup=()=>cloud()?signupCloud():signupLocal();
 V.login=()=>cloud()?loginCloud():loginLocal();
-const verifyStrip=()=>S.user&&S.user.cloud&&!S.user.verified?`<div class="alert-card mid"><span class="pill warn">ইমেইল</span><div><b>${esc(S.user.email)} যাচাই করুন</b><div class="small">আমরা যে লিংক পাঠিয়েছি সেটি চাপুন। <button class="linkbtn" data-a="resendVerify">আবার পাঠান</button></div></div></div>`:'';
+const verifyStrip=()=>S.user&&S.user.cloud&&!S.user.verified?`<div class="alert-card mid"><span class="pill warn">ইমেইল</span><div><b>${esc(S.user.email)} যাচাই করুন</b><div class="small">আমরা যে লিংক পাঠিয়েছি সেটি চাপুন। <button class="linkbtn" data-a="resendVerify">আবার পাঠান</button> · <button class="linkbtn" data-a="checkVerify">যাচাই করেছি, দেখুন</button></div></div></div>`:'';
 
 /* in cloud mode the same step forms are reused, only the submit targets differ */
 const cloudForm=AF;
@@ -289,13 +289,19 @@ AF['c-reset']=async f=>{
  rerender();
 };
 /* login form dispatch: the shared "login" handler name is used by the local form only */
+const vParam=/[?&]verified=1/.test(location.search);
+const checkVerified=(quiet)=>{if(!window.AgriCloud||!AgriCloud.ready||!S.user||!S.user.cloud||S.user.verified)return Promise.resolve();
+ return AgriCloud.refresh().then(v=>{if(v&&S.user){S.user.verified=true;render();toast('ইমেইল যাচাই হয়েছে। ধন্যবাদ!');}else if(!quiet)toast('এখনও যাচাই হয়নি। ইমেইলের লিংকটি চাপুন, তারপর আবার দেখুন।');}).catch(()=>{});};
 Object.assign(A,{
+ checkVerify:()=>checkVerified(false),
  authMethod:t=>{const a=au();a.method=t.dataset.v==='email'?'email':'phone';a.errs={};a.err='';a.ok='';rerender();},
  resendVerify:()=>{AgriCloud.resend().then(()=>toast('যাচাইয়ের ইমেইল আবার পাঠানো হয়েছে')).catch(e=>toast(cErr(e)));}
 });
-window.addEventListener('agri-cloud',()=>{if(S.route==='login'||S.route==='signup'){S.auth={step:'phone'};render();}});
+window.addEventListener('agri-cloud',()=>{if(S.route==='login'||S.route==='signup'){S.auth={step:'phone'};render();}
+ if(vParam){try{history.replaceState(null,'',location.pathname+location.hash);}catch(e){}if(!S.user)toast('ইমেইল যাচাই হয়েছে। এবার লগইন করুন।');}});
 window.addEventListener('agri-auth',async ev=>{
  const d=ev.detail;if(S.cloudBusy)return;
+ if(d&&!d.verified&&!isSyn(d.email))setTimeout(()=>checkVerified(true),300);
  if(d){
   if(S.user&&S.user.uid===d.uid)return;
   const u=await cloudUser(d);if(S.cloudBusy||(S.user&&S.user.uid===d.uid))return;
