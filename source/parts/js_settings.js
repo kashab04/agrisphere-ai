@@ -111,3 +111,44 @@ AF.feedback=async f=>{
 // "পিছনে" বাটন: অ্যাপের ভেতরে আগের পাতা থাকলে সেখানে যায়, নইলে হোমে।
 let navN=0;window.addEventListener('hashchange',()=>{navN++;});
 document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('a.back');if(!b)return;if(navN>0){e.preventDefault();navN--;history.back();}});
+
+// ডিলের রসিদ
+const MONTHS_R=['জানুয়ারি','ফেব্রুয়ারি','মার্চ','এপ্রিল','মে','জুন','জুলাই','আগস্ট','সেপ্টেম্বর','অক্টোবর','নভেম্বর','ডিসেম্বর'];
+function receiptData(lid){
+ const d=S.deals.find(x=>x.lid===lid);if(!d)return null;
+ const b=BUY[d.buyer],p=S.profile,t=new Date(d.at||Date.now()),c=CROPS[d.crop];
+ const hh=t.getHours(),mm=String(t.getMinutes()).padStart(2,'0');
+ return {d,b,p,c,no:bn(d.no||'KS-000000'),
+  when:bn(t.getDate())+' '+MONTHS_R[t.getMonth()]+' '+bn(t.getFullYear())+', '+bn(String(hh%12||12))+':'+bn(mm)+(hh<12?' সকাল':' বিকাল')};
+}
+function receiptText(r){
+ return ['কৃষিসখা · ডিলের রসিদ','নং: '+r.no,'তারিখ: '+r.when,'বিক্রেতা: '+r.p.name+', '+r.p.district,'ক্রেতা: '+r.b.n+' ('+r.b.city+')',
+  'ফসল: '+r.c.bn+', '+num(r.d.qty)+' কেজি','দর: '+tk(r.d.price)+'/কেজি','মোট: '+tk(r.d.total),'পেমেন্ট: '+r.b.pay,'(ডেমো রসিদ, আইনি দলিল নয়)'].join('\n');
+}
+function receiptSheet(lid){
+ const r=receiptData(lid);if(!r)return '';
+ const row=(a,b)=>`<div class="rc-r"><span>${a}</span><b>${b}</b></div>`;
+ return `<div class="sheet receipt" role="dialog" aria-modal="true" aria-label="ডিলের রসিদ">
+  <div class="sheet-h"><h2>ডিলের রসিদ</h2><button class="btn sm" data-a="close" aria-label="বন্ধ করুন">×</button></div>
+  <div class="rc" id="rcbox">
+   <div class="rc-top"><div class="rc-brand">কৃষিসখা</div><div class="rc-ok">ডিল নিশ্চিত ✓</div></div>
+   ${row('রসিদ নং',r.no)}${row('তারিখ ও সময়',r.when)}
+   <hr>
+   ${row('বিক্রেতা (কৃষক)',r.p.name+', '+r.p.district)}${row('ক্রেতা',r.b.n+' ('+r.b.city+')'+(r.b.ver?' · যাচাইকৃত':''))}
+   <hr>
+   ${row('ফসল',r.c.bn)}${row('পরিমাণ',num(r.d.qty)+' কেজি')}${row('দর',tk(r.d.price)+'/কেজি')}
+   <div class="rc-total"><span>মোট মূল্য</span><b>${tk(r.d.total)}</b></div>
+   <hr>
+   ${row('পেমেন্ট',r.b.pay)}${row('পরিবহন',r.b.tp)}
+   ${r.d.gain>0?`<div class="rc-gain">মধ্যস্বত্বভোগীর দরের তুলনায় আপনার বাড়তি আয়: <b>${tk(r.d.gain)}</b></div>`:''}
+   <div class="rc-note">এটি ডেমো রসিদ। আসল লেনদেনের আইনি দলিল নয়।</div>
+  </div>
+  <div class="row" style="margin-top:14px;gap:10px"><button class="btn primary" data-a="rcPrint">প্রিন্ট / PDF</button><button class="btn" data-a="rcShare" data-v="${lid}">শেয়ার</button></div>
+ </div>`;
+}
+A.receipt=t=>{openModal(receiptSheet(t.dataset.v));};
+A.rcPrint=()=>{document.body.classList.add('printing');setTimeout(()=>{try{window.print();}catch(e){}document.body.classList.remove('printing');},50);};
+A.rcShare=t=>{const r=receiptData(t.dataset.v);if(!r)return;const x=receiptText(r);
+ if(navigator.share){navigator.share({title:'কৃষিসখা রসিদ',text:x}).catch(()=>{});}
+ else if(navigator.clipboard){navigator.clipboard.writeText(x).then(()=>toast('রসিদের লেখা কপি হয়েছে।'),()=>toast('কপি করা গেল না।'));}
+ else toast('এই ব্রাউজারে শেয়ার সুবিধা নেই।');};

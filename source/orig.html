@@ -809,7 +809,7 @@ M.buyers=()=>{
  return `<div class="stack">
  ${S.listings.length>1?`<div class="chips" role="group" aria-label="লিস্টিং">${S.listings.map(l=>chip(`${CROPS[l.crop].bn} ${num(l.qty)} কেজি`,`data-a="viewBuyers" data-v="${l.id}"`,l.id===L.id)).join('')}</div>`:''}
  <div class="card flat"><b>${CROPS[L.crop].bn}, ${num(L.qty)} কেজি</b> · আপনার চাওয়া দাম ${tk(L.price)}/কেজি।<br>স্থানীয় আড়তদার সাধারণত দেন প্রায় <b>${tk(mid)}/কেজি</b> (বাজারদরের ৮০%, নমুনা হার)। ক্রেতার প্রস্তাব এর সাথে তুলনা করুন।</div>
- ${S.deals.filter(d=>d.lid===L.id).map(d=>`<div class="deal-strip"><b>ডিল সম্পন্ন: ${BUY[d.buyer].n}</b><span>${tk(d.price)}/কেজি, মোট ${tk(d.total)}</span><span class="pos"><b>মধ্যস্বত্বভোগীর তুলনায় বাড়তি ${tk(d.gain)}</b></span><button class="btn sm" data-a="toLogi">পরিবহন হিসাব করুন</button></div>`).join('')}
+ ${S.deals.filter(d=>d.lid===L.id).map(d=>`<div class="deal-strip"><b>ডিল সম্পন্ন: ${BUY[d.buyer].n}</b><span>${tk(d.price)}/কেজি, মোট ${tk(d.total)}</span><span class="pos"><b>মধ্যস্বত্বভোগীর তুলনায় বাড়তি ${tk(d.gain)}</b></span><button class="btn primary sm" data-a="receipt" data-v="${d.lid}">রসিদ দেখুন</button><button class="btn sm" data-a="toLogi">পরিবহন হিসাব করুন</button></div>`).join('')}
  <div class="grid">
   ${list.map(id=>{const b=BUY[id],off=offerFor(id,L),dv=(off-lp)/lp*100,ok=L.qty>=b.min,ch=S.chats[id];return `<section class="card buyer">
    <div class="top2"><div><div class="nm">${b.n}</div><div class="small muted">${b.type}, ${b.city}</div></div>${b.ver?'<span class="pill ok">যাচাইকৃত</span>':'<span class="pill warn">যাচাই বাকি</span>'}</div>
@@ -876,7 +876,7 @@ function chatSheet(id){
    <div class="row"><button class="btn sm" disabled>ভয়েস কল <span class="pill plain">শীঘ্রই</span></button><button class="btn sm" disabled>ভিডিও কল <span class="pill plain">শীঘ্রই</span></button></div></div>
   <div class="chat-b" id="chatb">${msgs}${ch.typing?'<div class="typing">লিখছেন…</div>':''}</div>
   <div class="chat-f">
-   ${ch.deal?`<div class="deal-strip"><b>ডিল সম্পন্ন</b><button class="btn sm" data-a="toLogi">পরিবহন হিসাব করুন</button></div>`
+   ${ch.deal?`<div class="deal-strip"><b>ডিল সম্পন্ন</b><button class="btn primary sm" data-a="receipt" data-v="${L.id}">রসিদ দেখুন</button><button class="btn sm" data-a="toLogi">পরিবহন হিসাব করুন</button></div>`
     :sold?'<div class="deal-strip">এই তালিকা অন্য ক্রেতার কাছে বিক্রি হয়ে গেছে।</div>'
     :ch.agreed?`<div class="deal-strip"><span><b>${tk(ch.agreed)}/কেজি</b> এ রাজি, মোট ${tk(ch.agreed*L.qty)}</span><button class="btn primary sm" data-a="chatConfirm">ডিল কনফার্ম করুন</button></div>`:''}
    ${(ch.deal||sold)?'':`<div class="chips">${chips.join('')}</div>
@@ -948,7 +948,7 @@ const A={
  chatConfirm:()=>{
   const id=S.openChat,ch=S.chats[id],L=S.listings.find(l=>l.id===ch.lid);if(L.sold)return;
   const mid=midPrice(L.crop),p=ch.agreed;
-  S.deals.push({lid:L.id,buyer:id,crop:L.crop,qty:L.qty,price:p,total:p*L.qty,gain:(p-mid)*L.qty});
+  S.deals.push({lid:L.id,buyer:id,crop:L.crop,qty:L.qty,price:p,total:p*L.qty,gain:(p-mid)*L.qty,mid,at:Date.now(),no:'KS-'+String(Date.now()).slice(-6)});
   L.sold=true;ch.deal=true;ch.msgs.push({w:'sys',t:`ডিল নিশ্চিত: ${tk(p)}/কেজি, মোট ${tk(p*L.qty)}`});renderChat(id);render();
  }
 };
