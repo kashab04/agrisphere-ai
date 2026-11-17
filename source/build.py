@@ -1,5 +1,5 @@
 import re, json, pathlib
-KEEP_SUB = {'কেজি', 'একর', 'কিমি', 'ছত্রাক।', 'কেজি।', 'কেজিতে', 'বার্তা', 'সোম:', 'মঙ্গল:', 'বুধ:', 'বৃহঃ:', 'শুক্র:', 'শনি:', 'রবি:', 'ডোমেইন:'}
+KEEP_SUB = {'কেজি', 'একর', 'কিমি', 'ছত্রাক।', 'কেজি।', 'কেজিতে', 'বার্তা', 'সোম:', 'মঙ্গল:', 'বুধ:', 'বৃহঃ:', 'শুক্র:', 'শনি:', 'রবি:', 'ডোমেইন:', 'ইউরিয়া', 'হিমাগার-', 'কাছেই'}
 def load_en():
     d = {}
     for f in ['names.txt', 'frag1.txt', 'frag2.txt', 'extras.txt']:
@@ -9,6 +9,11 @@ def load_en():
                 if f != 'names.txt' and k and k[0] not in '=- /(' and ' ' not in k and len(k) <= 8 and k not in KEEP_SUB:
                     k = '=' + k
                 d[k] = v
+    for sk, sv in [('এঁটেল','Clay'),('বেলে','Sandy'),('পলি','Silt'),('লাল','Red'),('লবণাক্ত','Saline'),('বেলে-দো-আঁশ','Sandy loam'),('এঁটেল-দো-আঁশ','Clay loam'),('পিট/জৈব','Peat/organic'),('দো-আঁশ','Loam')]:
+        d[sk + ' মাটি'] = sv + ' soil'
+        d[sk + ' মাটিতে মাঝারি সেচ যথেষ্ট।'] = sv + ' soil needs only medium irrigation.'
+        d[sk + ' মাটি দ্রুত শুকায়, তাই সেচ বেশি লাগে।'] = sv + ' soil dries quickly, so more irrigation is needed.'
+        d[sk + ' মাটি পানি ধরে রাখে, তাই সেচ কম লাগে।'] = sv + ' soil holds water, so less irrigation is needed.'
     return 'const EN=' + json.dumps(d, ensure_ascii=False, separators=(',', ':')) + ';\n'
 root = pathlib.Path(__file__).resolve().parent
 P = lambda n: (root / 'parts' / n).read_text()
