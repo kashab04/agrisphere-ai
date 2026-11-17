@@ -1,9 +1,11 @@
-/* Firebase web config. Fill in the values from Firebase console → Project settings → Your apps → SDK setup.
-   These values are not secrets (they ship in the browser); access is protected by Authorized domains and security rules.
-   While apiKey is empty the app runs in local demo mode (fake OTP, accounts stored in the browser only). */
+/* Firebase web config for the agrisphere-ai project.
+   These values are not secrets (they ship in every browser that opens the site).
+   Access is protected by Authorized domains and Firebase security rules. */
 export default {
-  apiKey: "",
-  authDomain: "",
-  projectId: "",
-  appId: ""
+  apiKey: "AIzaSyD-y4usRo3UImG3ksdlrhN79J7i2CNrY8g",
+  authDomain: "agrisphere-ai-aacf6.firebaseapp.com",
+  projectId: "agrisphere-ai-aacf6",
+  storageBucket: "agrisphere-ai-aacf6.firebasestorage.app",
+  messagingSenderId: "147538102181",
+  appId: "1:147538102181:web:3794edb1af6fec317d0a4c"
 };
