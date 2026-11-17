@@ -24,6 +24,6 @@ function render(){
 function accountSheet(){
  const p=S.profile,u=S.user;
  return `<div class="sheet" role="dialog" aria-modal="true" aria-label="আমার অ্যাকাউন্ট"><div class="sheet-h"><h2>আমার অ্যাকাউন্ট</h2><button class="x" data-a="close" aria-label="বন্ধ করুন">×</button></div>
- <dl class="acct"><dt>নাম</dt><dd>${esc(u.name)}</dd>${u.cloud?`<dt>ইমেইল</dt><dd>${esc(u.email)}</dd>${u.mobile?`<dt>মোবাইল</dt><dd>${bn(u.mobile)}</dd>`:''}`:`<dt>মোবাইল</dt><dd>${bn(u.phone)}</dd>`}<dt>জেলা</dt><dd>${p.district}</dd><dt>ফসল</dt><dd>${CROPS[p.crop].bn}</dd><dt>জমি</dt><dd>${dec(p.land)} একর, ${SOIL[p.soil]} মাটি</dd></dl>
+ <dl class="acct"><dt>নাম</dt><dd>${esc(u.name)}</dd>${u.cloud?`${u.email?`<dt>ইমেইল</dt><dd>${esc(u.email)}</dd>`:''}${u.mobile?`<dt>মোবাইল</dt><dd>${bn(u.mobile)}</dd>`:''}`:`<dt>মোবাইল</dt><dd>${bn(u.phone)}</dd>`}<dt>জেলা</dt><dd>${p.district}</dd><dt>ফসল</dt><dd>${CROPS[p.crop].bn}</dd><dt>জমি</dt><dd>${dec(p.land)} একর, ${SOIL[p.soil]} মাটি</dd></dl>
  <div class="row"><button class="btn" data-a="profile">তথ্য বদলান</button><button class="btn" data-a="logout">লগ আউট</button></div></div>`;
 }

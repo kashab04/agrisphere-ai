@@ -1,4 +1,4 @@
-/* Connects the app to Firebase Authentication (email + password) and Firestore (farmer profile).
+/* Connects the app to Firebase Authentication (email or mobile number + password) and Firestore (farmer profile).
    Does nothing until firebase-config.js is filled in. Exposes window.AgriCloud for the app. */
 import cfg from './firebase-config.js';
 
@@ -14,9 +14,9 @@ import cfg from './firebase-config.js';
     const mk = u => ({ uid: u.uid, email: u.email || '', name: u.displayName || '', verified: !!u.emailVerified });
     window.AgriCloud = {
       ready: true,
-      async signUp(email, pw, name) {
+      async signUp(email, pw, name, noVerify) {
         const c = await A.createUserWithEmailAndPassword(auth, email, pw);
-        try { await A.updateProfile(c.user, { displayName: name }); await A.sendEmailVerification(c.user); } catch (e) {}
+        try { await A.updateProfile(c.user, { displayName: name }); if (!noVerify) await A.sendEmailVerification(c.user); } catch (e) {}
         return mk(c.user);
       },
       async signIn(email, pw) { return mk((await A.signInWithEmailAndPassword(auth, email, pw)).user); },

@@ -186,40 +186,48 @@ const cloud=()=>!!(window.AgriCloud&&window.AgriCloud.ready);
 const cErr=e=>{const c=(e&&e.code)||'';return({'auth/email-already-in-use':'এই ইমেইলে আগেই অ্যাকাউন্ট আছে। লগইন করুন।','auth/invalid-email':'সঠিক ইমেইল দিন।','auth/weak-password':'পাসওয়ার্ড আরও শক্ত করুন (কমপক্ষে ৬ অক্ষর)।','auth/invalid-credential':'ইমেইল বা পাসওয়ার্ড ঠিক নয়।','auth/user-not-found':'এই ইমেইলে কোনো অ্যাকাউন্ট নেই।','auth/wrong-password':'ইমেইল বা পাসওয়ার্ড ঠিক নয়।','auth/too-many-requests':'অনেকবার চেষ্টা হয়েছে। কিছুক্ষণ পর আবার চেষ্টা করুন।','auth/network-request-failed':'ইন্টারনেট সংযোগ নেই। সংযোগ দেখে আবার চেষ্টা করুন।','auth/operation-not-allowed':'ইমেইল লগইন চালু করা নেই (Firebase → Authentication → Sign-in method দেখুন)।','auth/unauthorized-domain':'এই ঠিকানা Firebase-এ অনুমোদিত নয় (Authorized domains দেখুন)।'})[c]||'কিছু একটা সমস্যা হয়েছে। আবার চেষ্টা করুন।';};
 const validEmail=v=>/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v);
 const emailField=(id,v,k)=>`<div class="fld${fC(k)}"><label for="${id}">ইমেইল</label><input id="${id}" type="email" inputmode="email" autocomplete="email" placeholder="name@example.com" value="${esc(v||'')}" ${fC(k)?'aria-invalid="true"':''}>${fE(k)}</div>`;
+const SYN='@agrisphere.app';
+const isSyn=e=>!!e&&e.endsWith(SYN);
+const meth=()=>au().method||'phone';
+const seg=()=>`<div class="seg" role="group" aria-label="কীভাবে প্রবেশ করবেন" style="margin-top:14px;width:100%"><button type="button" style="flex:1" data-a="authMethod" data-v="phone" aria-pressed="${meth()==='phone'}">মোবাইল নম্বর</button><button type="button" style="flex:1" data-a="authMethod" data-v="email" aria-pressed="${meth()==='email'}">ইমেইল</button></div>`;
+const cErrM=(e,m)=>{const t=cErr(e);return m==='phone'?t.replace('ইমেইলে','নম্বরে').replace('ইমেইল','মোবাইল নম্বর'):t;};
 const busyA=(f,on)=>{const b=f&&f.querySelector('button[type=submit]');if(b){if(on){b.disabled=true;b.dataset.h=b.innerHTML;b.innerHTML='<span class="spin"></span> অপেক্ষা করুন…';}else{b.disabled=false;if(b.dataset.h)b.innerHTML=b.dataset.h;}}};
 async function cloudUser(u,farm,extra){
  let doc=null;try{doc=await AgriCloud.loadProfile(u.uid);}catch(e){}
  const lp=store.get('agri_cp_'+u.uid);
  const base=Object.assign({district:'রংপুর',crop:'potato',land:1,soil:'loam'},(doc&&doc.profile)||lp||{},farm||{});
  const name=(extra&&extra.name)||(doc&&doc.name)||u.name||'কৃষক';
- return {cloud:true,uid:u.uid,email:u.email,name,mobile:(extra&&extra.mobile)||(doc&&doc.phone)||'',phone:'cloud:'+u.uid,verified:u.verified,profile:Object.assign({},base,{name})};
+ const syn=isSyn(u.email),em=syn?'':u.email;
+ return {cloud:true,uid:u.uid,email:em,name,mobile:(extra&&extra.mobile)||(doc&&doc.phone)||(syn?u.email.slice(0,-SYN.length):''),phone:'cloud:'+u.uid,verified:syn?true:u.verified,profile:Object.assign({},base,{name})};
 }
 const signupCloud=()=>{
  const a=au(),d=a.d;let n=1,body;
  if(a.step==='pass'){n=2;body=passStep();}
  else if(a.step==='farm'){n=3;body=farmStep();}
- else body=`<form data-f="c-info" novalidate>${topErr()}
+  else{const m=meth();body=`${seg()}<form data-f="c-info" novalidate>${topErr()}
   <div class="fld${fC('name')}"><label for="sname">আপনার নাম</label><input id="sname" type="text" autocomplete="name" value="${esc(d.name||'')}" ${fC('name')?'aria-invalid="true"':''}>${fE('name')}</div>
-  ${emailField('semail',d.email,'email')}
-  <div class="fld${fC('phone')}"><label for="sphone">মোবাইল নম্বর <span class="muted">(ঐচ্ছিক)</span></label><input id="sphone" class="phin" type="tel" inputmode="numeric" maxlength="14" placeholder="০১৭XXXXXXXX" autocomplete="tel" value="${esc(d.phone||'')}">${fE('phone')}</div>
+  ${m==='email'?emailField('semail',d.email,'email')+`<div class="fld${fC('phone')}"><label for="sphone">মোবাইল নম্বর <span class="muted">(ঐচ্ছিক)</span></label><input id="sphone" class="phin" type="tel" inputmode="numeric" maxlength="14" placeholder="০১৭XXXXXXXX" autocomplete="tel" value="${esc(d.phone||'')}">${fE('phone')}</div>`:phoneField('sphone',d.phone,'phone')+'<p class="small muted" style="margin-top:6px">এসএমএস কোড লাগবে না। নম্বর ও পাসওয়ার্ড দিয়েই প্রবেশ করবেন।</p>'}
   <label class="chk${fC('terms')}"><input type="checkbox" id="sterms" ${d.terms?'checked':''}><span>আমি ব্যবহারের শর্ত ও গোপনীয়তা নীতিতে সম্মত।</span></label>${fE('terms')}
-  ${sendBtn('এগিয়ে যান')}</form>`;
+  ${sendBtn('এগিয়ে যান')}</form>`;}
  const title=['অ্যাকাউন্ট খুলুন','পাসওয়ার্ড দিন','আপনার জমির তথ্য'][n-1];
- const sub=['নাম ও ইমেইল দিয়ে শুরু করুন।','অ্যাকাউন্ট সুরক্ষিত রাখতে পাসওয়ার্ড দিন।','এই তথ্য দিয়ে সব হিসাব আপনার জন্য মিলিয়ে দেওয়া হবে।'][n-1];
+ const sub=[meth()==='phone'?'নাম ও মোবাইল নম্বর দিয়ে শুরু করুন।':'নাম ও ইমেইল দিয়ে শুরু করুন।','অ্যাকাউন্ট সুরক্ষিত রাখতে পাসওয়ার্ড দিন।','এই তথ্য দিয়ে সব হিসাব আপনার জন্য মিলিয়ে দেওয়া হবে।'][n-1];
  return `<div class="auth-wrap">${authArt('নতুন অ্যাকাউন্ট')}
  <section class="card">${prog(n,3)}<h1 style="font-size:1.5rem;margin-top:8px">${title}</h1><p class="muted" style="margin-top:4px">${sub}</p>${body}</section>
  <p class="small muted" style="text-align:center">আগে থেকেই অ্যাকাউন্ট আছে? <a href="#login"><b>লগইন করুন</b></a></p></div>`;
 };
 const loginCloud=()=>{
  const a=au(),d=a.d;
- if(a.mode==='reset')return `<div class="auth-wrap">${authArt('পাসওয়ার্ড উদ্ধার')}
-  <section class="card"><h1 style="font-size:1.5rem">পাসওয়ার্ড ভুলে গেছেন?</h1><p class="muted" style="margin-top:4px">ইমেইলে একটি রিসেট লিংক পাঠানো হবে।</p>${topOk()}${topErr()}
-  <form data-f="c-reset" novalidate>${emailField('aemail',d.email,'email')}${sendBtn('রিসেট লিংক পাঠান')}</form></section>
-  <p class="small muted" style="text-align:center"><a href="#login" data-a="authCancel"><b>লগইনে ফিরে যান</b></a></p></div>`;
+ if(a.mode==='reset'){const pm=meth()==='phone';return `<div class="auth-wrap">${authArt('পাসওয়ার্ড উদ্ধার')}
+  <section class="card"><h1 style="font-size:1.5rem">পাসওয়ার্ড ভুলে গেছেন?</h1>${seg()}
+  ${pm?`<div class="alert-card mid" style="margin-top:14px"><span class="pill warn">জানুন</span><div><b>মোবাইল নম্বরের অ্যাকাউন্টে রিসেট এখনও নেই</b><div class="small">এসএমএস পাঠানোর সুবিধা পরে যুক্ত হবে। এখন পাসওয়ার্ড ভুলে গেলে নতুন পাসওয়ার্ডের জন্য ইমেইল অপশন ব্যবহার করুন, অথবা অন্য নম্বরে নতুন অ্যাকাউন্ট খুলুন।</div></div></div>`
+  :`<p class="muted" style="margin-top:12px">ইমেইলে একটি রিসেট লিংক পাঠানো হবে।</p>${topOk()}${topErr()}
+  <form data-f="c-reset" novalidate>${emailField('aemail',d.email,'email')}${sendBtn('রিসেট লিংক পাঠান')}</form>`}</section>
+  <p class="small muted" style="text-align:center"><a href="#login" data-a="authCancel"><b>লগইনে ফিরে যান</b></a></p></div>`;}
+ const m=meth();
  return `<div class="auth-wrap">${authArt('স্বাগতম')}
- <section class="card"><h1 style="font-size:1.5rem">লগইন</h1><p class="muted" style="margin-top:4px">ইমেইল ও পাসওয়ার্ড দিয়ে প্রবেশ করুন।</p>
+ <section class="card"><h1 style="font-size:1.5rem">লগইন</h1><p class="muted" style="margin-top:4px">${m==='phone'?'মোবাইল নম্বর':'ইমেইল'} ও পাসওয়ার্ড দিয়ে প্রবেশ করুন।</p>${seg()}
  ${topOk()}${topErr()}
- <form data-f="c-login" novalidate>${emailField('aemail',d.email,'email')}${pwField('apw','পাসওয়ার্ড','current-password','pw')}
+ <form data-f="c-login" novalidate>${m==='phone'?phoneField('aphone',d.phone,'phone'):emailField('aemail',d.email,'email')}${pwField('apw','পাসওয়ার্ড','current-password','pw')}
  <div style="margin-top:6px;text-align:right"><button type="button" class="linkbtn" data-a="forgot">পাসওয়ার্ড ভুলে গেছেন?</button></div>
  ${sendBtn('লগইন')}</form></section>
  <div class="divider">অথবা</div>
@@ -233,10 +241,11 @@ const verifyStrip=()=>S.user&&S.user.cloud&&!S.user.verified?`<div class="alert-
 /* in cloud mode the same step forms are reused, only the submit targets differ */
 const cloudForm=AF;
 AF['c-info']=f=>{
- const a=au(),d=a.d;d.name=$('#sname').value.trim();d.email=$('#semail').value.trim().toLowerCase();d.phone=cleanPh($('#sphone').value);d.terms=$('#sterms').checked;a.err='';a.errs={};
+ const a=au(),d=a.d,m=meth();d.name=$('#sname').value.trim();d.phone=cleanPh($('#sphone').value);d.terms=$('#sterms').checked;a.err='';a.errs={};d.method=m;
+ if(m==='email')d.email=$('#semail').value.trim().toLowerCase();
  if(d.name.length<2)a.errs.name='আপনার নাম লিখুন।';
- if(!validEmail(d.email))a.errs.email='সঠিক ইমেইল দিন, যেমন name@example.com।';
- if(d.phone&&!validPhone(d.phone))a.errs.phone='সঠিক মোবাইল নম্বর দিন বা ঘরটি ফাঁকা রাখুন।';
+ if(m==='email'){if(!validEmail(d.email))a.errs.email='সঠিক ইমেইল দিন, যেমন name@example.com।';if(d.phone&&!validPhone(d.phone))a.errs.phone='সঠিক মোবাইল নম্বর দিন বা ঘরটি ফাঁকা রাখুন।';}
+ else if(!validPhone(d.phone))a.errs.phone='সঠিক মোবাইল নম্বর দিন, যেমন ০১৭১২৩৪৫৬৭৮৯।';
  if(!d.terms)a.errs.terms='এগিয়ে যেতে সম্মতি দিন।';
  if(Object.keys(a.errs).length)return rerender();
  a.step='pass';rerender();
@@ -255,20 +264,21 @@ AF['farm']=async f=>{
  if(!(farm.land>=.1&&farm.land<=50)){a.errs.land='জমির পরিমাণ ০.১ থেকে ৫০ একরের মধ্যে দিন।';return rerender();}
  busyA(f,true);S.cloudBusy=true;
  try{
-  const cu=await AgriCloud.signUp(d.email,d.pwPlain,d.name);d.pwPlain='';
+  const pm=d.method==='phone',cu=await AgriCloud.signUp(pm?d.phone+SYN:d.email,d.pwPlain,d.name,pm);d.pwPlain='';
   const u=await cloudUser(cu,farm,{name:d.name,mobile:d.phone});
   try{await AgriCloud.saveProfile(u.uid,{name:u.name,email:u.email,phone:u.mobile,profile:u.profile});}catch(e){}
-  S.cloudBusy=false;loginUser(u);toast('অ্যাকাউন্ট তৈরি হয়েছে। ইমেইলে যাচাইয়ের লিংক পাঠানো হয়েছে।');
- }catch(e){S.cloudBusy=false;a.err=cErr(e);if(e&&e.code==='auth/email-already-in-use'){a.step='phone';}rerender();}
+  S.cloudBusy=false;loginUser(u);toast(pm?'অ্যাকাউন্ট তৈরি হয়েছে। স্বাগতম, '+u.name+'!':'অ্যাকাউন্ট তৈরি হয়েছে। ইমেইলে যাচাইয়ের লিংক পাঠানো হয়েছে।');
+ }catch(e){S.cloudBusy=false;a.err=cErrM(e,d.method);if(e&&e.code==='auth/email-already-in-use'){a.step='phone';}rerender();}
 };
 AF['c-login']=async f=>{
- const a=au(),d=a.d;d.email=$('#aemail').value.trim().toLowerCase();const pw=$('#apw').value;a.ok='';a.err='';a.errs={};
- if(!validEmail(d.email))a.errs.email='সঠিক ইমেইল দিন।';
+ const a=au(),d=a.d,m=meth();a.ok='';a.err='';a.errs={};const pw=$('#apw').value;let id='';
+ if(m==='phone'){d.phone=cleanPh($('#aphone').value);if(!validPhone(d.phone))a.errs.phone='সঠিক মোবাইল নম্বর দিন, যেমন ০১৭১২৩৪৫৬৭৮৯।';id=d.phone+SYN;}
+ else{d.email=$('#aemail').value.trim().toLowerCase();if(!validEmail(d.email))a.errs.email='সঠিক ইমেইল দিন।';id=d.email;}
  if(!pw)a.errs.pw='পাসওয়ার্ড লিখুন।';
  if(Object.keys(a.errs).length)return rerender();
  busyA(f,true);S.cloudBusy=true;
- try{const cu=await AgriCloud.signIn(d.email,pw);const u=await cloudUser(cu);S.cloudBusy=false;loginUser(u);toast('স্বাগতম, '+u.name+'!');}
- catch(e){S.cloudBusy=false;a.err=cErr(e);rerender();}
+ try{const cu=await AgriCloud.signIn(id,pw);const u=await cloudUser(cu);S.cloudBusy=false;loginUser(u);toast('স্বাগতম, '+u.name+'!');}
+ catch(e){S.cloudBusy=false;a.err=cErrM(e,m);rerender();}
 };
 AF['c-reset']=async f=>{
  const a=au(),d=a.d;d.email=$('#aemail').value.trim().toLowerCase();a.ok='';a.err='';a.errs={};
@@ -280,6 +290,7 @@ AF['c-reset']=async f=>{
 };
 /* login form dispatch: the shared "login" handler name is used by the local form only */
 Object.assign(A,{
+ authMethod:t=>{const a=au();a.method=t.dataset.v==='email'?'email':'phone';a.errs={};a.err='';a.ok='';rerender();},
  resendVerify:()=>{AgriCloud.resend().then(()=>toast('যাচাইয়ের ইমেইল আবার পাঠানো হয়েছে')).catch(e=>toast(cErr(e)));}
 });
 window.addEventListener('agri-cloud',()=>{if(S.route==='login'||S.route==='signup'){S.auth={step:'phone'};render();}});
