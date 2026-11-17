@@ -1,4 +1,4 @@
-import re, json, pathlib
+import re, json, pathlib, datetime
 KEEP_SUB = {'কেজি', 'একর', 'কিমি', 'ছত্রাক।', 'কেজি।', 'কেজিতে', 'বার্তা', 'সোম:', 'মঙ্গল:', 'বুধ:', 'বৃহঃ:', 'শুক্র:', 'শনি:', 'রবি:', 'ডোমেইন:', 'ইউরিয়া', 'হিমাগার-', 'কাছেই'}
 def load_en():
     d = {}
@@ -108,5 +108,6 @@ head = ('<!doctype html>\n<html lang="bn"><head><meta charset="utf-8">'
         '<link rel="manifest" href="manifest.webmanifest">' '<script type="module" src="firebase-glue.js"></script>'
         '<link rel="icon" href="icon-192.png"><link rel="apple-touch-icon" href="icon-192.png">')
 tail = ('\n<script>if("serviceWorker" in navigator&&location.protocol.startsWith("http")){addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));}</script>\n</body></html>\n')
+s = s.replace('__BUILD__', datetime.datetime.utcnow().strftime('%d%m %H:%M') + ' UTC')
 (root.parent / 'index.html').write_text(head + s + tail)
 print('built', len(s)//1024, 'KB')
