@@ -199,7 +199,7 @@ async function aiRun(){
 A.aiRetry=()=>{aiLast=0;aiRun();};
 function aiCard(g,p){
  const a=g.ai||{busy:true},t=x=>esc(x==null?'':x),L=(h,x)=>x?`<div><h3>${h}</h3><p>${t(x)}</p></div>`:'';
- if(a.busy)return `<section class="card"><h2>ছবি বিশ্লেষণ</h2><p class="muted">AI আপনার ছবি দেখছে, কয়েক সেকেন্ড লাগবে…</p></section>`;
+ if(a.busy)return `<section class="card"><h2>ছবি বিশ্লেষণ</h2><p class="muted">AI আপনার ছবি দেখছে, প্রায় ১০ সেকেন্ড লাগতে পারে…</p></section>`;
  if(a.err){const m=a.err==='wait'?'একটু পরে আবার চেষ্টা করুন।':a.err==='noai'?'এই মুহূর্তে ছবি বিশ্লেষণ করা যাচ্ছে না। ইন্টারনেট সংযোগ দেখুন বা লগইন করে আবার চেষ্টা করুন।':'ছবি বিশ্লেষণ করা গেল না। ইন্টারনেট দেখে আবার চেষ্টা করুন।';
   return `<section class="card"><h2>ছবি বিশ্লেষণ</h2><p class="muted">${m}</p><div class="row" style="margin-top:10px"><button class="btn primary" data-a="aiRetry">আবার চেষ্টা করুন</button></div><p class="small muted" style="margin-top:10px">অথবা বাঁ পাশ থেকে একটি নমুনা পাতা বেছে রোগের তথ্য দেখুন।</p>${a.msg?`<p class="tiny muted" style="margin-top:8px;word-break:break-all">কারিগরি তথ্য: ${t(a.msg)}</p>`:''}</section>`;}
  const d=a.d||{};
