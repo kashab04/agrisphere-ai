@@ -1,0 +1,1000 @@
+<title>AgriSphere AI</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anek+Bangla:wght@500;600;700;800&family=Hind+Siliguri:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: sticky top bar, six hash-routed views (home journey + the five AgriSphere challenges), bottom tab bar on phones.
+   Palette: field-green ink on a green-tinted neutral, one rice-green accent, sun-yellow for money, water-blue for moisture. */
+:root{
+  --bg:#F1F5EE; --surface:#FFFFFF; --surface-2:#E6EEE2; --ink:#10251A; --muted:#52675A; --line:#D0DCCB;
+  --accent:#1B7A3D; --accent-ink:#FFFFFF; --accent-soft:#D9EEDC;
+  --sun:#855900; --sun-soft:#FAEFC9; --danger:#B3261E; --danger-soft:#F8DCD8; --water:#195E78; --water-soft:#D6EAF2;
+  --leaf:#5aa65a;
+  --shadow:0 1px 2px rgba(16,37,26,.06),0 8px 24px rgba(16,37,26,.06);
+  --font-display:"Anek Bangla","Hind Siliguri","Noto Sans Bengali",system-ui,sans-serif;
+  --font-body:"Hind Siliguri","Noto Sans Bengali",system-ui,sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0E1812; --surface:#15231A; --surface-2:#1C2E22; --ink:#E7F0E6; --muted:#9DB2A2; --line:#2A3E2F;
+  --accent:#5CC47A; --accent-ink:#0B1A10; --accent-soft:#1D3A26;
+  --sun:#F2B93B; --sun-soft:#3A2F12; --danger:#F29083; --danger-soft:#3C1D19; --water:#7CC3DE; --water-soft:#173340;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.25); color-scheme:dark;}}
+:root[data-theme="dark"]{
+  --bg:#0E1812; --surface:#15231A; --surface-2:#1C2E22; --ink:#E7F0E6; --muted:#9DB2A2; --line:#2A3E2F;
+  --accent:#5CC47A; --accent-ink:#0B1A10; --accent-soft:#1D3A26;
+  --sun:#F2B93B; --sun-soft:#3A2F12; --danger:#F29083; --danger-soft:#3C1D19; --water:#7CC3DE; --water-soft:#173340;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.25); color-scheme:dark;}
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--font-body);font-size:16px;line-height:1.6}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:40;background:var(--bg)}
+h1,h2,h3{font-family:var(--font-display);line-height:1.35;margin:0;text-wrap:balance;font-weight:700}
+h1{font-size:clamp(1.55rem,4.2vw,2.2rem);font-weight:800}
+h2{font-size:1.2rem} h3{font-size:1.02rem}
+p{margin:0}
+button,input,select{font:inherit;color:inherit}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px;border-radius:6px}
+.wrap{max-width:1100px;margin-inline:auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.muted{color:var(--muted)} .small{font-size:.88rem} .tiny{font-size:.78rem}
+.nowrap{white-space:nowrap}
+
+/* top bar */
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:30;background:var(--bg);border-bottom:1px solid var(--line)}
+.topin{display:flex;align-items:center;gap:16px;min-height:60px}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;font-family:var(--font-display);font-weight:800;font-size:1.15rem;flex:none}
+.brand svg{width:30px;height:30px;color:var(--accent)}
+.dnav{display:none;gap:2px;margin-left:auto}
+.dnav a{display:flex;flex-direction:column;align-items:center;text-decoration:none;padding:6px 12px;border-radius:10px;line-height:1.25;color:var(--muted)}
+.dnav a b{font-weight:600;font-size:.95rem;color:inherit}
+.dnav a span{font-size:.7rem;opacity:.85}
+.dnav a:hover{background:var(--surface-2)}
+.dnav a[aria-current="page"]{background:var(--accent-soft);color:var(--accent)}
+.demo-pill{margin-left:auto;font-size:.78rem;font-weight:600;padding:4px 10px;border-radius:99px;background:var(--sun-soft);color:var(--sun);white-space:nowrap}
+.bnav{position:fixed;left:0;right:0;bottom:0;z-index:30;background:var(--surface);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom,0px)}
+.bnav .wrap{display:grid;grid-template-columns:repeat(6,1fr);padding-left:max(4px,env(safe-area-inset-left,0px));padding-right:max(4px,env(safe-area-inset-right,0px))}
+.bnav a{display:flex;flex-direction:column;align-items:center;gap:1px;padding:8px 2px 7px;text-decoration:none;color:var(--muted);font-size:.7rem;font-weight:500;min-width:0}
+.bnav a svg{width:22px;height:22px}
+.bnav a[aria-current="page"]{color:var(--accent);font-weight:700}
+@media (min-width:860px){.dnav{display:flex}.demo-pill{margin-left:12px}.bnav{display:none}}
+
+main{padding-block:22px 110px;display:block}
+@media (min-width:860px){main{padding-block:28px 48px}}
+.stack{display:flex;flex-direction:column;gap:18px}
+.grid{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr))}
+.grid.two{grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr))}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px;min-width:0}
+.card.flat{background:var(--surface-2);border-color:transparent}
+.card h2{margin-bottom:10px}
+.card > .lead{color:var(--muted);margin:-4px 0 12px;font-size:.92rem}
+
+/* module header */
+.mod-head{display:flex;flex-direction:column;gap:8px}
+.tag{display:inline-flex;align-self:flex-start;align-items:center;gap:6px;font-family:var(--font-display);font-weight:600;font-size:.82rem;letter-spacing:.02em;padding:3px 12px;border-radius:99px;background:var(--accent-soft);color:var(--accent)}
+.mod-head p{color:var(--muted);max-width:62ch}
+.pbar{display:flex;align-items:center;gap:12px;flex-wrap:wrap;justify-content:space-between;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:8px 8px 8px 14px}
+.pbar-items{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:.92rem;min-width:0}
+.pbar-items span+span::before{content:"·";margin-right:14px;color:var(--muted)}
+
+/* controls */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;padding:8px 16px;border-radius:10px;border:1px solid var(--line);background:var(--surface);cursor:pointer;font-weight:600;text-decoration:none;line-height:1.3}
+.btn:hover{background:var(--surface-2)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.btn.primary:hover{filter:brightness(1.07);background:var(--accent)}
+.btn.sm{min-height:38px;padding:4px 12px;font-size:.92rem}
+.btn[disabled]{opacity:.55;cursor:not-allowed}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{min-height:40px;padding:4px 14px;border-radius:99px;border:1px solid var(--line);background:var(--surface);cursor:pointer;font-weight:500}
+.chip:hover{background:var(--surface-2)}
+.chip[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink);font-weight:600}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:var(--surface)}
+.seg button{min-height:40px;padding:4px 14px;border:0;background:transparent;cursor:pointer;font-weight:500}
+.seg button+button{border-left:1px solid var(--line)}
+.seg button[aria-pressed="true"]{background:var(--accent-soft);color:var(--accent);font-weight:700}
+.lbl{display:block;font-weight:600;margin:14px 0 6px;font-size:.92rem}
+input[type=number],input[type=text],select{width:100%;min-height:44px;padding:8px 12px;border-radius:10px;border:1px solid var(--line);background:var(--surface);font-size:1rem}
+input[type=range]{width:100%;accent-color:var(--accent);min-height:32px}
+.pill{display:inline-flex;align-items:center;gap:4px;font-size:.78rem;font-weight:700;padding:2px 10px;border-radius:99px;white-space:nowrap}
+.pill.ok{background:var(--accent-soft);color:var(--accent)}
+.pill.warn{background:var(--sun-soft);color:var(--sun)}
+.pill.bad{background:var(--danger-soft);color:var(--danger)}
+.pill.info{background:var(--water-soft);color:var(--water)}
+.pill.plain{background:var(--surface-2);color:var(--muted)}
+
+/* stats */
+.stats{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(min(100%,150px),1fr))}
+.stat{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 14px;min-width:0}
+.stat .k{font-size:.82rem;color:var(--muted)}
+.stat .v{font-family:var(--font-display);font-weight:700;font-size:1.45rem;line-height:1.3;font-variant-numeric:tabular-nums}
+.stat .s{font-size:.78rem;color:var(--muted)}
+.stat.hero{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.stat.hero .k,.stat.hero .s{color:inherit;opacity:.88}
+.stat.neg .v{color:var(--danger)}
+
+/* tables */
+.tw{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-variant-numeric:tabular-nums}
+th,td{text-align:left;padding:10px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-size:.82rem;color:var(--muted);font-weight:600;white-space:nowrap}
+td.r,th.r{text-align:right}
+tr.hl td{background:var(--accent-soft)}
+.neg{color:var(--danger)} .pos{color:var(--accent)}
+
+/* bars */
+.rank{display:flex;flex-direction:column;gap:8px}
+.rrow{display:grid;grid-template-columns:minmax(90px,.9fr) 3fr minmax(84px,auto);gap:10px;align-items:center;padding:8px 10px;border-radius:10px;border:1px solid transparent;background:transparent;width:100%;text-align:left;cursor:pointer}
+.rrow:hover{background:var(--surface-2)}
+.rrow[aria-pressed="true"]{border-color:var(--accent);background:var(--surface)}
+.rrow .nm{display:flex;flex-direction:column;gap:2px;font-weight:600;line-height:1.3}
+.bar{height:14px;background:var(--surface-2);border-radius:99px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--accent);border-radius:99px}
+.rrow.best .bar i{background:var(--accent)}
+.rrow:not(.best) .bar i{background:color-mix(in srgb,var(--accent) 45%,var(--surface-2))}
+.rrow .val{text-align:right;font-weight:700;font-variant-numeric:tabular-nums}
+@media (max-width:520px){.rrow{grid-template-columns:1fr auto}.rrow .bar{grid-column:1/-1;grid-row:2}}
+
+/* home */
+.hero{display:grid;gap:18px;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));align-items:stretch}
+.hero-copy{display:flex;flex-direction:column;gap:14px;justify-content:center}
+.hero-copy p{color:var(--muted);font-size:1.05rem;max-width:54ch}
+.farmer{display:flex;flex-direction:column;gap:12px}
+.farmer dl{display:grid;grid-template-columns:auto 1fr;gap:6px 16px;margin:0}
+.farmer dt{color:var(--muted);font-size:.9rem} .farmer dd{margin:0;font-weight:600}
+.journey{display:flex;flex-direction:column}
+.step{display:grid;grid-template-columns:48px 1fr;gap:4px 14px;padding:16px 0;position:relative}
+.step + .step{border-top:1px dashed var(--line)}
+.step .no{width:40px;height:40px;border-radius:50%;background:var(--accent-soft);color:var(--accent);display:grid;place-items:center;font-family:var(--font-display);font-weight:800;font-size:1.1rem}
+.step .body{display:flex;flex-direction:column;gap:6px;min-width:0}
+.step .when{font-size:.82rem;color:var(--muted);font-weight:600}
+.step .mt{display:flex;flex-wrap:wrap;align-items:center;gap:10px 18px;margin-top:4px}
+.step .metric{font-family:var(--font-display);font-weight:700;font-size:1.3rem;color:var(--accent)}
+.step .metric small{display:block;font-family:var(--font-body);font-weight:500;font-size:.78rem;color:var(--muted)}
+.links{display:grid;gap:10px}
+.links li{list-style:none;display:flex;gap:10px;align-items:flex-start}
+.links{padding:0;margin:0}
+.links svg{flex:none;width:18px;height:18px;margin-top:5px;color:var(--accent)}
+.deal-strip{display:flex;flex-wrap:wrap;gap:8px 20px;align-items:center;background:var(--accent-soft);border-radius:12px;padding:12px 16px}
+
+/* day strip */
+.days{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px}
+.day{display:flex;flex-direction:column;align-items:center;gap:4px;padding:10px 2px 8px;border-radius:12px;background:var(--surface-2);text-align:center;min-width:0}
+.day.alert{background:var(--water-soft)}
+.day .dn{font-size:.8rem;font-weight:600}
+.day .dt{font-family:var(--font-display);font-weight:700;font-size:1.02rem}
+.day svg{width:26px;height:26px;color:var(--muted)}
+.day.alert svg{color:var(--water)}
+.rainbar{width:14px;height:56px;border-radius:7px;background:var(--surface);position:relative;overflow:hidden;border:1px solid var(--line)}
+.rainbar i{position:absolute;left:0;right:0;bottom:0;background:var(--water)}
+.day .rp{font-size:.78rem;font-weight:600;color:var(--water)}
+.alerts{display:flex;flex-direction:column;gap:10px}
+.alert-card{display:grid;grid-template-columns:auto 1fr;gap:4px 12px;padding:12px 14px;border-radius:12px;background:var(--surface-2)}
+.alert-card.high{background:var(--danger-soft)} .alert-card.mid{background:var(--sun-soft)}
+.alert-card b{font-weight:700}
+.meter{height:12px;border-radius:99px;background:var(--surface-2);overflow:hidden}
+.meter i{display:block;height:100%;border-radius:99px;background:var(--accent)}
+.meter.mid i{background:var(--sun)} .meter.high i{background:var(--danger)}
+.sms{background:var(--surface-2);border-radius:16px 16px 16px 4px;padding:12px 14px;max-width:420px;font-size:.95rem;border:1px solid var(--line)}
+
+/* zones */
+.zones{display:grid;grid-template-columns:repeat(8,minmax(0,1fr));gap:4px}
+.zone{aspect-ratio:1.15;border-radius:6px;display:grid;place-items:center;font-size:.76rem;font-weight:600;font-variant-numeric:tabular-nums;border:1px solid transparent}
+.zone.dry{border:1.5px dashed var(--sun);font-weight:800}
+.legend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:.82rem;color:var(--muted)}
+.legend i{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+
+/* guardian */
+.leafpanel{position:relative;background:var(--surface-2);border-radius:12px;display:grid;place-items:center;min-height:280px;overflow:hidden}
+.leafpanel svg,.leafpanel img{max-height:270px;max-width:100%;width:auto}
+.leafpanel img{border-radius:8px;object-fit:contain}
+.scanline{position:absolute;left:0;right:0;height:3px;background:var(--accent);box-shadow:0 0 14px var(--accent);animation:scan 1.1s ease-in-out infinite alternate}
+@keyframes scan{from{top:8%}to{top:92%}}
+.scanning-note{position:absolute;bottom:10px;left:0;right:0;text-align:center;font-weight:700;color:var(--accent)}
+.steps{margin:0;padding-left:1.3em;display:flex;flex-direction:column;gap:6px}
+.kv{display:grid;gap:12px}
+.kv h3{font-size:.9rem;color:var(--muted);font-weight:600;margin-bottom:2px;font-family:var(--font-body)}
+.conf{display:flex;align-items:center;gap:10px}
+.conf .meter{flex:1}
+
+/* market */
+.tabs{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px;scrollbar-width:thin}
+.tabs button{flex:none;min-height:44px;padding:4px 16px;border-radius:10px;border:1px solid var(--line);background:var(--surface);cursor:pointer;font-weight:600;white-space:nowrap}
+.tabs button[aria-selected="true"]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.chartbox{width:100%;min-height:220px}
+.ch-grid{stroke:var(--line);stroke-width:1}
+.ch-txt{fill:var(--muted);font-size:11.5px;font-family:var(--font-body)}
+.ch-line{fill:none;stroke:var(--accent);stroke-width:2.6;stroke-linejoin:round}
+.ch-fc{fill:none;stroke:var(--accent);stroke-width:2.6;stroke-dasharray:7 6}
+.ch-band{fill:var(--accent);opacity:.14}
+.ch-today{stroke:var(--muted);stroke-dasharray:3 4}
+.ch-best{fill:var(--sun);stroke:var(--surface);stroke-width:2}
+.ch-bt{fill:var(--sun);font-size:12px;font-weight:700;font-family:var(--font-body)}
+.form-grid{display:grid;gap:4px 14px;grid-template-columns:repeat(auto-fit,minmax(min(100%,180px),1fr))}
+.listing{display:grid;grid-template-columns:auto 1fr;gap:10px 14px;align-items:start;padding:14px 0}
+.listing + .listing{border-top:1px solid var(--line)}
+.thumb{width:64px;height:64px;border-radius:10px;background:var(--surface-2);object-fit:cover;display:grid;place-items:center;color:var(--accent);font-family:var(--font-display);font-weight:800;font-size:1.3rem}
+.buyer{display:flex;flex-direction:column;gap:10px}
+.buyer .top2{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
+.buyer .nm{font-weight:700;font-family:var(--font-display)}
+.offer{font-family:var(--font-display);font-weight:800;font-size:1.6rem;color:var(--accent);line-height:1.2}
+.row{display:flex;flex-wrap:wrap;gap:6px 8px;align-items:center}
+.hr{height:1px;background:var(--line);margin:4px 0}
+.empty{border:1.5px dashed var(--line);border-radius:12px;padding:22px;text-align:center;color:var(--muted)}
+
+/* modal + chat */
+.modal{position:fixed;inset:0;z-index:60;background:rgba(8,16,11,.55);display:flex;align-items:flex-end;justify-content:center}
+.modal[hidden]{display:none}
+.sheet{background:var(--surface);color:var(--ink);width:100%;max-width:560px;max-height:92dvh;overflow:auto;border-radius:18px 18px 0 0;padding:18px max(16px,env(safe-area-inset-right,0px)) calc(18px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));box-shadow:var(--shadow)}
+@media (min-width:700px){.modal{align-items:center}.sheet{border-radius:18px}}
+.sheet-h{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:6px}
+.x{width:44px;height:44px;border-radius:10px;border:1px solid var(--line);background:var(--surface);font-size:1.5rem;line-height:1;cursor:pointer}
+.chat{display:flex;flex-direction:column;height:min(86dvh,700px);padding:0;gap:0}
+.chat-h{padding:14px 16px;border-bottom:1px solid var(--line);display:flex;flex-direction:column;gap:8px}
+.chat-b{flex:1;overflow:auto;padding:14px 16px;display:flex;flex-direction:column;gap:8px;background:var(--bg)}
+.msg{max-width:82%;padding:9px 13px;border-radius:14px;font-size:.96rem;line-height:1.5;overflow-wrap:anywhere}
+.msg.them{align-self:flex-start;background:var(--surface);border:1px solid var(--line);border-bottom-left-radius:4px}
+.msg.me{align-self:flex-end;background:var(--accent);color:var(--accent-ink);border-bottom-right-radius:4px}
+.msg.sys{align-self:center;background:var(--sun-soft);color:var(--sun);font-weight:600;font-size:.85rem;max-width:94%;text-align:center}
+.voice{display:flex;align-items:center;gap:10px}
+.wave{display:flex;align-items:center;gap:2px;height:22px}
+.wave i{display:block;width:3px;border-radius:2px;background:currentColor;opacity:.8}
+.chat-f{padding:10px 16px calc(12px + env(safe-area-inset-bottom,0px));border-top:1px solid var(--line);display:flex;flex-direction:column;gap:8px;background:var(--surface)}
+.chat-f form{display:flex;gap:8px}
+.chat-f .chips .chip{min-height:36px;font-size:.88rem}
+.typing{align-self:flex-start;color:var(--muted);font-size:.85rem}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(84px + env(safe-area-inset-bottom,0px));z-index:70;background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:10px;font-weight:600;max-width:min(92vw,460px);box-shadow:var(--shadow);opacity:0;pointer-events:none;transition:opacity .2s;text-align:center}
+.toast.on{opacity:1}
+@media (min-width:860px){.toast{bottom:28px}}
+.foot{color:var(--muted);font-size:.82rem;padding-block:0 100px}
+@media (min-width:860px){.foot{padding-bottom:36px}}
+@media (prefers-reduced-motion:reduce){.scanline{animation:none;top:50%}.toast{transition:none}}
+</style>
+
+<header class="top">
+  <div class="wrap topin">
+    <a class="brand" href="#home" aria-label="AgriSphere AI হোম">
+      <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="16" cy="16" r="13"/><path d="M16 25v-9"/><path d="M16 17c0-4 3-6.5 7-6.5 0 4-3 6.5-7 6.5z"/><path d="M16 19.5c0-3-2.2-5-6-5 0 3 2.2 5 6 5z"/></svg>
+      <span>AgriSphere AI</span>
+    </a>
+    <nav class="dnav" id="dnav" aria-label="প্রধান মেনু"></nav>
+    <span class="demo-pill">ডেমো প্রোটোটাইপ</span>
+  </div>
+</header>
+<main class="wrap" id="app"></main>
+<div class="wrap foot">AI Builders Congress · Team 01 · AgriSphere AI। এই ডেমোর সব সংখ্যা, নাম ও ক্রেতা নমুনা তথ্য; আসল বাজারদর, আবহাওয়া ও AI মডেল এখানে সংযুক্ত নেই।</div>
+<nav class="bnav" id="bnav" aria-label="নিচের মেনু"><div class="wrap"></div></nav>
+<div id="modal" class="modal" hidden></div>
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+<script>
+(()=>{
+'use strict';
+/* ---------- helpers ---------- */
+const $=s=>document.querySelector(s);
+const BD='০১২৩৪৫৬৭৮৯';
+const bn=v=>String(v).replace(/\d/g,d=>BD[d]);
+const num=n=>bn(Math.round(n).toLocaleString('en-IN'));
+const dec=(n,k=1)=>bn((Math.round(n*10**k)/10**k).toString());
+const tk=n=>(n<0?'−':'')+'৳'+num(Math.abs(n));
+const pct=n=>bn(Math.round(n))+'%';
+const tkd=n=>(n<0?'−':'')+'৳'+dec(Math.abs(n),1);
+const MONTHS=['জানুয়ারি','ফেব্রুয়ারি','মার্চ','এপ্রিল','মে','জুন','জুলাই','আগস্ট','সেপ্টেম্বর','অক্টোবর','নভেম্বর','ডিসেম্বর'];
+const WD=['রবি','সোম','মঙ্গল','বুধ','বৃহঃ','শুক্র','শনি'];
+const addDays=n=>{const d=new Date();d.setHours(12,0,0,0);d.setDate(d.getDate()+n);return d;};
+const dstr=d=>bn(d.getDate())+' '+MONTHS[d.getMonth()];
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const rng=seed=>{let a=seed>>>0;return()=>{a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};};
+const hash=s=>[...s].reduce((h,c)=>Math.imul(h^c.charCodeAt(0),16777619)>>>0,2166136261);
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+let toastT;
+const toast=m=>{const t=$('#toast');t.textContent=m;t.classList.add('on');clearTimeout(toastT);toastT=setTimeout(()=>t.classList.remove('on'),2800);};
+
+const IC={
+ home:'<path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/>',
+ yieldmax:'<path d="M12 21v-9"/><path d="M12 13c0-4 3-6 7-6 0 4-3 6-7 6z"/><path d="M12 16c0-3-2-5-6-5 0 3 2 5 6 5z"/>',
+ precision:'<path d="M12 3c3 4 6 7 6 10a6 6 0 0 1-12 0c0-3 3-6 6-10z"/><path d="M9.5 14a2.5 2.5 0 0 0 2.5 2.5"/>',
+ climate:'<path d="M7 18a4 4 0 0 1-.5-7.97A5.5 5.5 0 0 1 17 9a4.5 4.5 0 0 1 .5 9H7z"/>',
+ guardian:'<path d="M5 8V5h3M16 5h3v3M19 16v3h-3M8 19H5v-3"/><path d="M12 8c-3 1-4 3-4 6 3 0 5-1 6-4 0-1-1-2-2-2z"/>',
+ market:'<path d="M4 9l1.5-5h13L20 9"/><path d="M4 9v11h16V9"/><path d="M10 20v-5h4v5"/><path d="M4 9c0 1.5 1.3 2.5 2.7 2.5S9.3 10.5 9.3 9c0 1.5 1.3 2.5 2.7 2.5s2.7-1 2.7-2.5c0 1.5 1.3 2.5 2.7 2.5S20 10.5 20 9"/>',
+ check:'<path d="M5 12l5 5 9-10"/>'
+};
+const ic=(k,extra='')=>`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" ${extra}>${IC[k]}</svg>`;
+
+/* ---------- data (all sample values) ---------- */
+const NAV=[
+ {id:'home',bn:'হোম',en:'',short:'হোম'},
+ {id:'yieldmax',bn:'ফলন ও লাভ',en:'YieldMax',short:'ফলন'},
+ {id:'precision',bn:'সার ও সেচ',en:'Precision Farm',short:'সার-সেচ'},
+ {id:'climate',bn:'আবহাওয়া',en:'Climate Smart Farming',short:'আবহাওয়া'},
+ {id:'guardian',bn:'রোগ শনাক্ত',en:'Crop Guardian',short:'রোগ'},
+ {id:'market',bn:'বাজার',en:'FarmMarket',short:'বাজার'}
+];
+const SOIL={loam:'দো-আঁশ',clay:'এঁটেল',sandy:'বেলে'};
+const SOILF={loam:{u:1,k:1,w:1,base:40,thr:30},clay:{u:.95,k:.9,w:.8,base:46,thr:34},sandy:{u:1.05,k:1.15,w:1.3,base:32,thr:24}};
+const RISK={1:['কম','ok'],2:['মাঝারি','warn'],3:['বেশি','bad']};
+const CROPS={
+ rice:{bn:'বোরো ধান',yield:1700,cost:38000,base:28,trend:.0015,amp:.02,ph:0,days:140,store:.01,risk:1,sow:'১৫ নভেম্বর – ১৫ ডিসেম্বর (বীজতলা)',fert:{urea:105,tsp:40,mop:50,gyp:25},irr:12,suit:{loam:1,clay:1.1,sandy:.8},
+  tips:['পর্যায়ক্রমে ভেজা-শুকনো (AWD) সেচে ২০–২৫% পানি বাঁচে','বীজতলায় পলিথিন ঢাকনা দিলে ঠান্ডার ক্ষতি কমে','ইউরিয়া ভাগ করে দিন, ভারী বৃষ্টির আগে নয়']},
+ potato:{bn:'আলু',yield:7500,cost:85000,base:22,trend:.008,amp:.03,ph:1.2,days:90,store:.02,risk:2,sow:'১৫ – ৩০ নভেম্বর',fert:{urea:100,tsp:60,mop:100,gyp:48},irr:5,suit:{loam:1.05,clay:.85,sandy:.95},
+  tips:['উঁচু বেডে রোপণ করলে পানি নিষ্কাশন সহজ হয়','কুয়াশা ও আর্দ্র আবহাওয়ায় আগাম ছত্রাক নিয়ন্ত্রণ করুন','নালা বা ড্রিপ সেচে পানি সাশ্রয় হয়']},
+ tomato:{bn:'টমেটো',yield:7000,cost:95000,base:24,trend:-.006,amp:.06,ph:2,days:100,store:.15,risk:3,sow:'নভেম্বর – ডিসেম্বর (চারা রোপণ)',fert:{urea:150,tsp:110,mop:100,gyp:50},irr:8,suit:{loam:1.05,clay:.85,sandy:.9},
+  tips:['খুঁটি ও মালচিং দিয়ে আর্দ্রতা ধরে রাখুন','ঠান্ডা রাতে চারা ঢেকে দিন','ড্রিপ সেচ ও পরিমিত সার ব্যবহার করুন']},
+ onion:{bn:'পেঁয়াজ',yield:4000,cost:75000,base:42,trend:.004,amp:.04,ph:.5,days:110,store:.03,risk:3,sow:'নভেম্বর – ডিসেম্বর',fert:{urea:110,tsp:60,mop:90,gyp:45},irr:7,suit:{loam:1.05,clay:.8,sandy:.95},
+  tips:['উঁচু বেড ও ভালো নিষ্কাশন রাখুন','বৃষ্টির আগে সেচ ও স্প্রে বন্ধ রাখুন','তোলার পর ছায়াযুক্ত ঘরে শুকিয়ে সংরক্ষণ করুন']},
+ maize:{bn:'ভুট্টা',yield:3600,cost:45000,base:24,trend:.002,amp:.025,ph:2.5,days:135,store:.01,risk:1,sow:'নভেম্বর – ডিসেম্বর',fert:{urea:190,tsp:80,mop:60,gyp:40},irr:6,suit:{loam:1.05,clay:.9,sandy:.9},
+  tips:['খরা সহনশীল হাইব্রিড জাত বেছে নিন','গোড়ায় মাটি তুলে দিলে ঝড়ে গাছ হেলে পড়ে না','মালচিং দিয়ে আর্দ্রতা ধরে রাখুন']}
+};
+const CK=Object.keys(CROPS);
+const MARKETS={dhaka:{bn:'ঢাকা',f:1.12},ctg:{bn:'চট্টগ্রাম',f:1.08},bogura:{bn:'বগুড়া',f:.96},rangpur:{bn:'রংপুর',f:.93},rajshahi:{bn:'রাজশাহী',f:.97},jashore:{bn:'যশোর',f:.95}};
+const MK=Object.keys(MARKETS);
+const DIST={
+ 'রংপুর':{m:'rangpur',km:{dhaka:310,ctg:560,bogura:130,rangpur:10,rajshahi:250,jashore:400}},
+ 'বগুড়া':{m:'bogura',km:{dhaka:230,ctg:480,bogura:10,rangpur:130,rajshahi:120,jashore:270}},
+ 'রাজশাহী':{m:'rajshahi',km:{dhaka:260,ctg:520,bogura:120,rangpur:250,rajshahi:10,jashore:250}},
+ 'যশোর':{m:'jashore',km:{dhaka:180,ctg:400,bogura:270,rangpur:400,rajshahi:230,jashore:10}},
+ 'কুমিল্লা':{m:'dhaka',km:{dhaka:100,ctg:170,bogura:330,rangpur:430,rajshahi:360,jashore:280}},
+ 'সিলেট':{m:'dhaka',km:{dhaka:240,ctg:330,bogura:450,rangpur:520,rajshahi:480,jashore:420}}
+};
+const FC={
+ 'রংপুর':{t:[24,25,25,23,22,24,26],r:[10,10,20,60,75,30,10]},
+ 'বগুড়া':{t:[25,26,26,24,23,25,26],r:[10,15,20,50,70,30,10]},
+ 'রাজশাহী':{t:[26,27,27,26,25,26,27],r:[5,10,10,20,35,15,5]},
+ 'যশোর':{t:[27,28,27,26,25,26,28],r:[10,10,30,45,55,20,10]},
+ 'কুমিল্লা':{t:[27,28,28,26,24,25,27],r:[15,20,40,70,85,45,15]},
+ 'সিলেট':{t:[25,26,25,23,21,23,25],r:[20,30,55,80,90,60,25]}
+};
+const DIS={
+ potato:{bn:'আলুর লেট ব্লাইট (বিলম্বিত ধ্বসা)',en:'Late blight',sev:['উচ্চ','bad'],conf:91,leaf:'broad',
+  cause:'Phytophthora নামের ছত্রাকজাতীয় জীবাণু। ঠান্ডা, কুয়াশা ও আর্দ্র আবহাওয়ায় দ্রুত ছড়ায়।',
+  sym:'পাতায় পানি-ভেজা গাঢ় বাদামি দাগ, নিচের দিকে সাদা ছত্রাকের আস্তরণ। কয়েক দিনে পুরো গাছ ঝলসে যেতে পারে।',
+  steps:['আক্রান্ত পাতা ও গাছ তুলে মাটির নিচে পুঁতে ফেলুন বা পুড়িয়ে দিন','জমিতে পানি জমতে দেবেন না, উপর থেকে সেচ এড়ান','উপজেলা কৃষি অফিসারের পরামর্শে অনুমোদিত ছত্রাকনাশক দিন, লেবেলের মাত্রা মানুন'],
+  bio:'রোগমুক্ত বীজ, সুষম সার এবং ফসল পর্যায়ক্রম।',chem:'ম্যানকোজেব বা মেটালেক্সিল-জাতীয় ছত্রাকনাশক (লেবেল অনুযায়ী)।',humid:true},
+ tomato:{bn:'টমেটোর আর্লি ব্লাইট (আগাম ধ্বসা)',en:'Early blight',sev:['মাঝারি','warn'],conf:88,leaf:'broad',
+  cause:'Alternaria solani ছত্রাক। গরম-আর্দ্র আবহাওয়া ও দুর্বল গাছে বেশি হয়।',
+  sym:'নিচের পাতায় লক্ষ্যবস্তুর মতো বৃত্তাকার ঘন দাগ। পরে পাতা হলুদ হয়ে ঝরে পড়ে।',
+  steps:['নিচের আক্রান্ত পাতা কেটে সরিয়ে ফেলুন','গোড়ায় মালচিং দিন, পাতা ভিজিয়ে সেচ দেবেন না','কৃষি অফিসারের পরামর্শে অনুমোদিত ছত্রাকনাশক দিন'],
+  bio:'তিন বছরের ফসল পর্যায়ক্রম, রোগমুক্ত চারা।',chem:'ক্লোরোথ্যালোনিল বা ম্যানকোজেব-জাতীয় (লেবেল অনুযায়ী)।',humid:true},
+ rice:{bn:'ধানের ব্লাস্ট',en:'Rice blast',sev:['উচ্চ','bad'],conf:86,leaf:'blade',
+  cause:'Magnaporthe oryzae ছত্রাক। অতিরিক্ত ইউরিয়া ও ঠান্ডা-আর্দ্র আবহাওয়ায় বাড়ে।',
+  sym:'পাতায় মাঝখানে ধূসর, কিনারা বাদামি রম্বাস আকৃতির দাগ। শীষেও আক্রমণ করতে পারে।',
+  steps:['অতিরিক্ত ইউরিয়া বন্ধ করুন, সুষম সার দিন','জমিতে পানি ধরে রাখুন','কৃষি অফিসারের পরামর্শে অনুমোদিত ছত্রাকনাশক দিন'],
+  bio:'প্রতিরোধী জাত ও সময়মতো রোপণ।',chem:'ট্রাইসাইক্লাজোল-জাতীয় (লেবেল অনুযায়ী)।',humid:true},
+ onion:{bn:'পেঁয়াজের পার্পল ব্লচ',en:'Purple blotch',sev:['মাঝারি','warn'],conf:84,leaf:'blade',
+  cause:'Alternaria porri ছত্রাক। বৃষ্টি, কুয়াশা ও ঘন রোপণে ছড়ায়।',
+  sym:'পাতায় বেগুনি কেন্দ্রের দাগ, চারপাশে হলুদ আভা। দাগ বাড়লে পাতা ভেঙে পড়ে।',
+  steps:['ঘন রোপণ এড়ান, বাতাস চলাচল বাড়ান','আক্রান্ত পাতা সরিয়ে ফেলুন','কৃষি অফিসারের পরামর্শে অনুমোদিত ছত্রাকনাশক দিন'],
+  bio:'রোগমুক্ত বীজ ও ফসল পর্যায়ক্রম।',chem:'ম্যানকোজেব-জাতীয় (লেবেল অনুযায়ী)।',humid:true},
+ maize:{bn:'ভুট্টার পাতা ঝলসানো (লিফ ব্লাইট)',en:'Northern leaf blight',sev:['মাঝারি','warn'],conf:87,leaf:'blade',
+  cause:'Exserohilum turcicum ছত্রাক। মাঝারি তাপ ও আর্দ্রতায় বাড়ে।',
+  sym:'পাতায় লম্বা, চুরুটের মতো ধূসর-বাদামি দাগ। নিচের পাতা থেকে উপরে ওঠে।',
+  steps:['আক্রান্ত অবশিষ্টাংশ জমি থেকে সরান','সুষম সার, বিশেষ করে পটাশ নিশ্চিত করুন','প্রয়োজনে কৃষি অফিসারের পরামর্শে ছত্রাকনাশক দিন'],
+  bio:'প্রতিরোধী হাইব্রিড জাত।',chem:'প্রোপিকোনাজল-জাতীয় (লেবেল অনুযায়ী)।',humid:true},
+ healthy:{bn:'সুস্থ পাতা',en:'Healthy',sev:['কোনো রোগ নেই','ok'],conf:95,leaf:'broad',
+  cause:'কোনো রোগের লক্ষণ পাওয়া যায়নি।',sym:'পাতার রং সমান সবুজ, দাগ বা ছত্রাকের আস্তরণ নেই।',
+  steps:['নিয়মিত পর্যবেক্ষণ চালিয়ে যান','প্রতি ৭ দিনে পাতার ছবি তুলে দেখুন','আবহাওয়ার সতর্কবার্তা অনুসরণ করুন'],bio:'সুষম সার ও পরিমিত সেচ বজায় রাখুন।',chem:'কোনো ওষুধ দরকার নেই।',humid:false}
+};
+const CASES=[['potato','আলুর পাতা'],['tomato','টমেটোর পাতা'],['rice','ধানের পাতা'],['onion','পেঁয়াজের পাতা'],['maize','ভুট্টার পাতা'],['healthy','সুস্থ পাতা']];
+const BUY={
+ b1:{n:'আল-আমিন ট্রেডার্স',type:'পাইকার',city:'বগুড়া',crops:['potato','rice','maize'],m:.97,min:1000,rate:4.6,deals:128,ver:true,pay:'নগদ, মাল তোলার সময়',tp:'জমি থেকে নিজেরাই তুলে নেব, পরিবহন খরচ আমাদের।'},
+ b2:{n:'গ্রিন বাস্কেট ফুডস',type:'খুচরা চেইনের সরবরাহকারী',city:'ঢাকা',crops:['potato','tomato','onion'],m:1.03,min:2000,rate:4.4,deals:76,ver:true,pay:'ডেলিভারির ২ দিনের মধ্যে',tp:'পরিবহন ভাগাভাগি করা যায়, ৫০০ কেজির বেশি হলে আমরা গাড়ি পাঠাব।'},
+ b3:{n:'সততা এগ্রো',type:'পাইকার',city:'রংপুর',crops:['rice','maize','onion','potato'],m:.95,min:500,rate:4.2,deals:54,ver:true,pay:'নগদ, মাল বুঝে নিয়ে',tp:'আপনার পরিবহন, আমরা গুদামে বুঝে নেব।'},
+ b4:{n:'ফ্রেশ কার্ট',type:'অনলাইন গ্রোসারি',city:'ঢাকা',crops:['tomato','potato','onion'],m:1.06,min:800,rate:4.1,deals:22,ver:false,pay:'ডেলিভারির ৭ দিন পর',tp:'পরিবহন আপনাকে দিতে হবে।'},
+ b5:{n:'নবান্ন ফিড মিলস',type:'ফিড কোম্পানি',city:'ময়মনসিংহ',crops:['maize','rice'],m:1.04,min:3000,rate:4.5,deals:41,ver:true,pay:'ব্যাংক হিসাবে ৩ দিনে',tp:'বড় পরিমাণে আমরা ট্রাক পাঠাব।'}
+};
+const VEH=[['পিকআপ',1000,28],['মিনি ট্রাক',3000,40],['ট্রাক',10000,70]];
+
+/* ---------- state ---------- */
+const S={
+ route:'home',
+ profile:{name:'রহিম মিয়া',district:'রংপুর',crop:'potato',land:2,soil:'loam'},
+ yS:'normal',pS:'normal',
+ mTab:'board',mCrop:'potato',selL:null,
+ listings:[],deals:[],chats:{},prefill:null,seed:1,
+ g:{key:'potato',photo:null,scanning:false},
+ hold:3
+};
+const YF={bad:.82,normal:1,good:1.1}, PF={low:.88,normal:1,high:1.1};
+
+/* ---------- price engine ---------- */
+const PCache={};
+function priceData(crop,mk){
+ const key=crop+'|'+mk; if(PCache[key])return PCache[key];
+ const c=CROPS[crop],m=MARKETS[mk],r=rng(hash(key)),N=28,M=10,hist=[];
+ for(let i=0;i<N;i++){const t=i-(N-1);hist.push(c.base*m.f*(1+c.trend*t+c.amp*Math.sin(2*Math.PI*t/7+c.ph)+(r()-.5)*.025));}
+ let sx=0,sy=0,sxy=0,sxx=0;for(let i=0;i<N;i++){sx+=i;sy+=hist[i];sxy+=i*hist[i];sxx+=i*i;}
+ const b=(N*sxy-sx*sy)/(N*sxx-sx*sx),a=(sy-b*sx)/N;
+ const res=hist.map((v,i)=>v-(a+b*i)),sea=Array(7).fill(0),cnt=Array(7).fill(0);
+ res.forEach((e,i)=>{sea[i%7]+=e;cnt[i%7]++;});for(let k=0;k<7;k++)sea[k]/=cnt[k];
+ const sd=Math.sqrt(res.reduce((s,e,i)=>s+(e-sea[i%7])**2,0)/N),fc=[];
+ for(let d=1;d<=M;d++){const i=N-1+d,v=a+b*i+sea[i%7],w=1.28*sd*Math.sqrt(1+d/4);fc.push({v,lo:v-w,hi:v+w});}
+ return PCache[key]={hist,fc};
+}
+const todayP=(crop,mk)=>{const h=priceData(crop,mk).hist;return h[h.length-1];};
+const localMk=()=>DIST[S.profile.district].m;
+const localPrice=crop=>todayP(crop,localMk());
+function bestDay(crop,mk){
+ const {hist,fc}=priceData(crop,mk),st=CROPS[crop].store,t=hist[hist.length-1];
+ let best={d:0,net:t,price:t};
+ fc.forEach((f,i)=>{const d=i+1,net=f.v-st*d;if(net>best.net+.05)best={d,net,price:f.v};});
+ return best;
+}
+const transportPerKg=km=>km*.009+.3;
+
+/* ---------- calculations ---------- */
+function yieldCalc(crop=S.profile.crop,o={}){
+ const p=S.profile,c=CROPS[crop],ys=o.ys||S.yS,ps=o.ps||S.pS;
+ const yieldKg=p.land*c.yield*c.suit[p.soil]*YF[ys];
+ const price=localPrice(crop)*PF[ps];
+ const revenue=yieldKg*price,cost=p.land*c.cost,profit=revenue-cost;
+ return {yieldKg,price,revenue,cost,profit,be:cost/yieldKg,roi:profit/cost};
+}
+function precCalc(){
+ const p=S.profile,c=CROPS[p.crop],f=SOILF[p.soil],L=p.land;
+ const rec={urea:c.fert.urea*f.u*L,tsp:c.fert.tsp*L,mop:c.fert.mop*f.k*L,gyp:c.fert.gyp*L};
+ const PR={urea:27,tsp:27,mop:20,gyp:15};
+ const cost=Object.keys(rec).reduce((s,k)=>s+rec[k]*PR[k],0);
+ const typical=cost*1.25;
+ const irr=Math.max(2,Math.round(c.irr*f.w));
+ return {rec,PR,cost,typical,saving:typical-cost,irr,gap:Math.round(c.days/irr)};
+}
+function zones(){
+ const p=S.profile,f=SOILF[p.soil],r=rng(S.seed*7919+hash(p.soil+p.crop)),arr=[];
+ for(let y=0;y<5;y++)for(let x=0;x<8;x++){const v=f.base-12*(x/7)+(r()-.5)*26-(y>2?4:0);arr.push(clamp(Math.round(v),8,60));}
+ return {arr,thr:f.thr,dry:arr.filter(v=>v<f.thr).length};
+}
+function climate(){
+ const p=S.profile,d=FC[p.district],crop=p.crop,alerts=[];
+ const heavy=d.r.findIndex(v=>v>=70);
+ const dayLbl=i=>i===0?'আজ':WD[addDays(i).getDay()];
+ if(heavy>-1){
+  const act={rice:'বৃষ্টির আগে ইউরিয়া বা কীটনাশক দেবেন না। জমির পানি বের হওয়ার নালা পরিষ্কার রাখুন।',potato:'জমিতে পানি জমতে দেবেন না। আগাম ছত্রাক নিয়ন্ত্রণের কথা কৃষি অফিসারের সাথে বলুন।',tomato:'গাছে খুঁটি দিন ও পানি বের করার নালা ঠিক করুন।',onion:'উঁচু বেডে পানি নিষ্কাশন নিশ্চিত করুন। বৃষ্টির আগে স্প্রে করবেন না।',maize:'গোড়ায় মাটি তুলে দিন, ঝড়ে গাছ হেলে পড়তে পারে।'}[crop];
+  alerts.push({l:'high',t:`${dayLbl(heavy)}: ভারী বৃষ্টির সম্ভাবনা (${pct(d.r[heavy])})`,a:act});
+ }
+ if((crop==='potato'||crop==='tomato'||crop==='onion'||crop==='rice')&&d.r.some(v=>v>=50)){
+  alerts.push({l:'mid',t:'আর্দ্র আবহাওয়ায় ছত্রাক রোগের ঝুঁকি বাড়বে',a:'পাতায় দাগ দেখলে ছবি তুলে "রোগ শনাক্ত" অংশে দেখুন।',go:'guardian'});
+ }
+ if(heavy>-1&&heavy<=3){
+  const n=precCalc().irr;
+  alerts.push({l:'ok',t:'বৃষ্টির আগের দুই দিন সেচ বন্ধ রাখুন',a:`একটি সেচ বাদ দিলে মৌসুমে প্রায় ${pct(100/n)} পানি বাঁচে।`});
+ }
+ if(!d.r.some(v=>v>=50)){alerts.push({l:'ok',t:'এই সপ্তাহে বৃষ্টির সম্ভাবনা কম',a:'নির্ধারিত সেচের সময়সূচি মেনে চলুন।'});}
+ const avg=d.r.reduce((a,b)=>a+b,0)/7;
+ const sens={rice:.8,potato:1.1,tomato:1.1,onion:1.2,maize:.8}[crop];
+ const score=clamp(Math.round((avg*.7+(d.r.filter(v=>v>=70).length*10))*sens),5,95);
+ return {d,alerts,score,lvl:score>=55?['বেশি','high']:score>=30?['মাঝারি','mid']:['কম','']};
+}
+const wIcon=r=>r>=60?'<path d="M7 15a4 4 0 0 1-.5-7.97A5.5 5.5 0 0 1 17 6a4.5 4.5 0 0 1 .5 9H7z"/><path d="M9 18l-1 3M13 18l-1 3M17 18l-1 3"/>':r>=30?'<path d="M7 18a4 4 0 0 1-.5-7.97A5.5 5.5 0 0 1 17 9a4.5 4.5 0 0 1 .5 9H7z"/>':'<circle cx="12" cy="12" r="4"/><path d="M12 3v2M12 19v2M3 12h2M19 12h2M5.6 5.6l1.4 1.4M17 17l1.4 1.4M5.6 18.4L7 17M17 7l1.4-1.4"/>';
+
+/* ---------- shared UI bits ---------- */
+const chip=(label,attrs,on)=>`<button class="chip" ${attrs} aria-pressed="${!!on}">${label}</button>`;
+const statT=(k,v,s='',cls='')=>`<div class="stat ${cls}"><div class="k">${k}</div><div class="v">${v}</div>${s?`<div class="s">${s}</div>`:''}</div>`;
+const profileBar=()=>{const p=S.profile;return `<div class="pbar"><div class="pbar-items"><span><b>${p.name}</b>, ${p.district}</span><span>${CROPS[p.crop].bn}</span><span>${dec(p.land)} একর</span><span>${SOIL[p.soil]} মাটি</span></div><button class="btn sm" data-a="profile">তথ্য বদলান</button></div>`;};
+const head=(tagTxt,title,sub)=>`<header class="mod-head"><span class="tag">${tagTxt}</span><h1>${title}</h1><p>${sub}</p></header>${profileBar()}`;
+const note=t=>`<p class="tiny muted">${t}</p>`;
+
+/* ---------- views ---------- */
+const V={};
+
+V.home=()=>{
+ const p=S.profile,c=CROPS[p.crop],y=yieldCalc(),pr=precCalc(),cl=climate(),ld=localPrice(p.crop);
+ const dealSum=S.deals.reduce((s,d)=>s+d.total,0),gain=S.deals.reduce((s,d)=>s+d.gain,0);
+ const steps=[
+  ['yieldmax','মৌসুমের আগে','কোন ফসল লাগালে লাভ বেশি?','জমি, মাটি ও বাজারদর দেখে প্রত্যাশিত ফলন ও লাভের হিসাব।','YieldMax',tk(y.profit),'প্রত্যাশিত নিট লাভ'],
+  ['precision','চাষের সময়','কতটুকু সার ও পানি লাগবে?','মাটি ও ফসল অনুযায়ী সার-সেচের মাত্রা এবং জমির শুকনো অংশ চিহ্নিত করা।','Precision Farm',tk(pr.saving),'সারে সাশ্রয়'],
+  ['climate','সারা মৌসুম','আবহাওয়ার ঝুঁকি কী?','৭ দিনের পূর্বাভাস, বৃষ্টি ও তাপের সতর্কবার্তা, এসএমএস ও ভয়েস অ্যালার্ট।','Climate Smart Farming',bn(cl.alerts.filter(a=>a.l!=='ok').length)+' টি','সতর্কবার্তা চালু'],
+  ['guardian','ফসল রক্ষা','পাতায় দাগ, রোগটা কী?','পাতার ছবি তুলে রোগ শনাক্ত, প্রতিকার ও ওষুধের পরামর্শ।','Crop Guardian',DIS[p.crop].en,c.bn+'-এর সাধারণ রোগ'],
+  ['market','ফসল তোলার পর','কোথায়, কত দামে, কার কাছে বিক্রি?','বাজারদর, দামের পূর্বাভাস, সরাসরি ক্রেতার সাথে চ্যাট ও দরদাম।','FarmMarket',tk(ld)+'/কেজি','আজকের স্থানীয় দর']
+ ];
+ return `<div class="stack">
+ <section class="hero">
+  <div class="hero-copy">
+   <span class="tag">AgriSphere AI</span>
+   <h1>ক্ষুদ্র কৃষকের জন্য মৌসুমের শুরু থেকে ফসল বিক্রি পর্যন্ত একটাই প্ল্যাটফর্ম</h1>
+   <p>পাঁচটি ধাপ একে অপরের তথ্য ব্যবহার করে। ফলনের হিসাব বিক্রির তালিকায় যায়, আবহাওয়ার সতর্কতা রোগের ঝুঁকি জানায়।</p>
+   <div class="row"><a class="btn primary" href="#yieldmax">যাত্রা শুরু করুন</a><button class="btn" data-a="profile">কৃষকের তথ্য বদলান</button></div>
+  </div>
+  <div class="card farmer">
+   <div class="row" style="justify-content:space-between"><h2 style="margin:0">আজকের কৃষক</h2><span class="pill plain">নমুনা</span></div>
+   <dl>
+    <dt>নাম</dt><dd>${p.name}</dd>
+    <dt>জেলা</dt><dd>${p.district}</dd>
+    <dt>ফসল</dt><dd>${c.bn}</dd>
+    <dt>জমি</dt><dd>${dec(p.land)} একর, ${SOIL[p.soil]} মাটি</dd>
+    <dt>নিকটস্থ বাজার</dt><dd>${MARKETS[localMk()].bn}</dd>
+   </dl>
+   ${note('এই তথ্য বদলালে পাঁচটি মডিউলের সব হিসাব বদলে যায়।')}
+  </div>
+ </section>
+ ${S.deals.length?`<div class="deal-strip"><b>সম্পন্ন ডিল ${bn(S.deals.length)}টি</b><span>মোট ${tk(dealSum)}</span><span class="pos"><b>মধ্যস্বত্বভোগীর তুলনায় বাড়তি ${tk(gain)}</b></span></div>`:''}
+ <section class="card">
+  <h2>কৃষকের যাত্রা</h2>
+  <p class="lead">মৌসুমের ক্রম অনুযায়ী পাঁচটি ধাপ। সংখ্যাগুলো এখনকার কৃষক ও জমির তথ্য থেকে হিসাব করা।</p>
+  <div class="journey">
+  ${steps.map((s,i)=>`<div class="step"><div class="no">${bn(i+1)}</div><div class="body">
+    <span class="when">${s[1]}</span><h3>${s[2]}</h3><p class="muted">${s[3]}</p>
+    <div class="mt"><span class="tag">${s[4]}</span><span class="metric">${s[5]}<small>${s[6]}</small></span><a class="btn sm" href="#${s[0]}">খুলুন</a></div>
+  </div></div>`).join('')}
+  </div>
+ </section>
+ <section class="card">
+  <h2>ধাপগুলো কীভাবে যুক্ত</h2>
+  <ul class="links">
+   <li>${ic('check')}<span><b>ফলন থেকে বিক্রি:</b> ফলনের পূর্বাভাস থেকে বিক্রির তালিকার পরিমাণ ও দাম আপনা-আপনি ভরে যায়।</span></li>
+   <li>${ic('check')}<span><b>আবহাওয়া থেকে রোগ:</b> বৃষ্টির পূর্বাভাস বেশি হলে ছত্রাক রোগের সতর্কবার্তা আসে।</span></li>
+   <li>${ic('check')}<span><b>মাটি থেকে সার ও লাভ:</b> একই মাটির তথ্য সারের মাত্রা ও ফলনের হিসাব দুটোতেই ব্যবহার হয়।</span></li>
+   <li>${ic('check')}<span><b>বাজার থেকে ফলন:</b> বাজারের আজকের দর থেকে প্রত্যাশিত আয় ও লাভ বের হয়।</span></li>
+  </ul>
+ </section>
+ <div class="row"><button class="btn sm" data-a="reset">ডেমো ডেটা রিসেট করুন</button></div>
+ </div>`;
+};
+
+V.yieldmax=()=>{
+ const p=S.profile,c=CROPS[p.crop],y=yieldCalc(),all=CK.map(k=>({k,...yieldCalc(k)})).sort((a,b)=>b.profit-a.profit);
+ const best=all[0],maxP=Math.max(...all.map(a=>Math.abs(a.profit)),1);
+ const harvest=addDays(c.days);
+ let advice;
+ if(best.k===p.crop){advice=`আপনার নির্বাচিত ${c.bn} এই জমিতে সবচেয়ে বেশি লাভজনক। ${dec(p.land)} একরে প্রত্যাশিত নিট লাভ ${tk(y.profit)}।`;}
+ else{
+  const bc=CROPS[best.k],diff=best.profit-y.profit;
+  advice=`${dec(p.land)} একর ${SOIL[p.soil]} জমিতে ${bc.bn} চাষে ${c.bn}-এর চেয়ে প্রায় ${tk(diff)} বেশি লাভের সম্ভাবনা আছে। তবে ${bc.bn}-এর ঝুঁকি ${RISK[bc.risk][0]} এবং খরচ ${tk(Math.abs(best.cost-y.cost))} ${best.cost>y.cost?'বেশি':'কম'}। ${c.bn}-এর ঝুঁকি ${RISK[c.risk][0]}।`;
+ }
+ const sens=[-.2,-.1,0,.1].map(f=>{const prf=y.price*(1+f);return {f,price:prf,profit:y.yieldKg*prf-y.cost};});
+ return `<div class="stack">
+ ${head('YieldMax','কোন ফসলে কত ফলন ও লাভ','জমির পরিমাণ, মাটি ও আজকের বাজারদর থেকে প্রত্যাশিত ফলন, খরচ ও নিট লাভের হিসাব।')}
+ <div class="card"><div class="row" style="gap:16px 28px">
+   <div><div class="small muted" style="margin-bottom:4px">মৌসুম কেমন হবে?</div><div class="seg" role="group" aria-label="মৌসুম">${[['bad','খারাপ'],['normal','স্বাভাবিক'],['good','ভালো']].map(a=>`<button data-a="yS" data-v="${a[0]}" aria-pressed="${S.yS===a[0]}">${a[1]}</button>`).join('')}</div></div>
+   <div><div class="small muted" style="margin-bottom:4px">বিক্রির দাম কেমন থাকবে?</div><div class="seg" role="group" aria-label="দাম">${[['low','কম'],['normal','স্বাভাবিক'],['high','বেশি']].map(a=>`<button data-a="pS" data-v="${a[0]}" aria-pressed="${S.pS===a[0]}">${a[1]}</button>`).join('')}</div></div>
+ </div></div>
+ <div class="stats">
+  ${statT('প্রত্যাশিত ফলন',num(y.yieldKg)+' কেজি',c.bn)}
+  ${statT('মোট খরচ',tk(y.cost),'বীজ, সার, শ্রম, সেচ')}
+  ${statT('প্রত্যাশিত আয়',tk(y.revenue),'দর '+tk(y.price)+'/কেজি')}
+  ${statT('নিট লাভ',tk(y.profit),'খরচের '+pct(y.roi*100)+(y.profit<0?' ক্ষতি':' লাভ'),y.profit<0?'neg':'hero')}
+  ${statT('লাভ-ক্ষতিহীন দাম',tk(y.be)+'/কেজি','এর নিচে বিক্রি করলে লোকসান')}
+ </div>
+ <div class="grid two">
+  <section class="card"><h2>পাঁচ ফসলের তুলনা</h2><p class="lead">${dec(p.land)} একর জমিতে নিট লাভ। ফসলে চাপ দিলে সেটি নির্বাচিত হবে।</p>
+   <div class="rank">${all.map((a,i)=>`<button class="rrow ${i===0?'best':''}" data-a="pickCrop" data-v="${a.k}" aria-pressed="${a.k===p.crop}">
+     <span class="nm">${CROPS[a.k].bn}<span class="row"><span class="pill ${RISK[CROPS[a.k].risk][1]}">ঝুঁকি ${RISK[CROPS[a.k].risk][0]}</span>${i===0?'<span class="pill ok">সবচেয়ে বেশি লাভ</span>':''}</span></span>
+     <span class="bar" aria-hidden="true"><i style="width:${Math.max(3,Math.abs(a.profit)/maxP*100)}%"></i></span>
+     <span class="val ${a.profit<0?'neg':''}">${tk(a.profit)}</span></button>`).join('')}</div>
+  </section>
+  <div class="stack">
+   <section class="card"><h2>পরামর্শ</h2><p>${advice}</p>${note('ডেমোতে সরল হিসাব ব্যবহার হয়েছে। আসল সংস্করণে মেশিন লার্নিং মডেল ও কৃষি গবেষণার ডেটা যুক্ত হবে।')}</section>
+   <section class="card"><h2>সময়সূচি</h2>
+    <div class="kv"><div><h3>বপন বা রোপণের সময়</h3><b>${c.sow}</b></div>
+    <div><h3>ফসল তোলা আনুমানিক</h3><b>${dstr(harvest)}</b> <span class="muted small">(${bn(c.days)} দিন পর)</span></div></div>
+   </section>
+  </div>
+ </div>
+ <section class="card"><h2>দাম কমলে লাভ কত থাকবে</h2>
+  <div class="tw"><table><thead><tr><th>দামের পরিবর্তন</th><th class="r">দাম/কেজি</th><th class="r">নিট লাভ</th></tr></thead><tbody>
+  ${sens.map(s=>`<tr><td>${s.f===0?'আজকের দর':(s.f>0?'+':'−')+pct(Math.abs(s.f)*100)}</td><td class="r">${tk(s.price)}</td><td class="r ${s.profit<0?'neg':'pos'}"><b>${tk(s.profit)}</b></td></tr>`).join('')}
+  </tbody></table></div></section>
+ <div class="row"><button class="btn primary" data-a="toListing">ফলন বিক্রির তালিকায় পাঠান</button><span class="small muted">প্রত্যাশিত ফলনের ৮৫% বিক্রির জন্য ধরা হবে, বাকিটা ঘরে ব্যবহার।</span></div>
+ </div>`;
+};
+
+V.precision=()=>{
+ const p=S.profile,c=CROPS[p.crop],x=precCalc(),z=zones();
+ const d1=Math.round(c.days*.25),d2=Math.round(c.days*.5),u=x.rec.urea;
+ const L=[['ইউরিয়া','urea'],['টিএসপি (TSP)','tsp'],['এমওপি (MoP)','mop'],['জিপসাম','gyp']];
+ const dry=z.dry,tot=z.arr.length;
+ const zc=v=>v<z.thr?'color-mix(in srgb,var(--sun) 50%,var(--surface))':v>46?'color-mix(in srgb,var(--water) 38%,var(--surface))':'color-mix(in srgb,var(--accent) 24%,var(--surface))';
+ return `<div class="stack">
+ ${head('Precision Farm','কতটুকু সার ও পানি','মাটি ও ফসল অনুযায়ী সারের মাত্রা, সেচের সময়সূচি এবং জমির কোন অংশে পানি দরকার তার হিসাব।')}
+ <div class="stats">
+  ${statT('মোট সার খরচ',tk(x.cost),dec(p.land)+' একরের জন্য')}
+  ${statT('সাধারণ চাষির খরচ',tk(x.typical),'প্রায় ২৫% বেশি সার দেওয়ার অভ্যাস ধরে')}
+  ${statT('সাশ্রয়',tk(x.saving),'সুপারিশ মানলে','hero')}
+  ${statT('সেচ',bn(x.irr)+' বার','প্রতি '+bn(x.gap)+' দিন অন্তর')}
+ </div>
+ <div class="grid two">
+  <section class="card"><h2>সুপারিশকৃত সার</h2><p class="lead">${c.bn}, ${SOIL[p.soil]} মাটি, ${dec(p.land)} একর</p>
+   <div class="tw"><table><thead><tr><th>সার</th><th class="r">পরিমাণ</th><th class="r">খরচ</th></tr></thead><tbody>
+   ${L.map(l=>`<tr><td>${l[0]}</td><td class="r"><b>${num(x.rec[l[1]])} কেজি</b></td><td class="r">${tk(x.rec[l[1]]*x.PR[l[1]])}</td></tr>`).join('')}
+   </tbody></table></div>
+   ${note('ধরা দাম: ইউরিয়া ৳২৭, টিএসপি ৳২৭, এমওপি ৳২০, জিপসাম ৳১৫ প্রতি কেজি। মাত্রা নমুনা; প্রয়োগের আগে উপজেলা কৃষি অফিসারের সাথে মিলিয়ে নিন।')}
+  </section>
+  <section class="card"><h2>কখন কত দেবেন</h2>
+   <ol class="steps">
+    <li><b>জমি তৈরির সময়:</b> টিএসপি, এমওপি ও জিপসাম পুরোটা এবং ইউরিয়া ${num(u*.3)} কেজি</li>
+    <li><b>${bn(d1)} দিন পর:</b> ইউরিয়া ${num(u*.4)} কেজি</li>
+    <li><b>${bn(d2)} দিন পর:</b> ইউরিয়া ${num(u*.3)} কেজি</li>
+   </ol>
+   <div class="hr" style="margin:14px 0"></div>
+   <p><b>সেচ:</b> ${bn(x.irr)} বার, প্রায় ${bn(x.gap)} দিন পরপর। ${p.soil==='sandy'?'বেলে মাটি দ্রুত শুকায়, তাই সেচ বেশি লাগে।':p.soil==='clay'?'এঁটেল মাটি পানি ধরে রাখে, তাই সেচ কম লাগে।':'দো-আঁশ মাটিতে মাঝারি সেচ যথেষ্ট।'}</p>
+  </section>
+ </div>
+ <section class="card"><div class="row" style="justify-content:space-between"><h2 style="margin:0">জমির আর্দ্রতা জোন</h2><button class="btn sm" data-a="moist">সেন্সর রিডিং আবার নিন</button></div>
+  <p class="lead" style="margin-top:8px">জমিকে ৪০ ভাগে ভাগ করে প্রতিটির আর্দ্রতা (%)। শুধু শুকনো অংশে সেচ দিলে পানি বাঁচে।</p>
+  <div class="zones" role="img" aria-label="জমির আর্দ্রতা জোন">${z.arr.map(v=>`<div class="zone ${v<z.thr?'dry':''}" style="background:${zc(v)}" title="${pct(v)}">${bn(v)}</div>`).join('')}</div>
+  <div class="legend" style="margin-top:12px"><span><i style="background:color-mix(in srgb,var(--sun) 50%,var(--surface));border:1.5px dashed var(--sun)"></i>শুকনো (${pct(z.thr)}-এর কম)</span><span><i style="background:color-mix(in srgb,var(--accent) 24%,var(--surface))"></i>উপযুক্ত</span><span><i style="background:color-mix(in srgb,var(--water) 38%,var(--surface))"></i>ভেজা</span></div>
+  <div class="row" style="margin-top:12px"><span class="pill ${dry?'warn':'ok'}">${bn(dry)}টি জোন শুকনো</span><span>${dry?`শুধু ${pct(dry/tot*100)} জমিতে সেচ দিলেই চলবে, প্রায় ${pct(100-dry/tot*100)} পানি বাঁচবে।`:'কোনো জোনে এখন সেচ দরকার নেই।'}</span></div>
+  ${note('এখানকার আর্দ্রতার মান নমুনা (সেন্সর সিমুলেশন)। আসল সংস্করণে জমির সেন্সর বা কৃষকের হাতে মাপা মান যুক্ত হবে।')}
+ </section>
+ </div>`;
+};
+
+V.climate=()=>{
+ const p=S.profile,cl=climate(),d=cl.d;
+ const top=cl.alerts[0];
+ const sms=`[AgriSphere] ${p.district}: ${top.t}। ${top.a}`;
+ return `<div class="stack">
+ ${head('Climate Smart Farming','আবহাওয়া ও ঝুঁকির সতর্কবার্তা','আপনার জেলার ৭ দিনের পূর্বাভাস থেকে ফসল অনুযায়ী করণীয় এবং এসএমএস ও ভয়েস অ্যালার্ট।')}
+ <div class="chips" role="group" aria-label="জেলা">${Object.keys(DIST).map(k=>chip(k,`data-a="setDistrict" data-v="${k}"`,k===p.district)).join('')}</div>
+ <section class="card"><h2>${p.district}: আগামী ৭ দিন</h2>
+  <div class="days">${d.t.map((t,i)=>`<div class="day ${d.r[i]>=70?'alert':''}"><span class="dn">${i===0?'আজ':WD[addDays(i).getDay()]}</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${wIcon(d.r[i])}</svg><span class="dt">${bn(t)}°</span><div class="rainbar" aria-hidden="true"><i style="height:${d.r[i]}%"></i></div><span class="rp">${pct(d.r[i])}</span></div>`).join('')}</div>
+  <div class="legend" style="margin-top:10px"><span>উপরে তাপমাত্রা (°সে), নিচে বৃষ্টির সম্ভাবনা</span></div>
+  ${note('পূর্বাভাস নমুনা। আসল সংস্করণে OpenWeather বা আবহাওয়া অধিদপ্তরের ডেটা আসবে।')}
+ </section>
+ <div class="grid two">
+  <section class="card"><h2>${CROPS[p.crop].bn}-এর জন্য সতর্কবার্তা</h2>
+   <div class="alerts">${cl.alerts.map(a=>`<div class="alert-card ${a.l}"><span class="pill ${a.l==='high'?'bad':a.l==='mid'?'warn':'ok'}">${a.l==='high'?'জরুরি':a.l==='mid'?'সতর্ক':'পরামর্শ'}</span><div><b>${a.t}</b><div class="small">${a.a}${a.go?` <a href="#${a.go}"><b>রোগ শনাক্ত করুন</b></a>`:''}</div></div></div>`).join('')}</div>
+  </section>
+  <div class="stack">
+   <section class="card"><h2>এই সপ্তাহের ঝুঁকি</h2>
+    <div class="row" style="justify-content:space-between;margin-bottom:6px"><b>${cl.lvl[0]}</b><span class="muted small">${bn(cl.score)} / ১০০</span></div>
+    <div class="meter ${cl.lvl[1]}"><i style="width:${cl.score}%"></i></div>
+    ${note('বৃষ্টির সম্ভাবনা ও ফসলের সংবেদনশীলতা থেকে হিসাব।')}
+   </section>
+   <section class="card"><h2>এসএমএস ও ভয়েস</h2>
+    <p class="lead">ইন্টারনেট ছাড়া ফোনেও সতর্কবার্তা যাবে।</p>
+    <div class="sms">${sms}</div>
+    <div class="row" style="margin-top:10px"><button class="btn sm" data-a="speak" data-t="${esc(top.t+'। '+top.a)}">বাংলায় শুনুন</button><span class="pill plain">এসএমএস প্রিভিউ</span></div>
+   </section>
+  </div>
+ </div>
+ <section class="card"><h2>জলবায়ু-স্মার্ট চাষের অভ্যাস: ${CROPS[p.crop].bn}</h2>
+  <ul class="links">${CROPS[p.crop].tips.map(t=>`<li>${ic('check')}<span>${t}</span></li>`).join('')}</ul></section>
+ </div>`;
+};
+
+function leafSVG(key){
+ const dz=DIS[key],broad=dz.leaf==='broad';
+ const shape=broad?'M100 12C168 56 182 150 100 228C18 150 32 56 100 12Z':'M100 8C124 50 126 170 100 234C74 170 76 50 100 8Z';
+ const veins=broad?'<path d="M100 20V222M100 70L58 100M100 70L142 100M100 120L50 152M100 120L150 152M100 170L70 190M100 170L130 190"/>':'<path d="M100 14V230"/>';
+ const sp={
+  potato:'<g fill="#5b3a1e" opacity=".88"><ellipse cx="62" cy="105" rx="20" ry="14" transform="rotate(-20 62 105)"/><ellipse cx="136" cy="140" rx="24" ry="16" transform="rotate(25 136 140)"/><ellipse cx="96" cy="188" rx="14" ry="10"/></g><g fill="none" stroke="#e4efcf" stroke-width="3" opacity=".85"><ellipse cx="62" cy="105" rx="26" ry="19" transform="rotate(-20 62 105)"/><ellipse cx="136" cy="140" rx="30" ry="21" transform="rotate(25 136 140)"/></g>',
+  tomato:'<g fill="#7a4a1d" opacity=".9"><circle cx="70" cy="95" r="14"/><circle cx="128" cy="130" r="16"/><circle cx="92" cy="180" r="11"/></g><g fill="none" stroke="#3b2410" stroke-width="2"><circle cx="70" cy="95" r="8"/><circle cx="70" cy="95" r="3"/><circle cx="128" cy="130" r="10"/><circle cx="128" cy="130" r="4"/><circle cx="92" cy="180" r="6"/></g><g fill="none" stroke="#e8d36b" stroke-width="3" opacity=".8"><circle cx="70" cy="95" r="19"/><circle cx="128" cy="130" r="21"/></g>',
+  rice:'<g fill="#b7b0a2" stroke="#6b3f1f" stroke-width="2.5"><polygon points="100,62 109,80 100,98 91,80"/><polygon points="97,124 107,144 97,164 87,144"/><polygon points="104,176 111,190 104,204 97,190"/></g>',
+  onion:'<g><circle cx="95" cy="70" r="15" fill="#e8d36b" opacity=".8"/><circle cx="106" cy="130" r="16" fill="#e8d36b" opacity=".8"/><circle cx="96" cy="186" r="13" fill="#e8d36b" opacity=".8"/></g><g fill="#6a2f6e"><circle cx="95" cy="70" r="8"/><circle cx="106" cy="130" r="9"/><circle cx="96" cy="186" r="7"/></g>',
+  maize:'<g fill="#a98a5a" stroke="#6b4a24" stroke-width="2"><ellipse cx="92" cy="86" rx="6" ry="24" transform="rotate(12 92 86)"/><ellipse cx="108" cy="150" rx="6" ry="26" transform="rotate(-12 108 150)"/><ellipse cx="94" cy="204" rx="5" ry="16" transform="rotate(8 94 204)"/></g>',
+  healthy:''
+ }[key];
+ return `<svg viewBox="0 0 200 244" role="img" aria-label="${dz.bn} নমুনা ছবি"><path d="${shape}" fill="#5aa65a" stroke="#2f6f3a" stroke-width="3"/><g fill="none" stroke="#2f6f3a" stroke-width="2" opacity=".6">${veins}</g>${sp}</svg>`;
+}
+
+V.guardian=()=>{
+ const g=S.g,dz=DIS[g.key],p=S.profile,cl=climate();
+ const humidRisk=dz.humid&&cl.d.r.some(v=>v>=50);
+ const panel=g.photo?`<img src="${g.photo}" alt="আপলোড করা পাতার ছবি">`:leafSVG(g.key);
+ return `<div class="stack">
+ ${head('Crop Guardian','পাতার ছবি থেকে রোগ শনাক্ত','পাতার ছবি তুলুন বা নমুনা ছবি বেছে নিন। রোগের নাম, কারণ, এখনই করণীয় ও ওষুধের পরামর্শ পাবেন।')}
+ <div class="grid two">
+  <section class="card"><h2>ছবি দিন</h2>
+   <div class="leafpanel">${panel}${g.scanning?'<div class="scanline"></div><div class="scanning-note">বিশ্লেষণ চলছে…</div>':''}</div>
+   <div class="lbl">নমুনা পাতা</div>
+   <div class="chips">${CASES.map(c=>chip(c[1],`data-a="case" data-v="${c[0]}"`,!g.photo&&g.key===c[0])).join('')}</div>
+   <div class="lbl">অথবা নিজের ছবি</div>
+   <input type="file" id="gphoto" accept="image/*" data-c="gphoto" aria-label="পাতার ছবি আপলোড">
+   ${note('ডেমো মোড: ফলাফল নমুনা। আসল অ্যাপে TensorFlow Lite মডেল ফোনেই চলবে, ইন্টারনেট ছাড়াও কাজ করবে।')}
+  </section>
+  <section class="card"><div class="row" style="justify-content:space-between;align-items:flex-start;margin-bottom:8px"><div><h2 style="margin:0">${dz.bn}</h2><span class="muted small">${dz.en}</span></div><span class="pill ${dz.sev[1]}">${dz.sev[0]}</span></div>
+   ${g.scanning?'<p class="muted">ফলাফল তৈরি হচ্ছে…</p>':`
+   <div class="conf" style="margin-bottom:12px"><span class="small muted nowrap">নিশ্চয়তা</span><div class="meter"><i style="width:${dz.conf}%"></i></div><b>${pct(dz.conf)}</b><span class="pill plain">ডেমো মান</span></div>
+   <div class="kv">
+    <div><h3>কারণ</h3><p>${dz.cause}</p></div>
+    <div><h3>লক্ষণ</h3><p>${dz.sym}</p></div>
+    <div><h3>এখনই যা করবেন</h3><ol class="steps">${dz.steps.map(s=>`<li>${s}</li>`).join('')}</ol></div>
+    <div><h3>জৈব ও সাংস্কৃতিক উপায়</h3><p>${dz.bio}</p></div>
+    <div><h3>রাসায়নিক বিকল্প</h3><p>${dz.chem}</p></div>
+   </div>
+   ${humidRisk?`<div class="alert-card mid" style="margin-top:14px"><span class="pill warn">আবহাওয়া</span><div><b>${p.district}-এ আগামী দিনে বৃষ্টির সম্ভাবনা বেশি</b><div class="small">আর্দ্র আবহাওয়ায় এই রোগ দ্রুত ছড়ায়। <a href="#climate"><b>পূর্বাভাস দেখুন</b></a></div></div></div>`:''}
+   <div class="row" style="margin-top:14px"><button class="btn" data-a="officer">কৃষি অফিসারকে ছবি পাঠান</button></div>
+   ${note('ওষুধ ব্যবহারের আগে লেবেল পড়ুন এবং উপজেলা কৃষি অফিসারের পরামর্শ নিন।')}`}
+  </section>
+ </div></div>`;
+};
+
+/* market */
+function priceChart(crop,mk,W){
+ const {hist,fc}=priceData(crop,mk),bd=bestDay(crop,mk);
+ const H=Math.round(clamp(W*.5,230,320)),pl=40,pr=14,pt=22,pb=30,N=hist.length,M=fc.length,tot=N+M-1;
+ const lo=[...hist,...fc.map(f=>f.lo)],hi=[...hist,...fc.map(f=>f.hi)];
+ let mn=Math.min(...lo),mx=Math.max(...hi);const pad=(mx-mn)*.12||1;mn-=pad;mx+=pad;
+ const x=i=>pl+(W-pl-pr)*i/tot,y=v=>pt+(H-pt-pb)*(1-(v-mn)/(mx-mn));
+ let g='';
+ for(let k=0;k<=4;k++){const v=mn+(mx-mn)*k/4;g+=`<line class="ch-grid" x1="${pl}" x2="${W-pr}" y1="${y(v)}" y2="${y(v)}"/><text class="ch-txt" x="${pl-6}" y="${y(v)+4}" text-anchor="end">${bn(Math.round(v))}</text>`;}
+ const marks=W<520?[[0,-(N-1)],[14,-(N-1)+14],[N-1,0],[N-1+M,M]]:[[0,-(N-1)],[7,-(N-1)+7],[14,-(N-1)+14],[21,-(N-1)+21],[N-1,0],[N-1+5,5],[N-1+M,M]];
+ marks.forEach(([i,off],k)=>{g+=`<text class="ch-txt" x="${x(i)}" y="${H-8}" text-anchor="${k===0?'start':i===tot?'end':'middle'}">${off===0?'আজ':dstr(addDays(off))}</text>`;});
+ const t0=N-1;
+ const band=`M${x(t0)} ${y(hist[t0])}`+fc.map((f,i)=>` L${x(t0+i+1)} ${y(f.hi)}`).join('')+fc.slice().reverse().map((f,i)=>` L${x(t0+M-i)} ${y(f.lo)}`).join('')+` L${x(t0)} ${y(hist[t0])}Z`;
+ const hp=hist.map((v,i)=>`${i?'L':'M'}${x(i)} ${y(v)}`).join(' ');
+ const fp=`M${x(t0)} ${y(hist[t0])}`+fc.map((f,i)=>` L${x(t0+i+1)} ${y(f.v)}`).join('');
+ const bi=t0+bd.d,bx=x(bi),by=y(bd.price);
+ const bl=bd.d===0?'আজই সেরা':'সেরা দিন';
+ const anchor=bx>W-70?'end':bx<pl+40?'start':'middle';
+ return `<svg viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" style="max-width:100%;height:auto;display:block" role="img" aria-label="দামের ইতিহাস ও ১০ দিনের পূর্বাভাস">${g}
+ <line class="ch-today" x1="${x(t0)}" x2="${x(t0)}" y1="${pt}" y2="${H-pb}"/>
+ <path class="ch-band" d="${band}"/><path class="ch-line" d="${hp}"/><path class="ch-fc" d="${fp}"/>
+ <circle class="ch-best" cx="${bx}" cy="${by}" r="6"/><text class="ch-bt" x="${bx}" y="${by-12}" text-anchor="${anchor}">${bl}</text></svg>`;
+}
+const curL=()=>S.listings.find(l=>l.id===S.selL)||S.listings[S.listings.length-1];
+const offerFor=(id,L)=>Math.round(localPrice(L.crop)*BUY[id].m);
+const reserveFor=(id,L)=>Math.round(offerFor(id,L)*1.06);
+const midPrice=crop=>Math.round(localPrice(crop)*.8);
+
+V.market=()=>{
+ const tabs=[['board','বাজারদর'],['forecast','দামের পূর্বাভাস'],['listing','লিস্টিং'],['buyers','ক্রেতা ও দরদাম'],['logi','পরিবহন ও সংরক্ষণ']];
+ return `<div class="stack">
+ ${head('FarmMarket','সঠিক দামে সরাসরি বিক্রি','বাজারদর দেখুন, দামের গতি বুঝে সময় ঠিক করুন, ফসল তালিকাভুক্ত করে ক্রেতার সাথে অ্যাপেই দরদাম করুন।')}
+ <div class="tabs" role="tablist" aria-label="বাজার অংশ">${tabs.map(t=>`<button role="tab" data-a="mTab" data-v="${t[0]}" aria-selected="${S.mTab===t[0]}">${t[1]}</button>`).join('')}</div>
+ ${M[S.mTab]()}
+ </div>`;
+};
+const cropChips=()=>`<div class="chips" role="group" aria-label="ফসল">${CK.map(k=>chip(CROPS[k].bn,`data-a="mCrop" data-v="${k}"`,S.mCrop===k)).join('')}</div>`;
+const M={};
+
+M.board=()=>{
+ const crop=S.mCrop,km=DIST[S.profile.district].km;
+ const rows=MK.map(k=>{const h=priceData(crop,k).hist,t=h[h.length-1],w=h[h.length-8],ch=(t-w)/w*100,tr=transportPerKg(km[k]);return {k,t,ch,tr,net:t-tr,km:km[k]};});
+ const bestNet=rows.reduce((a,b)=>b.net>a.net?b:a);
+ return `<div class="stack">${cropChips()}
+ <section class="card"><h2>${CROPS[crop].bn}: আজকের বাজারদর</h2><p class="lead">কোন বাজারে কত দাম, আর পরিবহন খরচ বাদ দিলে আসলে কত থাকে।</p>
+  <div class="tw"><table><thead><tr><th>বাজার</th><th class="r">দর (৳/কেজি)</th><th class="r">দূরত্ব</th><th class="r">পরিবহন বাদে</th></tr></thead><tbody>
+  ${rows.map(r=>`<tr class="${r.k===bestNet.k?'hl':''}"><td><b>${MARKETS[r.k].bn}</b>${r.k===localMk()?' <span class="pill info">আপনার বাজার</span>':''}${r.k===bestNet.k?' <span class="pill ok">সেরা</span>':''}</td>
+   <td class="r"><b>${tk(r.t)}</b><div class="tiny ${r.ch<0?'neg':'pos'}">${r.ch<0?'▼':'▲'} ${pct(Math.abs(r.ch))} (৭ দিনে)</div></td>
+   <td class="r">${r.km<=10?'কাছেই':bn(r.km)+' কিমি'}</td><td class="r"><b>${tk(r.net)}</b></td></tr>`).join('')}
+  </tbody></table></div>
+  ${note('সব দর নমুনা। আসল সংস্করণে কৃষি বিপণন অধিদপ্তরের বাজারদর যুক্ত হবে। পরিবহন খরচ ধরা হয়েছে কিলোমিটার প্রতি প্রায় ৳০.০১/কেজি।')}
+ </section>
+ <div class="card flat"><b>${MARKETS[bestNet.k].bn}</b> বাজারে পরিবহনের পর সবচেয়ে বেশি থাকে: <b>${tk(bestNet.net)}/কেজি</b>। ${bestNet.k!==localMk()?`এটি আপনার বাজারের চেয়ে ${tk(bestNet.net-(todayP(crop,localMk())-transportPerKg(km[localMk()])))} বেশি।`:'এটাই আপনার নিজের বাজার।'} বেশি দামের বাজারে গেলেই লাভ বেশি নয়।</div>
+ </div>`;
+};
+
+M.forecast=()=>{
+ const crop=S.mCrop,mk=localMk(),pd=priceData(crop,mk),t=pd.hist[pd.hist.length-1],bd=bestDay(crop,mk),c=CROPS[crop];
+ const qty=Math.round(yieldCalc(crop).yieldKg*.85/10)*10;
+ const gain=bd.net-t;
+ const msg=bd.d===0?`${c.bn}-এর দাম সামনে বাড়ার লক্ষণ নেই। আজই বিক্রি করা ভালো।`:`${bn(bd.d)} দিন পর (${dstr(addDays(bd.d))}) বিক্রি করলে সংরক্ষণ খরচ বাদেও প্রতি কেজিতে প্রায় ${tkd(gain)} বেশি পেতে পারেন।`;
+ return `<div class="stack">${cropChips()}
+ <section class="card"><h2>${CROPS[crop].bn}: ${MARKETS[mk].bn} বাজারের দাম</h2><p class="lead">গত ২৮ দিনের দাম (রেখা) ও পরের ১০ দিনের পূর্বাভাস (ডোরা রেখা ও ছায়া)।</p>
+  <div class="chartbox" id="fcChart"></div>
+  ${note('পূর্বাভাস পদ্ধতি: সরল ট্রেন্ড ও সাপ্তাহিক চক্র। ডেমোর জন্য সরল রাখা হয়েছে; আসল সংস্করণে ML মডেল আসবে। ছায়া অংশ অনিশ্চয়তার সীমা।')}
+ </section>
+ <div class="stats">
+  ${statT('আজকের দর',tk(t)+'/কেজি',MARKETS[mk].bn)}
+  ${statT('বিক্রির সেরা দিন',bd.d===0?'আজই':dstr(addDays(bd.d)),'প্রত্যাশিত '+tk(bd.price)+'/কেজি','hero')}
+  ${statT('সংরক্ষণ খরচ',tk(c.store*100)+'/১০০ কেজি/দিন',crop==='tomato'?'পচনশীল, দ্রুত বিক্রি করুন':'নমুনা হার')}
+ </div>
+ <div class="card flat"><b>পরামর্শ:</b> ${msg}</div>
+ <section class="card"><h2>অপেক্ষা করলে কত পাবেন</h2>
+  <label class="lbl" for="hold">কত দিন অপেক্ষা করবেন: <b id="holdv">${bn(S.hold)} দিন</b></label>
+  <input type="range" id="hold" min="0" max="10" step="1" value="${S.hold}" data-c="hold">
+  <div id="holdOut" style="margin-top:10px">${holdOut(crop,qty)}</div>
+ </section></div>`;
+};
+function holdOut(crop,qty){
+ const mk=localMk(),pd=priceData(crop,mk),t=pd.hist[pd.hist.length-1],d=S.hold,p=d===0?t:pd.fc[d-1].v,st=CROPS[crop].store*d,net=p-st,diff=net-t;
+ return `<div class="stats">${statT('তখনকার দাম',tk(p)+'/কেজি','আজ '+tk(t))}${statT('সংরক্ষণ খরচ',tkd(st)+'/কেজি','')}${statT('আজের তুলনায়',(diff>=0?'+':'')+tkd(diff)+'/কেজি',(diff>=0?'+':'')+tk(diff*qty)+' (প্রায় '+num(qty)+' কেজিতে)',diff<0?'neg':'')}</div>`;
+}
+
+M.listing=()=>{
+ const pf=S.prefill||{crop:S.mCrop,qty:Math.round(yieldCalc(S.mCrop).yieldKg*.85/10)*10,price:Math.round(localPrice(S.mCrop))};
+ return `<div class="grid two">
+ <section class="card"><h2>ফসল তালিকাভুক্ত করুন</h2>${S.prefill?'<p class="lead">ফলনের হিসাব থেকে পরিমাণ ও দাম ভরে দেওয়া হয়েছে। বদলাতে পারেন।</p>':'<p class="lead">পরিমাণ ও দাম দিন, ক্রেতারা প্রস্তাব পাঠাবে।</p>'}
+  <form data-f="listing"><div class="form-grid">
+   <div><label class="lbl" for="lcrop">ফসল</label><select id="lcrop">${CK.map(k=>`<option value="${k}" ${k===pf.crop?'selected':''}>${CROPS[k].bn}</option>`).join('')}</select></div>
+   <div><label class="lbl" for="lqty">পরিমাণ (কেজি)</label><input type="number" id="lqty" min="50" step="10" value="${pf.qty}" inputmode="numeric" required></div>
+   <div><label class="lbl" for="lprice">চাওয়া দাম (৳/কেজি)</label><input type="number" id="lprice" min="1" step="1" value="${pf.price}" inputmode="numeric" required></div>
+   <div><label class="lbl" for="lgrade">মান</label><select id="lgrade"><option>ক গ্রেড</option><option>খ গ্রেড</option><option>গ গ্রেড</option></select></div>
+   <div><label class="lbl" for="lready">কবে দিতে পারবেন</label><select id="lready"><option>এখনই</option><option>৭ দিনের মধ্যে</option><option>১৫ দিনের মধ্যে</option><option>ফসল তোলার পর</option></select></div>
+  </div>
+  <label class="lbl" for="lphoto">ফসলের ছবি (ঐচ্ছিক)</label><input type="file" id="lphoto" accept="image/*" data-c="lphoto">
+  <div style="margin-top:16px"><button class="btn primary" type="submit">তালিকায় দিন</button></div></form>
+ </section>
+ <section class="card"><h2>আমার তালিকা</h2>
+  ${S.listings.length?S.listings.map(l=>{const lp=localPrice(l.crop),dv=(l.price-lp)/lp*100;return `<div class="listing"><div class="thumb">${l.photo?`<img src="${l.photo}" alt="" style="width:64px;height:64px;border-radius:10px;object-fit:cover">`:CROPS[l.crop].bn[0]}</div>
+   <div style="min-width:0"><b>${CROPS[l.crop].bn}</b> · ${num(l.qty)} কেজি <span class="pill ${l.sold?'ok':'info'}">${l.sold?'বিক্রি হয়েছে':'ক্রেতার অপেক্ষায়'}</span>
+   <div class="small muted">${l.grade} · ${l.ready}</div>
+   <div class="small">চাওয়া দাম <b>${tk(l.price)}/কেজি</b>, বাজারদরের চেয়ে <b class="${dv>5?'neg':'pos'}">${dv>=0?'+':'−'}${pct(Math.abs(dv))}</b>${dv>5?' (ক্রেতা কম পেতে পারেন)':''}</div>
+   <div class="row" style="margin-top:8px"><button class="btn sm primary" data-a="viewBuyers" data-v="${l.id}">ক্রেতার প্রস্তাব দেখুন</button><button class="btn sm" data-a="rmL" data-v="${l.id}">মুছুন</button></div></div></div>`;}).join(''):`<div class="empty">এখনো কোনো ফসল তালিকায় নেই।<br>বাঁ পাশের ফর্ম পূরণ করে "তালিকায় দিন" চাপুন।</div>`}
+ </section></div>`;
+};
+
+M.buyers=()=>{
+ const L=curL();
+ if(!L)return `<div class="empty">আগে "লিস্টিং" অংশে ফসল তালিকাভুক্ত করুন, তারপর ক্রেতার প্রস্তাব আসবে।<div style="margin-top:12px"><button class="btn primary" data-a="mTab" data-v="listing">ফসল তালিকাভুক্ত করুন</button></div></div>`;
+ const list=Object.keys(BUY).filter(id=>BUY[id].crops.includes(L.crop)),mid=midPrice(L.crop),lp=localPrice(L.crop);
+ return `<div class="stack">
+ ${S.listings.length>1?`<div class="chips" role="group" aria-label="লিস্টিং">${S.listings.map(l=>chip(`${CROPS[l.crop].bn} ${num(l.qty)} কেজি`,`data-a="viewBuyers" data-v="${l.id}"`,l.id===L.id)).join('')}</div>`:''}
+ <div class="card flat"><b>${CROPS[L.crop].bn}, ${num(L.qty)} কেজি</b> · আপনার চাওয়া দাম ${tk(L.price)}/কেজি।<br>স্থানীয় আড়তদার সাধারণত দেন প্রায় <b>${tk(mid)}/কেজি</b> (বাজারদরের ৮০%, নমুনা হার)। ক্রেতার প্রস্তাব এর সাথে তুলনা করুন।</div>
+ ${S.deals.filter(d=>d.lid===L.id).map(d=>`<div class="deal-strip"><b>ডিল সম্পন্ন: ${BUY[d.buyer].n}</b><span>${tk(d.price)}/কেজি, মোট ${tk(d.total)}</span><span class="pos"><b>মধ্যস্বত্বভোগীর তুলনায় বাড়তি ${tk(d.gain)}</b></span><button class="btn sm" data-a="toLogi">পরিবহন হিসাব করুন</button></div>`).join('')}
+ <div class="grid">
+  ${list.map(id=>{const b=BUY[id],off=offerFor(id,L),dv=(off-lp)/lp*100,ok=L.qty>=b.min,ch=S.chats[id];return `<section class="card buyer">
+   <div class="top2"><div><div class="nm">${b.n}</div><div class="small muted">${b.type}, ${b.city}</div></div>${b.ver?'<span class="pill ok">যাচাইকৃত</span>':'<span class="pill warn">যাচাই বাকি</span>'}</div>
+   <div><div class="offer">${tk(off)}<span class="small muted" style="font-family:var(--font-body);font-weight:500">/কেজি</span></div>
+   <div class="small">বাজারদরের তুলনায় <b class="${dv<0?'neg':'pos'}">${dv>=0?'+':'−'}${pct(Math.abs(dv))}</b>, আড়তদারের চেয়ে <b class="pos">+${tk(off-mid)}/কেজি</b></div></div>
+   <div class="row small muted"><span>★ ${dec(b.rate)} (${bn(b.deals)} ডিল)</span><span>·</span><span>সর্বনিম্ন ${num(b.min)} কেজি ${ok?'':'<b class="neg">(আপনার পরিমাণ কম)</b>'}</span></div>
+   <div class="small">টাকা: ${b.pay}</div>
+   ${b.ver?'':'<div class="small neg">এই ক্রেতার পরিচয় যাচাই হয়নি। অগ্রিম মাল ছাড়বেন না।</div>'}
+   <button class="btn primary" data-a="openChat" data-v="${id}" ${L.sold?'disabled':''}>${ch?'চ্যাট চালিয়ে যান':'চ্যাট ও দরদাম'}</button></section>`;}).join('')}
+ </div>
+ ${list.length?'':'<div class="empty">এই ফসলের জন্য এখন কোনো ক্রেতা নেই।</div>'}
+ ${note('ক্রেতার নাম ও তথ্য সম্পূর্ণ কাল্পনিক নমুনা। আসল সংস্করণে ফোন নম্বর যাচাই, রেটিং ও রিভিউ যুক্ত হবে।')}
+ </div>`;
+};
+
+M.logi=()=>{
+ const L=curL(),qty=L?L.qty:Math.round(yieldCalc(S.mCrop).yieldKg*.85/10)*10;
+ return `<div class="grid two">
+ <section class="card"><h2>পরিবহন খরচ</h2>
+  <div class="form-grid"><div><label class="lbl" for="lgm">গন্তব্য বাজার</label><select id="lgm" data-c="logi">${MK.map(k=>`<option value="${k}" ${k===(S.lgm||'dhaka')?'selected':''}>${MARKETS[k].bn}</option>`).join('')}</select></div>
+  <div><label class="lbl" for="lgq">পরিমাণ (কেজি)</label><input type="number" id="lgq" min="50" step="10" value="${qty}" data-c="logi" inputmode="numeric"></div></div>
+  <div id="logiOut" style="margin-top:14px">${logiOut(S.lgm||'dhaka',qty)}</div>
+ </section>
+ <section class="card"><h2>হিমাগার ও গুদাম</h2><p class="lead">${S.profile.district} ও আশেপাশে (নমুনা তালিকা)</p>
+  ${[['১','৭০০ টন ফাঁকা',.6],['২','২০০ টন ফাঁকা',.7],['৩','কোনো জায়গা নেই',.55]].map((h,i)=>`<div class="listing" style="grid-template-columns:1fr auto"><div><b>${S.profile.district} হিমাগার-${h[0]}</b><div class="small muted">${h[1]}</div></div><div class="small" style="text-align:right"><b>${tk(h[2])}/কেজি/মাস</b></div></div>`).join('')}
+  <div class="card flat" style="margin-top:8px"><b>${CROPS[S.mCrop].bn}:</b> ${CROPS[S.mCrop].store>=.1?'পচনশীল, হিমাগারে বেশি দিন রাখা যায় না। দ্রুত বিক্রি করুন।':'সংরক্ষণযোগ্য। দাম বাড়ার অপেক্ষায় হিমাগার বা শুকনো গুদামে রাখতে পারেন।'}</div>
+ </section></div>`;
+};
+function logiOut(mk,qty){
+ const km=DIST[S.profile.district].km[mk],rows=VEH.map(v=>{const trips=Math.ceil(qty/v[1]),cost=trips*v[2]*km+500*trips;return {n:v[0],cap:v[1],trips,cost};}),best=rows.reduce((a,b)=>b.cost<a.cost?b:a);
+ return `<p class="small muted">${MARKETS[mk].bn} পর্যন্ত আনুমানিক ${km<=10?'কাছেই':bn(km)+' কিমি'}</p><div class="tw"><table><thead><tr><th>গাড়ি</th><th class="r">খেপ</th><th class="r">মোট</th><th class="r">কেজি প্রতি</th></tr></thead><tbody>
+ ${rows.map(r=>`<tr class="${r===best?'hl':''}"><td><b>${r.n}</b>${r===best?' <span class="pill ok">কম খরচ</span>':''}<div class="tiny muted">${num(r.cap)} কেজি</div></td><td class="r">${bn(r.trips)}</td><td class="r"><b>${tk(r.cost)}</b></td><td class="r">${tk(r.cost/qty)}</td></tr>`).join('')}</tbody></table></div>${note('ভাড়ার হার নমুনা (লোডিং সহ)।')}`;
+}
+
+/* ---------- chat ---------- */
+function chatInit(id){
+ if(S.chats[id])return;const L=curL(),off=offerFor(id,L);
+ S.chats[id]={lid:L.id,msgs:[{w:'them',t:`আস্সালামু আলাইকুম! আপনার ${CROPS[L.crop].bn} ${num(L.qty)} কেজির তালিকা দেখেছি। আমি ${tk(off)}/কেজি দিতে পারি। আপনার দাম কত?`}],agreed:null,counter:null,deal:false,typing:false};
+}
+function buyerReply(id,text,price){
+ const ch=S.chats[id],L=S.listings.find(l=>l.id===ch.lid),b=BUY[id],off=offerFor(id,L),res=reserveFor(id,L);
+ if(price!=null){
+  if(price<=res){const f=Math.max(price,off);ch.agreed=f;ch.counter=null;return price<off?`আমি তো ${tk(off)} দিতেই রাজি ছিলাম। ${tk(off)}/কেজিতে ডিল করি। কনফার্ম করুন।`:`ঠিক আছে, ${tk(f)}/কেজিতে রাজি। ডিল কনফার্ম করুন।`;}
+  const c=Math.min(res,Math.max(off,Math.round((price+off)/2)));ch.counter=c;ch.agreed=null;
+  return c>=res?`${tk(price)} একটু বেশি হয়ে যাচ্ছে। আমার সর্বোচ্চ ${tk(c)}/কেজি।`:`${tk(price)} বাজারের তুলনায় বেশি। পাল্টা প্রস্তাব: ${tk(c)}/কেজি।`;
+ }
+ if(/পরিবহন|গাড়ি|ট্রাক|ভ্যান/.test(text))return b.tp;
+ if(/টাকা|পেমেন্ট|কবে/.test(text))return 'পেমেন্ট: '+b.pay+'।';
+ if(text==='__voice')return 'ভয়েস মেসেজ পেয়েছি, ধন্যবাদ। দামটা লিখে জানাবেন।';
+ return 'ঠিক আছে। দাম বা পরিমাণ নিয়ে লিখুন।';
+}
+function chatSheet(id){
+ const b=BUY[id],ch=S.chats[id],L=S.listings.find(l=>l.id===ch.lid);
+ const msgs=ch.msgs.map(m=>{
+  if(m.w==='sys')return `<div class="msg sys">${m.t}</div>`;
+  if(m.v)return `<div class="msg ${m.w}"><div class="voice"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M8 5l11 7-11 7z" fill="currentColor"/></svg><span class="wave">${[8,14,20,12,18,10,16,22,12,8,14,10].map(h=>`<i style="height:${h}px"></i>`).join('')}</span><span class="small">${m.v}</span></div></div>`;
+  return `<div class="msg ${m.w}">${esc(m.t)}</div>`;}).join('');
+ const sold=L.sold&&!ch.deal;
+ const chips=[];
+ if(ch.counter)chips.push(`<button class="chip" data-a="chatQuick" data-p="${ch.counter}">রাজি, ${tk(ch.counter)}</button>`);
+ chips.push(`<button class="chip" data-a="chatQuick" data-p="${L.price}">${tk(L.price)}/কেজি চাই</button>`,`<button class="chip" data-a="chatQuick" data-t="পরিবহন কে দেবে?">পরিবহন কে দেবে?</button>`,`<button class="chip" data-a="chatQuick" data-t="টাকা কবে পাব?">টাকা কবে পাব?</button>`);
+ return `<div class="sheet chat" role="dialog" aria-modal="true" aria-label="${b.n} এর সাথে চ্যাট">
+  <div class="chat-h"><div class="row" style="justify-content:space-between;flex-wrap:nowrap"><div style="min-width:0"><b>${b.n}</b> ${b.ver?'<span class="pill ok">যাচাইকৃত</span>':'<span class="pill warn">যাচাই বাকি</span>'}<div class="small muted">${CROPS[L.crop].bn} ${num(L.qty)} কেজি · প্রস্তাব ${tk(offerFor(id,L))}/কেজি</div></div><button class="x" data-a="close" aria-label="বন্ধ করুন">×</button></div>
+   <div class="row"><button class="btn sm" disabled>ভয়েস কল <span class="pill plain">শীঘ্রই</span></button><button class="btn sm" disabled>ভিডিও কল <span class="pill plain">শীঘ্রই</span></button></div></div>
+  <div class="chat-b" id="chatb">${msgs}${ch.typing?'<div class="typing">লিখছেন…</div>':''}</div>
+  <div class="chat-f">
+   ${ch.deal?`<div class="deal-strip"><b>ডিল সম্পন্ন</b><button class="btn sm" data-a="toLogi">পরিবহন হিসাব করুন</button></div>`
+    :sold?'<div class="deal-strip">এই তালিকা অন্য ক্রেতার কাছে বিক্রি হয়ে গেছে।</div>'
+    :ch.agreed?`<div class="deal-strip"><span><b>${tk(ch.agreed)}/কেজি</b> এ রাজি, মোট ${tk(ch.agreed*L.qty)}</span><button class="btn primary sm" data-a="chatConfirm">ডিল কনফার্ম করুন</button></div>`:''}
+   ${(ch.deal||sold)?'':`<div class="chips">${chips.join('')}</div>
+   <form data-f="chat"><input type="text" id="cin" placeholder="লিখুন বা দাম বলুন (যেমন ২৩)" autocomplete="off" aria-label="বার্তা"><button class="btn primary" type="submit">পাঠান</button><button class="btn" type="button" data-a="chatVoice" aria-label="ভয়েস মেসেজ">ভয়েস</button></form>`}
+  </div></div>`;
+}
+function renderChat(id){const m=$('#modal');if(m.hidden||S.openChat!==id)return;m.innerHTML=chatSheet(id);const b=$('#chatb');if(b)b.scrollTop=b.scrollHeight;}
+function say(id,type,payload){
+ const ch=S.chats[id];ch.msgs.push(payload);ch.typing=true;renderChat(id);
+ setTimeout(()=>{ch.typing=false;let price=null;if(type==='p')price=payload.p;ch.msgs.push({w:'them',t:buyerReply(id,type==='v'?'__voice':(payload.t||''),price)});renderChat(id);},850);
+}
+
+/* ---------- modal / profile ---------- */
+function openModal(html){const m=$('#modal');m.innerHTML=html;m.hidden=false;document.body.style.overflow='hidden';const f=m.querySelector('button,input');}
+function closeModal(){const m=$('#modal');m.hidden=true;m.innerHTML='';S.openChat=null;document.body.style.overflow='';}
+function profileSheet(){
+ const p=S.profile;
+ return `<div class="sheet" role="dialog" aria-modal="true" aria-label="কৃষক ও জমির তথ্য"><div class="sheet-h"><h2>কৃষক ও জমির তথ্য</h2><button class="x" data-a="close" aria-label="বন্ধ করুন">×</button></div>
+ <p class="small muted">বদলালে সব মডিউলের হিসাব সাথে সাথে বদলে যাবে।</p>
+ <div class="lbl">জেলা</div><div class="chips">${Object.keys(DIST).map(k=>chip(k,`data-a="setDistrict" data-v="${k}" data-sheet="1"`,k===p.district)).join('')}</div>
+ <div class="lbl">ফসল</div><div class="chips">${CK.map(k=>chip(CROPS[k].bn,`data-a="pickCrop" data-v="${k}" data-sheet="1"`,k===p.crop)).join('')}</div>
+ <label class="lbl" for="land">জমির পরিমাণ: <b id="landv">${dec(p.land)} একর</b></label><input type="range" id="land" min="0.5" max="10" step="0.5" value="${p.land}" data-c="land">
+ <div class="lbl">মাটি</div><div class="chips">${Object.keys(SOIL).map(k=>chip(SOIL[k],`data-a="setSoil" data-v="${k}" data-sheet="1"`,k===p.soil)).join('')}</div>
+ <div style="margin-top:20px"><button class="btn primary" data-a="close">ঠিক আছে</button></div></div>`;
+}
+
+/* ---------- render / routing ---------- */
+function setGuardianForCrop(){S.g={key:S.profile.crop,photo:null,scanning:false};}
+function onProfile(sheet){
+ S.mCrop=S.profile.crop;S.prefill=null;S.seed=S.seed;
+ if(!S.g.photo)setGuardianForCrop();
+ render();if(sheet)openModal(profileSheet());
+}
+function render(){
+ const r=S.route;
+ $('#dnav').innerHTML=NAV.map(n=>`<a href="#${n.id}" ${n.id===r?'aria-current="page"':''}><b>${n.bn}</b>${n.en?`<span>${n.en}</span>`:''}</a>`).join('');
+ $('#bnav .wrap').innerHTML=NAV.map(n=>`<a href="#${n.id}" ${n.id===r?'aria-current="page"':''}>${ic(n.id)}<span>${n.short}</span></a>`).join('');
+ $('#app').innerHTML=(V[r]||V.home)();
+ hydrate();
+}
+function hydrate(){
+ const cb=$('#fcChart');if(cb){cb.innerHTML=priceChart(S.mCrop,localMk(),Math.max(300,Math.floor(cb.clientWidth)));}
+}
+function route(){const h=location.hash.slice(1);S.route=V[h]?h:'home';render();window.scrollTo(0,0);}
+function go(r){if(location.hash==='#'+r)route();else location.hash=r;}
+
+/* ---------- events ---------- */
+const A={
+ profile:()=>openModal(profileSheet()),
+ close:closeModal,
+ reset:()=>{Object.assign(S,{profile:{name:'রহিম মিয়া',district:'রংপুর',crop:'potato',land:2,soil:'loam'},yS:'normal',pS:'normal',mTab:'board',mCrop:'potato',selL:null,listings:[],deals:[],chats:{},prefill:null,seed:1,g:{key:'potato',photo:null,scanning:false},hold:3});render();toast('ডেমো ডেটা রিসেট হয়েছে');},
+ pickCrop:t=>{S.profile.crop=t.dataset.v;onProfile(!!t.dataset.sheet);},
+ setDistrict:t=>{S.profile.district=t.dataset.v;S.prefill=null;render();if(t.dataset.sheet)openModal(profileSheet());},
+ setSoil:t=>{S.profile.soil=t.dataset.v;render();if(t.dataset.sheet)openModal(profileSheet());},
+ yS:t=>{S.yS=t.dataset.v;render();},pS:t=>{S.pS=t.dataset.v;render();},
+ moist:()=>{S.seed++;render();},
+ speak:t=>speak(t.dataset.t),
+ case:t=>{S.g={key:t.dataset.v,photo:null,scanning:true};render();setTimeout(()=>{S.g.scanning=false;if(S.route==='guardian')render();},900);},
+ officer:()=>toast('ডেমো: আসল অ্যাপে ছবিসহ রিপোর্ট উপজেলা কৃষি অফিসারের কাছে যাবে'),
+ toListing:()=>{const c=S.profile.crop,y=yieldCalc(c);S.prefill={crop:c,qty:Math.round(y.yieldKg*.85/10)*10,price:Math.round(localPrice(c))};S.mCrop=c;S.mTab='listing';go('market');},
+ mTab:t=>{S.mTab=t.dataset.v;render();},
+ mCrop:t=>{S.mCrop=t.dataset.v;render();},
+ rmL:t=>{S.listings=S.listings.filter(l=>l.id!==t.dataset.v);S.selL=null;render();},
+ viewBuyers:t=>{S.selL=t.dataset.v;S.mTab='buyers';render();},
+ toLogi:()=>{closeModal();S.mTab='logi';go('market');},
+ openChat:t=>{const id=t.dataset.v;chatInit(id);S.openChat=id;openModal(chatSheet(id));const b=$('#chatb');if(b)b.scrollTop=b.scrollHeight;},
+ chatQuick:t=>{const id=S.openChat,ch=S.chats[id];if(t.dataset.p){const p=+t.dataset.p;say(id,'p',{w:'me',t:`${tk(p)}/কেজিতে দিতে পারি।`,p});}else say(id,'t',{w:'me',t:t.dataset.t});},
+ chatVoice:()=>{const id=S.openChat;say(id,'v',{w:'me',v:'০:'+bn(String(5+Math.floor(Math.random()*8)).padStart(2,'0'))});},
+ chatConfirm:()=>{
+  const id=S.openChat,ch=S.chats[id],L=S.listings.find(l=>l.id===ch.lid);if(L.sold)return;
+  const mid=midPrice(L.crop),p=ch.agreed;
+  S.deals.push({lid:L.id,buyer:id,crop:L.crop,qty:L.qty,price:p,total:p*L.qty,gain:(p-mid)*L.qty});
+  L.sold=true;ch.deal=true;ch.msgs.push({w:'sys',t:`ডিল নিশ্চিত: ${tk(p)}/কেজি, মোট ${tk(p*L.qty)}`});renderChat(id);render();
+ }
+};
+function speak(t){
+ try{const s=window.speechSynthesis;if(!s){toast('এই ব্রাউজারে ভয়েস সুবিধা নেই');return;}
+  const v=s.getVoices().find(x=>/^bn/i.test(x.lang));
+  if(!v){toast('এই ডিভাইসে বাংলা ভয়েস নেই। আসল অ্যাপে রেকর্ড করা ভয়েস অ্যালার্ট যাবে।');return;}
+  s.cancel();const u=new SpeechSynthesisUtterance(t);u.voice=v;u.lang=v.lang;s.speak(u);}catch(e){toast('ভয়েস চালু করা যায়নি');}
+}
+document.addEventListener('click',e=>{
+ const t=e.target.closest('[data-a]');
+ if(t&&A[t.dataset.a]){A[t.dataset.a](t,e);return;}
+ if(e.target.id==='modal')closeModal();
+});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('#modal').hidden)closeModal();});
+document.addEventListener('input',e=>{
+ const c=e.target.dataset.c;
+ if(c==='land'){S.profile.land=+e.target.value;$('#landv').textContent=dec(S.profile.land)+' একর';}
+ if(c==='hold'){S.hold=+e.target.value;$('#holdv').textContent=bn(S.hold)+' দিন';const q=Math.round(yieldCalc(S.mCrop).yieldKg*.85/10)*10;$('#holdOut').innerHTML=holdOut(S.mCrop,q);}
+ if(c==='logi'){S.lgm=$('#lgm').value;$('#logiOut').innerHTML=logiOut(S.lgm,Math.max(50,+$('#lgq').value||50));}
+});
+document.addEventListener('change',e=>{
+ const c=e.target.dataset.c;
+ if(c==='land'){S.prefill=null;render();}
+ if(c==='gphoto'||c==='lphoto'){
+  const f=e.target.files&&e.target.files[0];if(!f)return;
+  const rd=new FileReader();rd.onload=()=>{
+   if(c==='gphoto'){S.g={key:S.profile.crop,photo:rd.result,scanning:true};render();setTimeout(()=>{S.g.scanning=false;if(S.route==='guardian')render();},1100);}
+   else{S.lphoto=rd.result;toast('ছবি যোগ হয়েছে');}
+  };rd.readAsDataURL(f);
+ }
+});
+document.addEventListener('submit',e=>{
+ const f=e.target.dataset.f;if(!f)return;e.preventDefault();
+ if(f==='listing'){
+  const l={id:'l'+Date.now(),crop:$('#lcrop').value,qty:Math.max(1,+$('#lqty').value),price:Math.max(1,+$('#lprice').value),grade:$('#lgrade').value,ready:$('#lready').value,photo:S.lphoto||null,sold:false};
+  S.lphoto=null;S.listings.push(l);S.selL=l.id;S.prefill=null;S.mCrop=l.crop;S.mTab='buyers';render();toast('তালিকায় যোগ হয়েছে, ক্রেতারা প্রস্তাব পাঠিয়েছে');
+ }
+ if(f==='chat'){
+  const inp=$('#cin'),v=inp.value.trim();if(!v)return;const id=S.openChat;
+  const m=v.replace(/[০-৯]/g,d=>BD.indexOf(d)).match(/\d+(\.\d+)?/),n=m?+m[0]:null;
+  if(n!=null&&n>=5&&n<=500)say(id,'p',{w:'me',t:v,p:Math.round(n)});else say(id,'t',{w:'me',t:v});
+ }
+});
+let rz;window.addEventListener('resize',()=>{clearTimeout(rz);rz=setTimeout(hydrate,150);});
+window.addEventListener('hashchange',route);
+route();
+})();
+</script>

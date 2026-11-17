@@ -1,0 +1,52 @@
+
+/* overrides and new pages */
+main{padding-block:16px 28px}
+.foot{padding-block:0 36px}
+.toast{bottom:calc(28px + env(safe-area-inset-bottom,0px))}
+.auth-wrap{max-width:460px;margin-inline:auto;display:flex;flex-direction:column;gap:16px}
+.auth-art{position:relative;height:150px;border-radius:20px;overflow:hidden;background:linear-gradient(180deg,#d6ecf9,#eef8ee);border:1px solid rgba(15,60,30,.08)}
+.auth-art img{position:absolute;right:0;bottom:0;height:100%;width:auto;max-width:80%;object-fit:cover}
+.auth-art b{position:absolute;left:18px;top:18px;z-index:2;font-family:var(--font-display);color:#0b6a2c;font-size:1.45rem;line-height:1.25;max-width:52%}
+.auth-art small{position:absolute;left:18px;bottom:16px;z-index:2;font-family:var(--font-display);color:#0e5a2b;font-size:.9rem;max-width:50%;line-height:1.3}
+.fld{display:flex;flex-direction:column;gap:6px;margin-top:12px}
+.fld label{font-weight:600;font-size:.92rem}
+.err{background:var(--danger-soft);color:var(--danger);border-radius:10px;padding:10px 12px;font-weight:600;font-size:.92rem}
+.okmsg{background:var(--accent-soft);color:var(--accent);border-radius:10px;padding:10px 12px;font-weight:600;font-size:.92rem}
+.divider{display:flex;align-items:center;gap:12px;color:var(--muted);font-size:.85rem}
+.divider::before,.divider::after{content:"";flex:1;height:1px;background:var(--line)}
+.otp{letter-spacing:.5em;text-align:center;font-size:1.5rem;font-family:var(--font-display);font-weight:700}
+.acct{display:grid;grid-template-columns:auto 1fr;gap:6px 16px;margin:10px 0 18px}
+.acct dt{color:var(--muted);font-size:.9rem}
+.acct dd{margin:0;font-weight:600}
+.bud-row{display:grid;grid-template-columns:1fr minmax(110px,150px);gap:10px;align-items:center;padding:5px 0}
+.bud-row label{font-weight:500}
+.brow{display:grid;grid-template-columns:minmax(100px,1fr) 2fr auto;gap:10px;align-items:center;padding:5px 0}
+.brow .val{font-weight:700;font-variant-numeric:tabular-nums;text-align:right}
+@media (max-width:520px){.brow{grid-template-columns:1fr auto}.brow .bar{grid-column:1/-1;grid-row:2}}
+.bar.sun i{background:var(--sun)}
+input[type=tel]{width:100%;min-height:44px;padding:8px 12px;border-radius:10px;border:1px solid var(--line);background:var(--surface);font-size:1rem}
+
+/* auth flow */
+input[type=password]{width:100%;min-height:44px;padding:8px 12px;border-radius:10px;border:1px solid var(--line);background:var(--surface);font-size:1rem}
+.fld.bad input,.fld.bad select,.otpbox-row.bad .otpbox{border-color:var(--danger)}
+.ferr{color:var(--danger);font-size:.88rem;font-weight:600}
+.steps4{display:flex;gap:6px}
+.steps4 i{flex:1;height:5px;border-radius:3px;background:var(--line)}
+.steps4 i.dn{background:var(--accent)}.steps4 i.on{background:var(--accent);opacity:.55}
+.otpbox-row{display:flex;gap:10px;justify-content:center;margin-top:16px}
+.otpbox{width:56px;height:60px;text-align:center;font-size:1.6rem;font-family:var(--font-display);font-weight:700;border-radius:12px;border:1.5px solid var(--line);background:var(--surface)}
+.otpbox:focus{border-color:var(--accent);outline:none;box-shadow:0 0 0 3px var(--accent-soft)}
+.pwwrap{position:relative}
+.pwwrap input{padding-right:78px}
+.pwtoggle{position:absolute;right:6px;top:50%;transform:translateY(-50%);border:0;background:transparent;color:var(--accent);font-weight:700;padding:8px;cursor:pointer;min-height:36px}
+.pwm{margin-top:6px;display:flex;flex-direction:column;gap:4px}
+.pwm .bar{height:6px}
+.chk{display:flex;gap:10px;align-items:flex-start;margin-top:14px;font-size:.92rem}
+.chk input{width:20px;height:20px;margin-top:2px;accent-color:var(--accent);flex:none}
+.linkbtn{border:0;background:transparent;color:var(--accent);font-weight:700;cursor:pointer;padding:6px 0;min-height:36px}
+.spin{width:14px;height:14px;border-radius:50%;border:2px solid currentColor;border-right-color:transparent;display:inline-block;animation:sp .7s linear infinite}
+@keyframes sp{to{transform:rotate(360deg)}}
+.greet3{padding-inline:4px;display:flex;flex-direction:column;gap:2px}
+.greet-sub{color:var(--muted);font-size:.95rem}
+.wxs{text-decoration:none;color:inherit}
+@media (max-width:380px){.otpbox{width:48px;height:54px}}

@@ -1,0 +1,6 @@
+ account:()=>openModal(accountSheet()),
+ logout:()=>{S.user=null;store.set('agri_cur',null);S.listings=[];S.deals=[];S.chats={};S.selL=null;closeModal();go('login');},
+ demoLogin:()=>{const ph='01700000000';if(!USERS[ph])USERS[ph]={name:'রহিম মিয়া',phone:ph,profile:{name:'রহিম মিয়া',district:'রংপুর',crop:'potato',land:2,soil:'loam'}};loginUser(USERS[ph]);},
+ authBack:()=>{S.auth={step:'phone',phone:S.auth.phone,draft:S.auth.draft};render();},
+ budReset:()=>{delete S.bud[S.profile.crop+'|'+S.profile.land];delete S.budP[S.profile.crop];render();},
+ reset:()=>{Object.assign(S,{yS:'normal',pS:'normal',mTab:'board',mCrop:S.profile.crop,selL:null,listings:[],deals:[],chats:{},prefill:null,seed:1,g:{key:S.profile.crop,photo:null,scanning:false},hold:3,bud:{},budP:{}});render();toast('ডেমো ডেটা রিসেট হয়েছে');},
