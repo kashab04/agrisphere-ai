@@ -440,6 +440,7 @@ function zones(){
  return {arr,thr:f.thr,dry:arr.filter(v=>v<f.thr).length};
 }
 function climate(){
+ wxEnsure(S.profile.district);
  const p=S.profile,d=FC[p.district],crop=p.crop,alerts=[];
  const heavy=d.r.findIndex(v=>v>=70);
  const dayLbl=i=>i===0?'আজ':WD[addDays(i).getDay()];
@@ -624,6 +625,7 @@ V.climate=()=>{
  <section class="card"><h2>${p.district}: আগামী ৭ দিন</h2>
   <div class="days">${d.t.map((t,i)=>`<div class="day ${d.r[i]>=70?'alert':''}"><span class="dn">${i===0?'আজ':WD[addDays(i).getDay()]}</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${wIcon(d.r[i])}</svg><span class="dt">${bn(t)}°</span><div class="rainbar" aria-hidden="true"><i style="height:${d.r[i]}%"></i></div><span class="rp">${pct(d.r[i])}</span></div>`).join('')}</div>
   <div class="legend" style="margin-top:10px"><span>উপরে তাপমাত্রা (°সে), নিচে বৃষ্টির সম্ভাবনা</span></div>
+  <div class="tiny muted" style="margin-top:6px">${wxNote(p.district)}</div>
   
  </section>
  <div class="grid two">

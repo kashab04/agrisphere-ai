@@ -152,3 +152,25 @@ A.rcShare=t=>{const r=receiptData(t.dataset.v);if(!r)return;const x=receiptText(
  if(navigator.share){navigator.share({title:'কৃষিসখা রসিদ',text:x}).catch(()=>{});}
  else if(navigator.clipboard){navigator.clipboard.writeText(x).then(()=>toast('রসিদের লেখা কপি হয়েছে।'),()=>toast('কপি করা গেল না।'));}
  else toast('এই ব্রাউজারে শেয়ার সুবিধা নেই।');};
+
+// আসল আবহাওয়া: Open-Meteo (বিনা খরচে, API key লাগে না)
+const WX_TTL=3*3600*1000,wxBusy={},wxFail={};
+function wxApply(n,o){if(!FC[n]||!o||!o.t||o.t.length<7)return;FC[n].t=o.t.slice(0,7);FC[n].r=o.r.slice(0,7);FC[n].live=true;FC[n].at=o.at;}
+function wxEnsure(n){
+ const c=DCO[n];if(!c||wxBusy[n])return;
+ const f=FC[n];if(f&&f.live&&Date.now()-f.at<WX_TTL)return;
+ try{const k=store.get('agri_wx_'+n);if(k&&Date.now()-k.at<WX_TTL){wxApply(n,k);return;}}catch(e){}
+ if(wxFail[n]&&Date.now()-wxFail[n]<120000)return;
+ wxBusy[n]=1;
+ const u='https://api.open-meteo.com/v1/forecast?latitude='+c[0]+'&longitude='+c[1]+'&daily=temperature_2m_max,precipitation_probability_max&timezone=Asia%2FDhaka&forecast_days=7';
+ fetch(u).then(r=>{if(!r.ok)throw 0;return r.json();}).then(j=>{
+  const dl=j.daily,o={at:Date.now(),t:dl.temperature_2m_max.map(v=>Math.round(v)),r:dl.precipitation_probability_max.map(v=>Math.round(v==null?0:v))};
+  wxApply(n,o);try{store.set('agri_wx_'+n,o);}catch(e){}
+  delete wxBusy[n];if(S.user&&S.profile&&S.profile.district===n)render();
+ }).catch(()=>{delete wxBusy[n];wxFail[n]=Date.now();});
+}
+function wxNote(n){
+ const f=FC[n];
+ if(f&&f.live){const t=new Date(f.at);return 'তথ্যসূত্র: Open-Meteo (আসল পূর্বাভাস) · হালনাগাদ '+bn(String(t.getHours()).padStart(2,'0'))+':'+bn(String(t.getMinutes()).padStart(2,'0'));}
+ return wxBusy[n]?'আসল পূর্বাভাস আনা হচ্ছে…':'ইন্টারনেট সংযোগ না থাকায় আনুমানিক পূর্বাভাস দেখানো হচ্ছে।';
+}

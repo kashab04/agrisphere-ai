@@ -19,13 +19,13 @@ const DV=[
  ['ময়মনসিংহ বিভাগ',{t:26,b:15,p:60},[['ময়মনসিংহ',24.75,90.41],['জামালপুর',24.92,89.94],['শেরপুর',25.02,90.02],['নেত্রকোণা',24.87,90.73]]]
 ];
 const hav=(a,b)=>{const R=6371,t=Math.PI/180,dl=(b[0]-a[0])*t,dn=(b[1]-a[1])*t,x=Math.sin(dl/2)**2+Math.cos(a[0]*t)*Math.cos(b[0]*t)*Math.sin(dn/2)**2;return 2*R*Math.asin(Math.sqrt(x));};
-const DIST={},DGROUPS=[];
+const DIST={},DGROUPS=[],DCO={};
 DV.forEach(([dv,pr,list])=>{
  const names=[];
  list.forEach(([n,la,lo])=>{
   const km={};let near='dhaka',nd=1e9;
   for(const k in MC){const d=Math.max(10,Math.round(hav([la,lo],MC[k])*1.3/10)*10);km[k]=d;if(d<nd){nd=d;near=k;}}
-  DIST[n]={m:near,km,div:dv};names.push(n);
+  DIST[n]={m:near,km,div:dv};DCO[n]=[la,lo];names.push(n);
   if(!FC[n]){
    const r=rng(hash(n)),pd=3+Math.floor(r()*2),t=[],rn=[];
    for(let i=0;i<7;i++){const q=clamp(Math.round(pr.b+pr.p*Math.exp(-((i-pd)**2)/2.4)+(r()-.5)*10),0,95);rn.push(q);t.push(pr.t+Math.round((r()-.5)*2)-(q>=60?2:0));}

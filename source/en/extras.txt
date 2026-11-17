@@ -86,3 +86,6 @@ Rangpur-এ আগামী দিনে বৃষ্টির সম্ভা�
 ডিল ও চ্যাট=>Deals & chat
 ডিল ও চ্যাট মুছে নতুন করে শুরু হয়েছে=>Deals and chats cleared; starting fresh
 ডিল ও চ্যাট মুছুন=>Clear deals & chats
+তথ্যসূত্র: Open-Meteo (আসল পূর্বাভাস) · হালনাগাদ=>Source: Open-Meteo (live forecast) · updated
+আসল পূর্বাভাস আনা হচ্ছে…=>Fetching live forecast…
+ইন্টারনেট সংযোগ না থাকায় আনুমানিক পূর্বাভাস দেখানো হচ্ছে।=>No internet connection, so an estimated forecast is shown.
