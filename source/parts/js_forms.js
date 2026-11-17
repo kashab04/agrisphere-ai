@@ -72,7 +72,7 @@ const loginLocal=()=>{
  <div style="margin-top:6px;text-align:right"><button type="button" class="linkbtn" data-a="forgot">পাসওয়ার্ড ভুলে গেছেন?</button></div>
  ${sendBtn('লগইন')}</form></section>
  <div class="divider">অথবা</div>
- <button class="btn" data-a="demoLogin">ডেমো কৃষক হিসেবে প্রবেশ করুন</button>
+ <button class="btn" data-a="demoLogin">অতিথি হিসেবে দেখুন</button>
  <p class="small muted" style="text-align:center">নতুন? <a href="#signup"><b>অ্যাকাউন্ট খুলুন</b></a></p></div>`;
 };
 
@@ -92,7 +92,7 @@ const AF={
   if(Object.keys(a.errs).length)return rerender();
   busy(f,()=>{
    const u=USERS[ph];
-   if(!u){a.errs.phone='এই নম্বরে কোনো অ্যাকাউন্ট নেই। অ্যাকাউন্ট খুলুন বা ডেমো কৃষক হিসেবে প্রবেশ করুন।';return rerender();}
+   if(!u){a.errs.phone='এই নম্বরে কোনো অ্যাকাউন্ট নেই। অ্যাকাউন্ট খুলুন বা অতিথি হিসেবে দেখুন।';return rerender();}
    if(!u.pw){a.errs.pw='এই অ্যাকাউন্টে এখনও পাসওয়ার্ড নেই। "পাসওয়ার্ড ভুলে গেছেন?" চেপে একটি দিন।';return rerender();}
    if(u.pw!==pwh(ph,pw)){a.fails=(a.fails||0)+1;if(a.fails>=5){a.lockUntil=Date.now()+30000;a.fails=0;a.err='৫ বার ভুল হয়েছে। ৩০ সেকেন্ড পর আবার চেষ্টা করুন।';}else a.errs.pw='পাসওয়ার্ড ঠিক নয়। আর '+bn(5-a.fails)+' বার চেষ্টা করা যাবে।';return rerender();}
    loginUser(u);toast('স্বাগতম, '+u.name+'!');
@@ -231,7 +231,7 @@ const loginCloud=()=>{
  <div style="margin-top:6px;text-align:right"><button type="button" class="linkbtn" data-a="forgot">পাসওয়ার্ড ভুলে গেছেন?</button></div>
  ${sendBtn('লগইন')}</form></section>
  <div class="divider">অথবা</div>
- <button class="btn" data-a="demoLogin">ডেমো কৃষক হিসেবে প্রবেশ করুন</button>
+ <button class="btn" data-a="demoLogin">অতিথি হিসেবে দেখুন</button>
  <p class="small muted" style="text-align:center">নতুন? <a href="#signup"><b>অ্যাকাউন্ট খুলুন</b></a></p></div>`;
 };
 V.signup=()=>cloud()?signupCloud():signupLocal();

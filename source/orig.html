@@ -662,7 +662,7 @@ function leafSVG(key){
   maize:'<g fill="#a98a5a" stroke="#6b4a24" stroke-width="2"><ellipse cx="92" cy="86" rx="6" ry="24" transform="rotate(12 92 86)"/><ellipse cx="108" cy="150" rx="6" ry="26" transform="rotate(-12 108 150)"/><ellipse cx="94" cy="204" rx="5" ry="16" transform="rotate(8 94 204)"/></g>',
   healthy:''
  }[key];
- return `<svg viewBox="0 0 200 244" role="img" aria-label="${dz.bn} নমুনা ছবি"><path d="${shape}" fill="#5aa65a" stroke="#2f6f3a" stroke-width="3"/><g fill="none" stroke="#2f6f3a" stroke-width="2" opacity=".6">${veins}</g>${sp}</svg>`;
+ return `<svg viewBox="0 0 200 244" role="img" aria-label="${dz.bn} উদাহরণ ছবি"><path d="${shape}" fill="#5aa65a" stroke="#2f6f3a" stroke-width="3"/><g fill="none" stroke="#2f6f3a" stroke-width="2" opacity=".6">${veins}</g>${sp}</svg>`;
 }
 
 V.guardian=()=>{
@@ -670,11 +670,11 @@ V.guardian=()=>{
  const humidRisk=dz.humid&&cl.d.r.some(v=>v>=50);
  const panel=g.photo?`<img src="${g.photo}" alt="আপলোড করা পাতার ছবি">`:leafSVG(g.key);
  return `<div class="stack">
- ${head('Crop Guardian','পাতার ছবি থেকে রোগ শনাক্ত','পাতার ছবি তুলুন বা নমুনা ছবি বেছে নিন। রোগের নাম, কারণ, এখনই করণীয় ও ওষুধের পরামর্শ পাবেন।')}
+ ${head('Crop Guardian','পাতার ছবি থেকে রোগ শনাক্ত','পাতার ছবি তুলুন বা উদাহরণ ছবি বেছে নিন। রোগের নাম, কারণ, এখনই করণীয় ও ওষুধের পরামর্শ পাবেন।')}
  <div class="grid two">
   <section class="card"><h2>ছবি দিন</h2>
    <div class="leafpanel">${panel}${g.scanning?'<div class="scanline"></div><div class="scanning-note">বিশ্লেষণ চলছে…</div>':''}</div>
-   <div class="lbl">নমুনা পাতা</div>
+   <div class="lbl">উদাহরণ পাতা</div>
    <div class="chips">${CASES.map(c=>chip(c[1],`data-a="case" data-v="${c[0]}"`,!g.photo&&g.key===c[0])).join('')}</div>
    <div class="lbl">অথবা নিজের ছবি</div>
    <input type="file" id="gphoto" accept="image/*" data-c="gphoto" aria-label="পাতার ছবি আপলোড">
@@ -809,7 +809,7 @@ M.buyers=()=>{
  const list=Object.keys(BUY).filter(id=>BUY[id].crops.includes(L.crop)),mid=midPrice(L.crop),lp=localPrice(L.crop);
  return `<div class="stack">
  ${S.listings.length>1?`<div class="chips" role="group" aria-label="লিস্টিং">${S.listings.map(l=>chip(`${CROPS[l.crop].bn} ${num(l.qty)} কেজি`,`data-a="viewBuyers" data-v="${l.id}"`,l.id===L.id)).join('')}</div>`:''}
- <div class="card flat"><b>${CROPS[L.crop].bn}, ${num(L.qty)} কেজি</b> · আপনার চাওয়া দাম ${tk(L.price)}/কেজি।<br>স্থানীয় আড়তদার সাধারণত দেন প্রায় <b>${tk(mid)}/কেজি</b> (বাজারদরের ৮০%, নমুনা হার)। ক্রেতার প্রস্তাব এর সাথে তুলনা করুন।</div>
+ <div class="card flat"><b>${CROPS[L.crop].bn}, ${num(L.qty)} কেজি</b> · আপনার চাওয়া দাম ${tk(L.price)}/কেজি।<br>স্থানীয় আড়তদার সাধারণত দেন প্রায় <b>${tk(mid)}/কেজি</b> (বাজারদরের ৮০%, আনুমানিক হার)। ক্রেতার প্রস্তাব এর সাথে তুলনা করুন।</div>
  ${S.deals.filter(d=>d.lid===L.id).map(d=>`<div class="deal-strip"><b>ডিল সম্পন্ন: ${BUY[d.buyer].n}</b><span>${tk(d.price)}/কেজি, মোট ${tk(d.total)}</span><span class="pos"><b>মধ্যস্বত্বভোগীর তুলনায় বাড়তি ${tk(d.gain)}</b></span><button class="btn primary sm" data-a="receipt" data-v="${d.lid}">রসিদ দেখুন</button><button class="btn sm" data-a="toLogi">পরিবহন হিসাব করুন</button></div>`).join('')}
  <div class="grid">
   ${list.map(id=>{const b=BUY[id],off=offerFor(id,L),dv=(off-lp)/lp*100,ok=L.qty>=b.min,ch=S.chats[id];return `<section class="card buyer">
@@ -842,7 +842,7 @@ M.logi=()=>{
 function logiOut(mk,qty){
  const km=DIST[S.profile.district].km[mk],rows=VEH.map(v=>{const trips=Math.ceil(qty/v[1]),cost=trips*v[2]*km+500*trips;return {n:v[0],cap:v[1],trips,cost};}),best=rows.reduce((a,b)=>b.cost<a.cost?b:a);
  return `<p class="small muted">${MARKETS[mk].bn} পর্যন্ত আনুমানিক ${km<=10?'কাছেই':bn(km)+' কিমি'}</p><div class="tw"><table><thead><tr><th>গাড়ি</th><th class="r">খেপ</th><th class="r">মোট</th><th class="r">কেজি প্রতি</th></tr></thead><tbody>
- ${rows.map(r=>`<tr class="${r===best?'hl':''}"><td><b>${r.n}</b>${r===best?' <span class="pill ok">কম খরচ</span>':''}<div class="tiny muted">${num(r.cap)} কেজি</div></td><td class="r">${bn(r.trips)}</td><td class="r"><b>${tk(r.cost)}</b></td><td class="r">${tk(r.cost/qty)}</td></tr>`).join('')}</tbody></table></div>${note('ভাড়ার হার নমুনা (লোডিং সহ)।')}`;
+ ${rows.map(r=>`<tr class="${r===best?'hl':''}"><td><b>${r.n}</b>${r===best?' <span class="pill ok">কম খরচ</span>':''}<div class="tiny muted">${num(r.cap)} কেজি</div></td><td class="r">${bn(r.trips)}</td><td class="r"><b>${tk(r.cost)}</b></td><td class="r">${tk(r.cost/qty)}</td></tr>`).join('')}</tbody></table></div>${note('ভাড়ার হার আনুমানিক (লোডিং সহ)।')}`;
 }
 
 /* ---------- chat ---------- */

@@ -87,7 +87,7 @@ rep(r'''const cropChips=()=>`<div class="chips" role="group" aria-label="ফস�
 rep(r'''<select id="lcrop">${CK.map(k=>`<option value="${k}" ${k===pf.crop?'selected':''}>${CROPS[k].bn}</option>`).join('')}</select>''',
     r'''<select id="lcrop">${cropOpts(pf.crop)}</select>''')
 rep(r'''<div class="chips">${CASES.map(c=>chip(c[1],`data-a="case" data-v="${c[0]}"`,!g.photo&&g.key===c[0])).join('')}</div>''',
-    r'''<select id="gcase" data-c="gcase" aria-label="নমুনা পাতা">${CASEOPTS(g.photo?'':g.key)}</select>''')
+    r'''<select id="gcase" data-c="gcase" aria-label="উদাহরণ পাতা">${CASEOPTS(g.photo?'':g.key)}</select>''')
 rep(" if(c==='land'){S.prefill=null;render();}",
     " if(c==='land'){S.prefill=null;render();}\n if(c==='crop'){S.profile.crop=e.target.value;onProfile(false);}\n if(c==='soil'){S.profile.soil=e.target.value;render();}\n if(c==='mcrop'){S.mCrop=e.target.value;render();}\n if(c==='gcase'){A.case({dataset:{v:e.target.value}});}")
 
