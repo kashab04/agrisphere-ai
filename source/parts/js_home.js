@@ -1,4 +1,5 @@
 const IMG=__IMG__;
+const BANNER='<svg class="bn-art" viewBox="0 0 640 300" preserveAspectRatio="xMaxYMax slice" aria-hidden="true" focusable="false"><defs><linearGradient id="bgs" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#cfe9f7"/><stop offset=".72" stop-color="#eef8ee"/><stop offset="1" stop-color="#f6fbef"/></linearGradient><radialGradient id="bgsun" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#fff0a6"/><stop offset="1" stop-color="#fff0a6" stop-opacity="0"/></radialGradient><linearGradient id="bgf" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#6cbf4f"/><stop offset="1" stop-color="#2f8f3f"/></linearGradient></defs><rect width="640" height="300" fill="url(#bgs)"/><circle cx="548" cy="62" r="72" fill="url(#bgsun)"/><circle cx="548" cy="62" r="25" fill="#ffd95a"/><g fill="#fff" opacity=".9"><ellipse cx="410" cy="48" rx="44" ry="11"/><ellipse cx="436" cy="38" rx="28" ry="11"/><ellipse cx="608" cy="128" rx="34" ry="9"/></g><path d="M0 214C90 170 175 182 265 202C345 158 435 158 525 192C575 172 612 176 640 186V300H0Z" fill="#cfe8c6"/><g fill="#8cc67b"><circle cx="330" cy="168" r="14"/><circle cx="352" cy="174" r="11"/><circle cx="470" cy="172" r="13"/></g><path d="M0 240C110 210 220 220 330 237C430 210 540 215 640 232V300H0Z" fill="#9fd18f"/><path d="M0 266C140 244 300 250 420 262C520 250 590 252 640 260V300H0Z" fill="url(#bgf)"/><g fill="none" stroke="#e9f8da" stroke-opacity=".55" stroke-width="3" stroke-linecap="round"><path d="M0 280C150 266 300 270 420 278"/><path d="M200 300C300 282 460 280 640 286"/><path d="M430 262C500 262 570 266 640 276"/></g><g transform="translate(540 205)"><path d="M0 95C0 60 2 30 4 0" stroke="#1f7a37" stroke-width="5" fill="none" stroke-linecap="round"/><path d="M3 38C-26 36-42 14-40-12 -12-12 4 8 3 38Z" fill="#2f9a47"/><path d="M4 22C32 22 50 2 48-26 20-26 4-6 4 22Z" fill="#43b25a"/><path d="M3 62C-18 62-30 48-30 28-8 28 3 42 3 62Z" fill="#43b25a"/></g></svg>';
 const MKT_SVG='<svg class="ti" viewBox="0 0 220 130" aria-hidden="true"><ellipse cx="108" cy="119" rx="92" ry="8" fill="#000" opacity=".08"/><rect x="30" y="62" width="150" height="54" rx="7" fill="#c98a4b"/><rect x="30" y="62" width="150" height="11" rx="5" fill="#b2733a"/><rect x="42" y="82" width="126" height="8" rx="3" fill="#b2733a" opacity=".65"/><rect x="42" y="98" width="126" height="8" rx="3" fill="#b2733a" opacity=".65"/><circle cx="60" cy="56" r="17" fill="#e0452f"/><circle cx="94" cy="50" r="18" fill="#e8553a"/><ellipse cx="130" cy="55" rx="21" ry="15" fill="#d9b06a"/><ellipse cx="158" cy="59" rx="17" ry="12" fill="#c99a52"/><ellipse cx="54" cy="49" rx="5" ry="3" fill="#fff" opacity=".35"/><ellipse cx="88" cy="42" rx="5" ry="3" fill="#fff" opacity=".35"/><path d="M52 40c4-6 10-6 16 0M86 33c4-6 11-6 17 0" fill="none" stroke="#2e9a4d" stroke-width="4" stroke-linecap="round"/><g transform="translate(142 8) rotate(10)"><rect width="62" height="36" rx="9" fill="#fff" stroke="#e0a21a" stroke-width="3"/><text x="31" y="26" text-anchor="middle" font-size="21" font-weight="800" fill="#a56d00" font-family="Anek Bangla,Hind Siliguri,sans-serif">৳২২</text></g></svg>';
 const ARROW='<span class="go" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>';
 const timg=k=>`<img src="${IMG[k]}" alt="" loading="lazy">`;
@@ -8,10 +9,9 @@ const wxStrip=()=>{const a=climate().alerts[0];return a&&a.l==='high'?`<a class=
 V.home=()=>{
  const p=S.profile,dealSum=S.deals.reduce((s,d)=>s+d.total,0),gain=S.deals.reduce((s,d)=>s+d.gain,0);
  return `<div class="stack">
- <section class="hero2" aria-label="স্বাগতম">
-  <div class="hero-t"><span class="w">স্বাগতম<img class="hero-sprout" src="${IMG.sprout}" alt=""></span><h1>AgriSphere AI</h1>
-   <span class="tl">স্মার্ট চাষ, টেকসই ভবিষ্যৎ</span></div>
-  <img class="hero-img" src="${IMG.hero}" alt="">
+ <section class="hero2" aria-label="স্বাগতম">${BANNER}
+  <div class="hero-t"><span class="w">আপনাকে স্বাগতম!</span><h1>কৃষিসখা</h1>
+   <span class="tl">স্মার্ট কৃষির পথে আমরা আছি আপনার পাশে।</span></div>
  </section>
  <div class="greet3"><p class="greet2">আসসালামু আলাইকুম, <b>${esc(p.name)}</b></p><p class="greet-sub">আজ আপনার ${CROPS[p.crop].bn} ক্ষেতের জন্য কী দেখতে চান?</p></div>
  ${wxStrip()}
@@ -25,8 +25,7 @@ V.home=()=>{
   ${tile('market','বাজার ও বিক্রি','বাজারদর দেখুন, সরাসরি ক্রেতার কাছে ফসল বিক্রি করুন',MKT_SVG,'t-peach',true)}
   ${tile('budget','বাজেট','ফসলের খরচ ও আয় পরিকল্পনা করুন',timg('b'),'t-cream',true)}
  </nav>
- <img class="homefoot" src="${IMG.foot}" alt="Grow Smart, Farm Better, Live Greener">
- <div class="row" style="justify-content:center"><button class="btn sm" data-a="reset">ডেমো ডেটা রিসেট করুন</button></div>
+ <div class="row" style="justify-content:center"><button class="btn sm" data-a="open" data-v="settings">সেটিংস</button><button class="btn sm" data-a="open" data-v="help">সহায়তা ও মতামত</button></div>
  </div>`;
 };
 

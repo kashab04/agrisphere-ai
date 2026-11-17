@@ -1,0 +1,43 @@
+সোম:=>Mon:
+মঙ্গল:=>Tue:
+বুধ:=>Wed:
+বৃহঃ:=>Thu:
+শুক্র:=>Fri:
+শনি:=>Sat:
+রবি:=>Sun:
+আগামী=>Next
+পূর্বাভাস=>forecast
+সতর্কবার্তা=>alert
+ মাটিতে মাঝারি সেচ যথেষ্ট।=> soil needs only medium irrigation.
+ মাটি দ্রুত শুকায়, তাই সেচ বেশি লাগে।=> soil dries quickly, so more irrigation is needed.
+ মাটি পানি ধরে রাখে, তাই সেচ কম লাগে।=> soil holds water, so less irrigation is needed.
+লবণাক্ত মাটিতে মিঠা পানিতে সেচ দিন এবং লবণ-সহনশীল জাত বেছে নিন।=>In saline soil, irrigate with fresh water and choose salt-tolerant varieties.
+=কম=>Low
+=মাঝারি=>Medium
+=বেশি=>High
+=জন=>people
+সম্পন্ন ডিল=>Completed deals
+এর কম=> or less
+মাঝারি বৃষ্টির সম্ভাবনা আছে=>Moderate chance of rain
+সেচ দেওয়ার আগে আকাশের অবস্থা দেখে নিন।=>Check the sky before irrigating.
+Albugo candida ছত্রাক। ঠান্ডা ও আর্দ্র আবহাওয়ায় দেখা দেয়।=>Albugo candida fungus. Appears in cold, humid weather.
+Alternaria dauci ছত্রাক। উষ্ণ, আর্দ্র আবহাওয়া ও ঘন রোপণে বাড়ে।=>Alternaria dauci fungus. Increases in warm, humid weather and dense planting.
+Alternaria porri ছত্রাক। বৃষ্টি, কুয়াশা ও ঘন রোপণে ছড়ায়।=>Alternaria porri fungus. Spreads with rain, fog and dense planting.
+Alternaria solani ছত্রাক। গরম-আর্দ্র আবহাওয়া ও দুর্বল গাছে বেশি হয়।=>Alternaria solani fungus. More common in hot, humid weather and on weak plants.
+Alternaria ছত্রাক। আর্দ্র আবহাওয়ায় ও পুরনো পাতায় বেশি হয়।=>Alternaria fungus. More common in humid weather and on older leaves.
+Alternaria ছত্রাক। কুয়াশা, বৃষ্টি ও আর্দ্রতায় ছড়ায়।=>Alternaria fungus. Spreads with fog, rain and humidity.
+Cercospora ছত্রাক। আর্দ্র আবহাওয়ায় পুরনো পাতায় বেশি দেখা যায়।=>Cercospora fungus. Seen more on older leaves in humid weather.
+Exserohilum turcicum ছত্রাক। মাঝারি তাপ ও আর্দ্রতায় বাড়ে।=>Exserohilum turcicum fungus. Increases in moderate heat and humidity.
+Fusarium ছত্রাক, মাটিবাহিত। জমিতে পানি জমলে ও একই জমিতে বারবার লাউজাতীয় ফসল করলে বাড়ে।=>Fusarium fungus, soil-borne. Increases when water stands in the field and gourd-type crops are grown repeatedly on the same land.
+Macrophomina বা Colletotrichum ছত্রাক। উষ্ণ ও আর্দ্র আবহাওয়ায়, ঘন রোপণে বেশি হয়।=>Macrophomina or Colletotrichum fungus. More common in warm, humid weather and dense planting.
+Magnaporthe oryzae ছত্রাক। উষ্ণ, আর্দ্র ও মেঘলা আবহাওয়ায় শীষ আসার সময় বেশি ছড়ায়।=>Magnaporthe oryzae fungus. Spreads more at heading in warm, humid, cloudy weather.
+Magnaporthe oryzae ছত্রাক। অতিরিক্ত ইউরিয়া ও ঠান্ডা-আর্দ্র আবহাওয়ায় বাড়ে।=>Magnaporthe oryzae fungus. Increases with excess urea and cool, humid weather.
+Mycosphaerella ছত্রাক। উষ্ণ, আর্দ্র ও বৃষ্টির আবহাওয়ায় ছড়ায়।=>Mycosphaerella fungus. Spreads in warm, humid, rainy weather.
+Phomopsis vexans ছত্রাক। উষ্ণ, আর্দ্র আবহাওয়ায় ও সংক্রমিত বীজ থেকে ছড়ায়।=>Phomopsis vexans fungus. Spreads in warm, humid weather and from infected seed.
+Phytophthora নামের ছত্রাকজাতীয় জীবাণু। ঠান্ডা, কুয়াশা ও আর্দ্র আবহাওয়ায় দ্রুত ছড়ায়।=>A fungus-like organism called Phytophthora. Spreads fast in cold, foggy, humid weather.
+Pseudoperonospora cubensis। ঠান্ডা রাত, কুয়াশা ও আর্দ্রতায় দ্রুত ছড়ায়।=>Pseudoperonospora cubensis. Spreads fast with cold nights, fog and humidity.
+Puccinia ছত্রাক। ঠান্ডা ও আর্দ্র আবহাওয়ায় ছড়ায়।=>Puccinia fungus. Spreads in cold, humid weather.
+Uromyces ছত্রাক। ঠান্ডা, কুয়াশাচ্ছন্ন আর্দ্র আবহাওয়ায় বাড়ে।=>Uromyces fungus. Increases in cold, foggy, humid weather.
+Xanthomonas campestris নামের ব্যাকটেরিয়া। বৃষ্টি, শিশির ও সংক্রমিত বীজে ছড়ায়।=>A bacterium called Xanthomonas campestris. Spreads with rain, dew and infected seed.
+ডোমেইন:=>Domain:
+AI Builders Congress · Team 01 · ডোমেইন: AgriSphere AI। এই ডেমোর সব সংখ্যা, নাম ও ক্রেতা নমুনা তথ্য; আসল বাজারদর, আবহাওয়া ও AI মডেল এখানে সংযুক্ত নেই।=>AI Builders Congress · Team 01 · Domain: AgriSphere AI. All numbers, names and buyers in this demo are sample data; real market prices, weather and the AI model are not connected here.

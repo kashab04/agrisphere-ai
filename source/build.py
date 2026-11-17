@@ -1,4 +1,15 @@
 import re, json, pathlib
+KEEP_SUB = {'কেজি', 'একর', 'কিমি', 'ছত্রাক।', 'কেজি।', 'কেজিতে', 'বার্তা', 'সোম:', 'মঙ্গল:', 'বুধ:', 'বৃহঃ:', 'শুক্র:', 'শনি:', 'রবি:', 'ডোমেইন:'}
+def load_en():
+    d = {}
+    for f in ['names.txt', 'frag1.txt', 'frag2.txt', 'extras.txt']:
+        for ln in (pathlib.Path(__file__).resolve().parent / 'en' / f).read_text(encoding='utf-8').split('\n'):
+            if '=>' in ln and ln.strip():
+                k, v = ln.split('=>', 1)
+                if f != 'names.txt' and k and k[0] not in '=- /(' and ' ' not in k and len(k) <= 8 and k not in KEEP_SUB:
+                    k = '=' + k
+                d[k] = v
+    return 'const EN=' + json.dumps(d, ensure_ascii=False, separators=(',', ':')) + ';\n'
 root = pathlib.Path(__file__).resolve().parent
 P = lambda n: (root / 'parts' / n).read_text()
 s = (root / 'orig.html').read_text()
@@ -25,7 +36,7 @@ assert old_route in s
 s = s.replace(old_route, P('js_route.js').strip())
 s = re.sub(r" reset:\(\)=>\{Object\.assign\(S,\{profile.*\n", lambda m: P('js_actions.js'), s, count=1)
 s = s.replace("document.addEventListener('submit',e=>{\n const f=e.target.dataset.f;if(!f)return;e.preventDefault();",
-              P('js_forms.js') + "document.addEventListener('submit',e=>{\n const f=e.target.dataset.f;if(!f)return;e.preventDefault();\n if(AF[f]){AF[f](e.target);return;}", 1)
+              P('js_forms.js') + load_en() + P('js_settings.js') + "document.addEventListener('submit',e=>{\n const f=e.target.dataset.f;if(!f)return;e.preventDefault();\n if(AF[f]){AF[f](e.target);return;}", 1)
 s = s.replace(" if(c==='land'){S.profile.land=+e.target.value;",
               " if(c==='bud'){const p=S.profile,key=p.crop+'|'+p.land;S.bud[key]=S.bud[key]||{};document.querySelectorAll('[data-c=\"bud\"]').forEach(el=>{const v=Math.max(0,+el.value||0);if(el.dataset.k==='price')S.budP[p.crop]=Math.max(1,v);else S.bud[key][el.dataset.k]=v;});$('#budOut').innerHTML=budOut();}\n if(c==='land'){S.profile.land=+e.target.value;", 1)
 s = s.replace("window.addEventListener('hashchange',route);\nroute();",
@@ -77,13 +88,18 @@ rep(" if(c==='land'){S.prefill=null;render();}",
 
 img = json.dumps(json.loads(P('assets.json')), ensure_ascii=False)
 s = s.replace('__IMG__', img)
-s = s.replace('<title>AgriSphere AI</title>', '<title>AgriSphere AI</title>', 1)
+s = s.replace('<title>AgriSphere AI</title>', '<title>কৃষিসখা</title>', 1)
+s = s.replace('AI Builders Congress · Team 01 · AgriSphere AI।', 'AI Builders Congress · Team 01 · ডোমেইন: AgriSphere AI।', 1)
+s = s.replace('[AgriSphere] ', '[কৃষিসখা] ')
+_a = " const avg=d.r.reduce((a,b)=>a+b,0)/7;"
+assert _a in s
+s = s.replace(_a, " if(!alerts.length)alerts.push({l:'ok',t:'মাঝারি বৃষ্টির সম্ভাবনা আছে',a:'সেচ দেওয়ার আগে আকাশের অবস্থা দেখে নিন।'});\n" + _a, 1)
 # standalone page for GitHub Pages: full document, charset, viewport and PWA tags
 head = ('<!doctype html>\n<html lang="bn"><head><meta charset="utf-8">'
         '<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">'
         '<meta name="theme-color" content="#1B7A3D">'
         '<meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes">'
-        '<meta name="apple-mobile-web-app-title" content="AgriSphere">'
+        '<meta name="apple-mobile-web-app-title" content="কৃষিসখা">'
         '<link rel="manifest" href="manifest.webmanifest">' '<script type="module" src="firebase-glue.js"></script>'
         '<link rel="icon" href="icon-192.png"><link rel="apple-touch-icon" href="icon-192.png">')
 tail = ('\n<script>if("serviceWorker" in navigator&&location.protocol.startsWith("http")){addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));}</script>\n</body></html>\n')

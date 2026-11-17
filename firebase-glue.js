@@ -2,6 +2,7 @@
    Does nothing until firebase-config.js is filled in. Exposes window.AgriCloud for the app. */
 import cfg from './firebase-config.js';
 
+window.AGRI_CONTACT = (cfg && cfg.contactEmail) || '';
 (async () => {
   if (!cfg || !cfg.apiKey) return;
   try {
@@ -28,6 +29,7 @@ import cfg from './firebase-config.js';
       signOut() { return A.signOut(auth); },
       resend() { return sendVerify(auth.currentUser); },
       async refresh() { await A.reload(auth.currentUser); return auth.currentUser.emailVerified; },
+      async sendFeedback(d) { await F.addDoc(F.collection(db, 'feedback'), { uid: auth.currentUser ? auth.currentUser.uid : '', type: d.type, message: d.message, contact: d.contact, name: d.name, lang: d.lang, app: d.app, createdAt: F.serverTimestamp() }); },
       saveProfile(uid, data) { return F.setDoc(F.doc(db, 'users', uid), data, { merge: true }); },
       async loadProfile(uid) { const s = await F.getDoc(F.doc(db, 'users', uid)); return s.exists() ? s.data() : null; }
     };

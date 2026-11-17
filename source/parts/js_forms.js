@@ -1,5 +1,5 @@
 /* ---------- auth: multi-step sign-up, password login, OTP, password reset (demo only) ---------- */
-const authArt=t=>`<div class="auth-art"><b>${t}</b><small>স্মার্ট চাষ, টেকসই ভবিষ্যৎ</small><img src="${IMG.hero}" alt=""></div>`;
+const authArt=t=>`<div class="auth-art"><b>${t}</b><small>স্মার্ট কৃষির পথে আমরা আছি আপনার পাশে।</small>${BANNER}</div>`;
 const pwh=(ph,pw)=>'h'+hash('agri|'+ph+'|'+pw);
 const au=()=>{const a=S.auth;if(!a.mode)a.mode=S.route==='signup'?'signup':'login';if(!a.d)a.d={};return a;};
 const fE=k=>{const a=S.auth;return a.errs&&a.errs[k]?`<div class="ferr" role="alert">${a.errs[k]}</div>`:'';};

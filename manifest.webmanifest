@@ -1,7 +1,7 @@
 {
-  "name": "AgriSphere AI",
-  "short_name": "AgriSphere",
-  "description": "কৃষকদের জন্য বাংলা AI অ্যাপ: ফলন, সার-সেচ, আবহাওয়া, রোগ শনাক্ত ও বাজার",
+  "name": "কৃষিসখা",
+  "short_name": "কৃষিসখা",
+  "description": "কৃষিসখা: কৃষকদের জন্য বাংলা AI অ্যাপ: ফলন, সার-সেচ, আবহাওয়া, রোগ শনাক্ত ও বাজার",
   "lang": "bn",
   "dir": "ltr",
   "start_url": "./",
