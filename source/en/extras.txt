@@ -58,3 +58,4 @@ Rangpur-এ আগামী দিনে বৃষ্টির সম্ভা�
 একর। যেকোনো সংখ্যা বদলাতে পারেন। সারের খরচ=>acre(s). You can change any number. Fertilizer cost
 ইমেইলে=>to email
 (প্রায়=>(about
+← পিছনে=>← Back

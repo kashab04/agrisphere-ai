@@ -66,7 +66,7 @@ Object.assign(A,{
 });
 V.settings=()=>{
  const u=S.user||{},p=S.profile;
- return `<div class="stack"><a class="back" href="#home">← হোম</a><h1 style="font-size:1.6rem">সেটিংস</h1>
+ return `<div class="stack"><a class="back" href="#home">← পিছনে</a><h1 style="font-size:1.6rem">সেটিংস</h1>
  <section class="card"><h2>ভাষা</h2><p class="lead">অ্যাপ কোন ভাষায় দেখতে চান বেছে নিন।</p>${segBtns(LANGS,LANG,'lang')}<p class="small muted" style="margin-top:10px">আরও ভাষা পরে যোগ করা হবে।</p></section>
  <section class="card"><h2>লেখার আকার</h2><p class="lead">পড়তে অসুবিধা হলে লেখা বড় করুন।</p>${segBtns([['n','স্বাভাবিক'],['l','বড়'],['x','অনেক বড়']],FSK,'fsize')}</section>
  <section class="card"><h2>আমার অ্যাকাউন্ট</h2>
@@ -79,7 +79,7 @@ V.settings=()=>{
 const FB_TYPES=[['problem','সমস্যা জানাতে চাই'],['idea','পরামর্শ দিতে চাই'],['question','প্রশ্ন আছে'],['thanks','ধন্যবাদ জানাতে চাই']];
 V.help=()=>{
  const fb=S.fb||(S.fb={}),d=fb.draft||{type:'problem',msg:'',contact:(S.user&&(S.user.email||S.user.mobile))||''},mail=(window.AGRI_CONTACT||'');
- return `<div class="stack"><a class="back" href="#home">← হোম</a><h1 style="font-size:1.6rem">সহায়তা ও মতামত</h1>
+ return `<div class="stack"><a class="back" href="#home">← পিছনে</a><h1 style="font-size:1.6rem">সহায়তা ও মতামত</h1>
  <section class="card"><h2>আপনার কথা লিখুন</h2><p class="lead">অ্যাপে কোনো সমস্যা হলে বা ভালো কিছু মনে এলে এখানে লিখুন। আমাদের টিম পড়ে দেখবে।</p>
   ${fb.ok?`<div class="okmsg" role="status">${fb.ok}</div>`:''}${fb.err?`<div class="err" role="alert">${fb.err}</div>`:''}
   <form data-f="feedback" novalidate>
@@ -107,3 +107,7 @@ AF.feedback=async f=>{
  }catch(e){fb.err='পাঠানো যায়নি। ইন্টারনেট দেখে আবার চেষ্টা করুন।';}
  render();
 };
+
+// "পিছনে" বাটন: অ্যাপের ভেতরে আগের পাতা থাকলে সেখানে যায়, নইলে হোমে।
+let navN=0;window.addEventListener('hashchange',()=>{navN++;});
+document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('a.back');if(!b)return;if(navN>0){e.preventDefault();navN--;history.back();}});

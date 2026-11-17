@@ -34,7 +34,7 @@ s = re.sub(r'<nav class="bnav".*?</nav>\n', '', s, flags=re.S)
 
 # JS
 s = between(s, 'V.home=()=>{', 'V.yieldmax=()=>{', P('js_home.js'))
-s = s.replace('<header class="mod-head"><span class="tag">', '<header class="mod-head"><a class="back" href="#home">← হোম</a><span class="tag">', 1)
+s = s.replace('<header class="mod-head"><span class="tag">', '<header class="mod-head"><a class="back" href="#home">← পিছনে</a><span class="tag">', 1)
 s = between(s, 'function render(){', 'function hydrate()', P('js_render.js'))
 old_route = "function route(){const h=location.hash.slice(1);S.route=V[h]?h:'home';render();window.scrollTo(0,0);}"
 assert old_route in s
