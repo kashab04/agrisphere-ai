@@ -84,7 +84,7 @@ head = ('<!doctype html>\n<html lang="bn"><head><meta charset="utf-8">'
         '<meta name="theme-color" content="#1B7A3D">'
         '<meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes">'
         '<meta name="apple-mobile-web-app-title" content="AgriSphere">'
-        '<link rel="manifest" href="manifest.webmanifest">'
+        '<link rel="manifest" href="manifest.webmanifest">' '<script type="module" src="firebase-glue.js"></script>'
         '<link rel="icon" href="icon-192.png"><link rel="apple-touch-icon" href="icon-192.png">')
 tail = ('\n<script>if("serviceWorker" in navigator&&location.protocol.startsWith("http")){addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));}</script>\n</body></html>\n')
 (root.parent / 'index.html').write_text(head + s + tail)

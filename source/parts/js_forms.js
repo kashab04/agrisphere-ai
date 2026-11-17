@@ -40,7 +40,7 @@ function farmStep(){
  ${sendBtn('অ্যাকাউন্ট তৈরি করুন')}
  <div style="margin-top:8px"><button class="btn" style="width:100%" type="button" data-a="farmBack">পেছনে</button></div></form>`;
 }
-V.signup=()=>{
+const signupLocal=()=>{
  const a=au(),d=a.d;let body,n=1;
  if(a.step==='otp'){n=2;body=otpStep();}
  else if(a.step==='pass'){n=3;body=passStep();}
@@ -56,7 +56,7 @@ V.signup=()=>{
  <section class="card">${prog(n,4)}<h1 style="font-size:1.5rem;margin-top:8px">${title}</h1><p class="muted" style="margin-top:4px">${sub}</p>${body}</section>
  <p class="small muted" style="text-align:center">আগে থেকেই অ্যাকাউন্ট আছে? <a href="#login"><b>লগইন করুন</b></a></p></div>`;
 };
-V.login=()=>{
+const loginLocal=()=>{
  const a=au(),d=a.d;
  if(a.mode==='reset'){
   const n=a.step==='otp'?2:a.step==='pass'?3:1;
@@ -180,3 +180,118 @@ setInterval(()=>{
  if(el.dataset.s===st)return;el.dataset.s=st;
  el.innerHTML=left>0?`${bn(left)} সেকেন্ড পরে আবার OTP চাইতে পারবেন`:'<button class="btn sm" type="button" data-a="resendOtp">আবার OTP পাঠান</button>';
 },500);
+
+/* ---------- cloud mode (Firebase email + password), active only when firebase-config.js is filled in ---------- */
+const cloud=()=>!!(window.AgriCloud&&window.AgriCloud.ready);
+const cErr=e=>{const c=(e&&e.code)||'';return({'auth/email-already-in-use':'এই ইমেইলে আগেই অ্যাকাউন্ট আছে। লগইন করুন।','auth/invalid-email':'সঠিক ইমেইল দিন।','auth/weak-password':'পাসওয়ার্ড আরও শক্ত করুন (কমপক্ষে ৬ অক্ষর)।','auth/invalid-credential':'ইমেইল বা পাসওয়ার্ড ঠিক নয়।','auth/user-not-found':'এই ইমেইলে কোনো অ্যাকাউন্ট নেই।','auth/wrong-password':'ইমেইল বা পাসওয়ার্ড ঠিক নয়।','auth/too-many-requests':'অনেকবার চেষ্টা হয়েছে। কিছুক্ষণ পর আবার চেষ্টা করুন।','auth/network-request-failed':'ইন্টারনেট সংযোগ নেই। সংযোগ দেখে আবার চেষ্টা করুন।','auth/operation-not-allowed':'ইমেইল লগইন চালু করা নেই (Firebase → Authentication → Sign-in method দেখুন)।','auth/unauthorized-domain':'এই ঠিকানা Firebase-এ অনুমোদিত নয় (Authorized domains দেখুন)।'})[c]||'কিছু একটা সমস্যা হয়েছে। আবার চেষ্টা করুন।';};
+const validEmail=v=>/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v);
+const emailField=(id,v,k)=>`<div class="fld${fC(k)}"><label for="${id}">ইমেইল</label><input id="${id}" type="email" inputmode="email" autocomplete="email" placeholder="name@example.com" value="${esc(v||'')}" ${fC(k)?'aria-invalid="true"':''}>${fE(k)}</div>`;
+const busyA=(f,on)=>{const b=f&&f.querySelector('button[type=submit]');if(b){if(on){b.disabled=true;b.dataset.h=b.innerHTML;b.innerHTML='<span class="spin"></span> অপেক্ষা করুন…';}else{b.disabled=false;if(b.dataset.h)b.innerHTML=b.dataset.h;}}};
+async function cloudUser(u,farm,extra){
+ let doc=null;try{doc=await AgriCloud.loadProfile(u.uid);}catch(e){}
+ const lp=store.get('agri_cp_'+u.uid);
+ const base=Object.assign({district:'রংপুর',crop:'potato',land:1,soil:'loam'},(doc&&doc.profile)||lp||{},farm||{});
+ const name=(extra&&extra.name)||(doc&&doc.name)||u.name||'কৃষক';
+ return {cloud:true,uid:u.uid,email:u.email,name,mobile:(extra&&extra.mobile)||(doc&&doc.phone)||'',phone:'cloud:'+u.uid,verified:u.verified,profile:Object.assign({},base,{name})};
+}
+const signupCloud=()=>{
+ const a=au(),d=a.d;let n=1,body;
+ if(a.step==='pass'){n=2;body=passStep();}
+ else if(a.step==='farm'){n=3;body=farmStep();}
+ else body=`<form data-f="c-info" novalidate>${topErr()}
+  <div class="fld${fC('name')}"><label for="sname">আপনার নাম</label><input id="sname" type="text" autocomplete="name" value="${esc(d.name||'')}" ${fC('name')?'aria-invalid="true"':''}>${fE('name')}</div>
+  ${emailField('semail',d.email,'email')}
+  <div class="fld${fC('phone')}"><label for="sphone">মোবাইল নম্বর <span class="muted">(ঐচ্ছিক)</span></label><input id="sphone" class="phin" type="tel" inputmode="numeric" maxlength="14" placeholder="০১৭XXXXXXXX" autocomplete="tel" value="${esc(d.phone||'')}">${fE('phone')}</div>
+  <label class="chk${fC('terms')}"><input type="checkbox" id="sterms" ${d.terms?'checked':''}><span>আমি ব্যবহারের শর্ত ও গোপনীয়তা নীতিতে সম্মত।</span></label>${fE('terms')}
+  ${sendBtn('এগিয়ে যান')}</form>`;
+ const title=['অ্যাকাউন্ট খুলুন','পাসওয়ার্ড দিন','আপনার জমির তথ্য'][n-1];
+ const sub=['নাম ও ইমেইল দিয়ে শুরু করুন।','অ্যাকাউন্ট সুরক্ষিত রাখতে পাসওয়ার্ড দিন।','এই তথ্য দিয়ে সব হিসাব আপনার জন্য মিলিয়ে দেওয়া হবে।'][n-1];
+ return `<div class="auth-wrap">${authArt('নতুন অ্যাকাউন্ট')}
+ <section class="card">${prog(n,3)}<h1 style="font-size:1.5rem;margin-top:8px">${title}</h1><p class="muted" style="margin-top:4px">${sub}</p>${body}</section>
+ <p class="small muted" style="text-align:center">আগে থেকেই অ্যাকাউন্ট আছে? <a href="#login"><b>লগইন করুন</b></a></p></div>`;
+};
+const loginCloud=()=>{
+ const a=au(),d=a.d;
+ if(a.mode==='reset')return `<div class="auth-wrap">${authArt('পাসওয়ার্ড উদ্ধার')}
+  <section class="card"><h1 style="font-size:1.5rem">পাসওয়ার্ড ভুলে গেছেন?</h1><p class="muted" style="margin-top:4px">ইমেইলে একটি রিসেট লিংক পাঠানো হবে।</p>${topOk()}${topErr()}
+  <form data-f="c-reset" novalidate>${emailField('aemail',d.email,'email')}${sendBtn('রিসেট লিংক পাঠান')}</form></section>
+  <p class="small muted" style="text-align:center"><a href="#login" data-a="authCancel"><b>লগইনে ফিরে যান</b></a></p></div>`;
+ return `<div class="auth-wrap">${authArt('স্বাগতম')}
+ <section class="card"><h1 style="font-size:1.5rem">লগইন</h1><p class="muted" style="margin-top:4px">ইমেইল ও পাসওয়ার্ড দিয়ে প্রবেশ করুন।</p>
+ ${topOk()}${topErr()}
+ <form data-f="c-login" novalidate>${emailField('aemail',d.email,'email')}${pwField('apw','পাসওয়ার্ড','current-password','pw')}
+ <div style="margin-top:6px;text-align:right"><button type="button" class="linkbtn" data-a="forgot">পাসওয়ার্ড ভুলে গেছেন?</button></div>
+ ${sendBtn('লগইন')}</form></section>
+ <div class="divider">অথবা</div>
+ <button class="btn" data-a="demoLogin">ডেমো কৃষক হিসেবে প্রবেশ করুন</button>
+ <p class="small muted" style="text-align:center">নতুন? <a href="#signup"><b>অ্যাকাউন্ট খুলুন</b></a></p></div>`;
+};
+V.signup=()=>cloud()?signupCloud():signupLocal();
+V.login=()=>cloud()?loginCloud():loginLocal();
+const verifyStrip=()=>S.user&&S.user.cloud&&!S.user.verified?`<div class="alert-card mid"><span class="pill warn">ইমেইল</span><div><b>${esc(S.user.email)} যাচাই করুন</b><div class="small">আমরা যে লিংক পাঠিয়েছি সেটি চাপুন। <button class="linkbtn" data-a="resendVerify">আবার পাঠান</button></div></div></div>`:'';
+
+/* in cloud mode the same step forms are reused, only the submit targets differ */
+const cloudForm=AF;
+AF['c-info']=f=>{
+ const a=au(),d=a.d;d.name=$('#sname').value.trim();d.email=$('#semail').value.trim().toLowerCase();d.phone=cleanPh($('#sphone').value);d.terms=$('#sterms').checked;a.err='';a.errs={};
+ if(d.name.length<2)a.errs.name='আপনার নাম লিখুন।';
+ if(!validEmail(d.email))a.errs.email='সঠিক ইমেইল দিন, যেমন name@example.com।';
+ if(d.phone&&!validPhone(d.phone))a.errs.phone='সঠিক মোবাইল নম্বর দিন বা ঘরটি ফাঁকা রাখুন।';
+ if(!d.terms)a.errs.terms='এগিয়ে যেতে সম্মতি দিন।';
+ if(Object.keys(a.errs).length)return rerender();
+ a.step='pass';rerender();
+};
+const passSubmit=AF['pass'],farmSubmit=AF['farm'],loginSubmit=AF['login'];
+AF['pass']=f=>{
+ if(!cloud())return passSubmit(f);
+ const a=au(),pw=$('#apw').value,pw2=$('#apw2').value;a.err='';a.errs={};
+ if(pw.length<6)a.errs.pw='পাসওয়ার্ড কমপক্ষে ৬ অক্ষরের দিন।';else if(pw!==pw2)a.errs.pw2='দুটি পাসওয়ার্ড মেলেনি।';
+ if(Object.keys(a.errs).length)return rerender();
+ a.d.pwPlain=pw;a.step='farm';rerender();
+};
+AF['farm']=async f=>{
+ if(!cloud())return farmSubmit(f);
+ const a=au(),d=a.d,farm={district:$('#sdist').value,crop:$('#scrop').value,land:+$('#sland').value,soil:$('#ssoil').value};d.farm=farm;a.err='';a.errs={};
+ if(!(farm.land>=.1&&farm.land<=50)){a.errs.land='জমির পরিমাণ ০.১ থেকে ৫০ একরের মধ্যে দিন।';return rerender();}
+ busyA(f,true);S.cloudBusy=true;
+ try{
+  const cu=await AgriCloud.signUp(d.email,d.pwPlain,d.name);d.pwPlain='';
+  const u=await cloudUser(cu,farm,{name:d.name,mobile:d.phone});
+  try{await AgriCloud.saveProfile(u.uid,{name:u.name,email:u.email,phone:u.mobile,profile:u.profile});}catch(e){}
+  S.cloudBusy=false;loginUser(u);toast('অ্যাকাউন্ট তৈরি হয়েছে। ইমেইলে যাচাইয়ের লিংক পাঠানো হয়েছে।');
+ }catch(e){S.cloudBusy=false;a.err=cErr(e);if(e&&e.code==='auth/email-already-in-use'){a.step='phone';}rerender();}
+};
+AF['c-login']=async f=>{
+ const a=au(),d=a.d;d.email=$('#aemail').value.trim().toLowerCase();const pw=$('#apw').value;a.ok='';a.err='';a.errs={};
+ if(!validEmail(d.email))a.errs.email='সঠিক ইমেইল দিন।';
+ if(!pw)a.errs.pw='পাসওয়ার্ড লিখুন।';
+ if(Object.keys(a.errs).length)return rerender();
+ busyA(f,true);S.cloudBusy=true;
+ try{const cu=await AgriCloud.signIn(d.email,pw);const u=await cloudUser(cu);S.cloudBusy=false;loginUser(u);toast('স্বাগতম, '+u.name+'!');}
+ catch(e){S.cloudBusy=false;a.err=cErr(e);rerender();}
+};
+AF['c-reset']=async f=>{
+ const a=au(),d=a.d;d.email=$('#aemail').value.trim().toLowerCase();a.ok='';a.err='';a.errs={};
+ if(!validEmail(d.email)){a.errs.email='সঠিক ইমেইল দিন।';return rerender();}
+ busyA(f,true);
+ try{await AgriCloud.reset(d.email);a.ok='যদি এই ইমেইলে অ্যাকাউন্ট থাকে, রিসেট লিংক পাঠানো হয়েছে। ইনবক্স ও স্প্যাম ফোল্ডার দেখুন।';}
+ catch(e){a.err=cErr(e);}
+ rerender();
+};
+/* login form dispatch: the shared "login" handler name is used by the local form only */
+Object.assign(A,{
+ resendVerify:()=>{AgriCloud.resend().then(()=>toast('যাচাইয়ের ইমেইল আবার পাঠানো হয়েছে')).catch(e=>toast(cErr(e)));}
+});
+window.addEventListener('agri-cloud',()=>{if(S.route==='login'||S.route==='signup'){S.auth={step:'phone'};render();}});
+window.addEventListener('agri-auth',async ev=>{
+ const d=ev.detail;if(S.cloudBusy)return;
+ if(d){
+  if(S.user&&S.user.uid===d.uid)return;
+  const u=await cloudUser(d);if(S.cloudBusy||(S.user&&S.user.uid===d.uid))return;
+  applyUser(u);route();
+ }else if(S.user&&S.user.cloud){S.user=null;route();}
+});
+document.addEventListener('visibilitychange',()=>{
+ if(document.visibilityState==='visible'&&S.user&&S.user.cloud&&!S.user.verified&&window.AgriCloud){
+  AgriCloud.refresh().then(v=>{if(v&&S.user){S.user.verified=true;render();}}).catch(()=>{});}
+});

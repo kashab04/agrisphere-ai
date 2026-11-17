@@ -15,6 +15,7 @@ V.home=()=>{
  </section>
  <div class="greet3"><p class="greet2">আসসালামু আলাইকুম, <b>${esc(p.name)}</b></p><p class="greet-sub">আজ আপনার ${CROPS[p.crop].bn} ক্ষেতের জন্য কী দেখতে চান?</p></div>
  ${wxStrip()}
+ ${verifyStrip()}
  ${S.deals.length?`<div class="deal-strip"><b>সম্পন্ন ডিল ${bn(S.deals.length)}টি</b><span>মোট ${tk(dealSum)}</span><span class="pos"><b>মধ্যস্বত্বভোগীর তুলনায় বাড়তি ${tk(gain)}</b></span></div>`:''}
  <nav class="tiles" aria-label="সেবাসমূহ">
   ${tile('yieldmax','ফলন ও লাভ','ফসলের ফলন ও লাভ জানুন',timg('y'),'t-green')}
