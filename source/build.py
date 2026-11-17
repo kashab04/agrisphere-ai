@@ -78,5 +78,14 @@ rep(" if(c==='land'){S.prefill=null;render();}",
 img = json.dumps(json.loads(P('assets.json')), ensure_ascii=False)
 s = s.replace('__IMG__', img)
 s = s.replace('<title>AgriSphere AI</title>', '<title>AgriSphere AI</title>', 1)
-(root.parent / 'index.html').write_text(s)
+# standalone page for GitHub Pages: full document, charset, viewport and PWA tags
+head = ('<!doctype html>\n<html lang="bn"><head><meta charset="utf-8">'
+        '<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">'
+        '<meta name="theme-color" content="#1B7A3D">'
+        '<meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes">'
+        '<meta name="apple-mobile-web-app-title" content="AgriSphere">'
+        '<link rel="manifest" href="manifest.webmanifest">'
+        '<link rel="icon" href="icon-192.png"><link rel="apple-touch-icon" href="icon-192.png">')
+tail = ('\n<script>if("serviceWorker" in navigator&&location.protocol.startsWith("http")){addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));}</script>\n</body></html>\n')
+(root.parent / 'index.html').write_text(head + s + tail)
 print('built', len(s)//1024, 'KB')
