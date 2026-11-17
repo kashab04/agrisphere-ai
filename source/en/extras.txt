@@ -103,3 +103,4 @@ AI আপনার ছবি দেখছে, কয়েক সেকেন্
 ছবিতে যা দেখা যাচ্ছে=>What the photo shows
 ভবিষ্যতে করণীয়=>Prevention
 AI বিশ্লেষণ (Google Gemini)। এটি প্রাথমিক ধারণা। ওষুধ ব্যবহারের আগে লেবেল পড়ুন এবং উপজেলা কৃষি অফিসারের পরামর্শ নিন।=>AI analysis (Google Gemini). This is a first indication. Read the label before using any chemical and consult the Upazila Agriculture Officer.
+কারিগরি তথ্য:=>Technical details:
