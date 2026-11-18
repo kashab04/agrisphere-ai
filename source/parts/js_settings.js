@@ -213,3 +213,17 @@ function aiCard(g,p){
   <div class="row" style="margin-top:14px"><button class="btn" data-a="officer">কৃষি অফিসারকে ছবি পাঠান</button></div>
   <p class="tiny muted" style="margin-top:10px">AI বিশ্লেষণ (Google Gemini)। এটি প্রাথমিক ধারণা। ওষুধ ব্যবহারের আগে লেবেল পড়ুন এবং উপজেলা কৃষি অফিসারের পরামর্শ নিন।</p></section>`;
 }
+
+/* ---------- user-set price / cost on YieldMax ---------- */
+A.yoReset=()=>{delete S.yo[S.profile.crop];render();};
+document.addEventListener('change',e=>{
+ const c=e.target.dataset&&e.target.dataset.c;
+ if(c!=='yprice'&&c!=='ycost')return;
+ const v=+e.target.value,cr=S.profile.crop,o=S.yo[cr]=S.yo[cr]||{};
+ const key=c==='yprice'?'price':'cost';
+ if(v>0)o[key]=v;else delete o[key];
+ if(!o.price&&!o.cost)delete S.yo[cr];
+ render();
+});
+
+{const _r=A.reset;A.reset=function(){S.yo={};return _r.apply(this,arguments);};}

@@ -383,7 +383,7 @@ const VEH=[['পিকআপ',1000,28],['মিনি ট্রাক',3000,40],
 const S={
  route:'home',
  profile:{name:'রহিম মিয়া',district:'রংপুর',crop:'potato',land:2,soil:'loam'},
- yS:'normal',pS:'normal',
+ yS:'normal',pS:'normal',yo:{},
  mTab:'board',mCrop:'potato',selL:null,
  listings:[],deals:[],chats:{},prefill:null,seed:1,
  g:{key:'potato',photo:null,scanning:false},
@@ -420,8 +420,9 @@ const transportPerKg=km=>km*.009+.3;
 function yieldCalc(crop=S.profile.crop,o={}){
  const p=S.profile,c=CROPS[crop],ys=o.ys||S.yS,ps=o.ps||S.pS;
  const yieldKg=p.land*c.yield*c.suit[p.soil]*YF[ys];
- const price=localPrice(crop)*PF[ps];
- const revenue=yieldKg*price,cost=p.land*c.cost,profit=revenue-cost;
+ const ov=(S.yo&&S.yo[crop])||{};
+ const price=(ov.price||localPrice(crop))*PF[ps];
+ const revenue=yieldKg*price,cost=p.land*(ov.cost||c.cost),profit=revenue-cost;
  return {yieldKg,price,revenue,cost,profit,be:cost/yieldKg,roi:profit/cost};
 }
 function precCalc(){
@@ -542,7 +543,13 @@ V.yieldmax=()=>{
  <div class="card"><div class="row" style="gap:16px 28px">
    <div><div class="small muted" style="margin-bottom:4px">মৌসুম কেমন হবে?</div><div class="seg" role="group" aria-label="মৌসুম">${[['bad','খারাপ'],['normal','স্বাভাবিক'],['good','ভালো']].map(a=>`<button data-a="yS" data-v="${a[0]}" aria-pressed="${S.yS===a[0]}">${a[1]}</button>`).join('')}</div></div>
    <div><div class="small muted" style="margin-bottom:4px">বিক্রির দাম কেমন থাকবে?</div><div class="seg" role="group" aria-label="দাম">${[['low','কম'],['normal','স্বাভাবিক'],['high','বেশি']].map(a=>`<button data-a="pS" data-v="${a[0]}" aria-pressed="${S.pS===a[0]}">${a[1]}</button>`).join('')}</div></div>
- </div></div>
+ </div>
+ <div class="row" style="gap:12px 20px;margin-top:14px;align-items:flex-end">
+   <div style="flex:1;min-width:140px"><label class="lbl" for="yprice">আপনার ধরা দাম (৳/কেজি)</label><input type="number" id="yprice" data-c="yprice" min="1" step="1" inputmode="numeric" value="${Math.round((S.yo[p.crop]&&S.yo[p.crop].price)||localPrice(p.crop))}"></div>
+   <div style="flex:1;min-width:140px"><label class="lbl" for="ycost">একরপ্রতি খরচ (৳)</label><input type="number" id="ycost" data-c="ycost" min="1" step="100" inputmode="numeric" value="${Math.round((S.yo[p.crop]&&S.yo[p.crop].cost)||c.cost)}"></div>
+   ${S.yo&&S.yo[p.crop]?'<button class="btn sm" data-a="yoReset">বাজারদরে ফিরুন</button>':''}
+ </div>
+ <p class="small muted" style="margin:8px 0 0">নিজের এলাকার দাম বা খরচ লিখলে সব হিসাব সঙ্গে সঙ্গে বদলে যাবে।</p></div>
  <div class="stats">
   ${statT('প্রত্যাশিত ফলন',num(y.yieldKg)+' কেজি',c.bn)}
   ${statT('মোট খরচ',tk(y.cost),'বীজ, সার, শ্রম, সেচ')}

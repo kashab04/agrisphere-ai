@@ -118,3 +118,8 @@ AI বিশ্লেষণ (Google Gemini)। এটি প্রাথমি�
 অ্যাপ ভিডিও=>App video
 অ্যাপটি কীভাবে কাজ করে=>How the app works
 কৃষিসখার সব সেবা ২ মিনিটে দেখে নিন।=>See all Krishisakha services in 2 minutes.
+
+আপনার ধরা দাম (৳/কেজি)=>Your selling price (৳/kg)
+একরপ্রতি খরচ (৳)=>Cost per acre (৳)
+বাজারদরে ফিরুন=>Back to market rate
+নিজের এলাকার দাম বা খরচ লিখলে সব হিসাব সঙ্গে সঙ্গে বদলে যাবে।=>Enter your own local price or cost and every figure updates instantly.
