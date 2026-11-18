@@ -66,3 +66,5 @@ textarea{width:100%;min-height:120px;padding:10px 12px;border-radius:10px;border
 .rc-gain{background:var(--accent-soft);border-radius:10px;padding:8px 12px;font-size:.9rem}
 .rc-note{font-size:.78rem;color:var(--muted);text-align:center;margin-top:4px}
 @media print{body.printing>*:not(#modal){display:none!important}body.printing #modal{position:static;background:none;display:block}body.printing .sheet{max-height:none;box-shadow:none;max-width:none}body.printing .sheet .row,body.printing .sheet-h .btn{display:none}body.printing{background:#fff;color:#000}}
+
+.vidcard h2{margin:0 0 4px}.vidbox{display:block;width:100%;aspect-ratio:480/1000;max-height:70vh;border:0;border-radius:14px;background:#000;margin-top:10px;object-fit:contain}iframe.vidbox{aspect-ratio:16/9;max-height:none}

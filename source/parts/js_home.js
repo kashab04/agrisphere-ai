@@ -6,6 +6,8 @@ const timg=k=>`<img src="${IMG[k]}" alt="" loading="lazy">`;
 const tile=(r,t,s,img,cls,wide)=>`<a class="tile ${cls}${wide?' wide':''}" href="#${r}">${img}<span class="tt"><b>${t}</b><span>${s}</span></span>${ARROW}</a>`;
 
 const wxStrip=()=>{const a=climate().alerts[0];return a&&a.l==='high'?`<a class="alert-card high wxs" href="#climate"><span class="pill bad">জরুরি</span><div><b>${S.profile.district}: ${a.t}</b><div class="small">বিস্তারিত ও করণীয় দেখুন</div></div></a>`:'';};
+const VIDEO={yt:'',src:'demo.mp4',poster:'demo-poster.jpg'};
+const videoCard=()=>`<section class="card vidcard" aria-label="অ্যাপ ভিডিও"><h2>অ্যাপটি কীভাবে কাজ করে</h2><p class="small muted">কৃষিসখার সব সেবা ২ মিনিটে দেখে নিন।</p>${VIDEO.yt?`<div class="vidbox"><iframe src="https://www.youtube-nocookie.com/embed/${VIDEO.yt}" title="কৃষিসখা ভিডিও" allowfullscreen loading="lazy"></iframe></div>`:`<video class="vidbox" controls playsinline preload="none" poster="${VIDEO.poster}" src="${VIDEO.src}"></video>`}</section>`;
 V.home=()=>{
  const p=S.profile,dealSum=S.deals.reduce((s,d)=>s+d.total,0),gain=S.deals.reduce((s,d)=>s+d.gain,0);
  return `<div class="stack">
@@ -25,6 +27,7 @@ V.home=()=>{
   ${tile('market','বাজার ও বিক্রি','বাজারদর দেখুন, সরাসরি ক্রেতার কাছে ফসল বিক্রি করুন',MKT_SVG,'t-peach',true)}
   ${tile('budget','বাজেট','ফসলের খরচ ও আয় পরিকল্পনা করুন',timg('b'),'t-cream',true)}
  </nav>
+ ${videoCard()}
  <div class="row" style="justify-content:center"><button class="btn sm" data-a="open" data-v="settings">সেটিংস</button><button class="btn sm" data-a="open" data-v="help">সহায়তা ও মতামত</button></div>
  </div>`;
 };

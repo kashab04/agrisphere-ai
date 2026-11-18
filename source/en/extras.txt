@@ -114,3 +114,7 @@ AI বিশ্লেষণ (Google Gemini)। এটি প্রাথমি�
 মাহিগঞ্জ বাজার, রংপুর সদর, রংপুর=>Mahiganj Bazar, Rangpur Sadar, Rangpur
 অফিস: বনানী, ঢাকা=>Office: Banani, Dhaka
 চরপাড়া মোড়, ময়মনসিংহ সদর, ময়মনসিংহ=>Charpara Mor, Mymensingh Sadar, Mymensingh
+
+অ্যাপ ভিডিও=>App video
+অ্যাপটি কীভাবে কাজ করে=>How the app works
+কৃষিসখার সব সেবা ২ মিনিটে দেখে নিন।=>See all Krishisakha services in 2 minutes.
