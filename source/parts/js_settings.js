@@ -215,7 +215,8 @@ function aiCard(g,p){
 }
 
 /* ---------- user-set price / cost on YieldMax ---------- */
-A.yoReset=()=>{delete S.yo[S.profile.crop];render();};
+Object.defineProperty(S,'yo',{configurable:true,get(){return S.profile?(S.profile.yo||(S.profile.yo={})):{};},set(v){if(S.profile)S.profile.yo=v;}});
+A.yoReset=()=>{delete S.yo[S.profile.crop];persist();render();};
 document.addEventListener('change',e=>{
  const c=e.target.dataset&&e.target.dataset.c;
  if(c!=='yprice'&&c!=='ycost')return;
@@ -223,7 +224,7 @@ document.addEventListener('change',e=>{
  const key=c==='yprice'?'price':'cost';
  if(v>0)o[key]=v;else delete o[key];
  if(!o.price&&!o.cost)delete S.yo[cr];
- render();
+ persist();render();
 });
 
 {const _r=A.reset;A.reset=function(){S.yo={};return _r.apply(this,arguments);};}

@@ -1694,7 +1694,7 @@ V.settings=()=>{
   <div class="row"><button class="btn" data-a="profile">তথ্য বদলান</button><button class="btn" data-a="logout">লগ আউট</button></div></section>
  <section class="card"><h2>সাহায্য</h2><p class="lead">কোনো সমস্যা বা পরামর্শ থাকলে আমাদের জানান।</p><button class="btn" data-a="open" data-v="help">সহায়তা ও মতামত</button></section>
  <section class="card"><h2>ডিল ও চ্যাট</h2><p class="lead">ডিল, চ্যাট ও বাজেট মুছে নতুন করে শুরু করুন। আপনার অ্যাকাউন্ট ও জমির তথ্য মুছবে না।</p><button class="btn" data-a="reset">ডিল ও চ্যাট মুছুন</button></section>
- <section class="card flat"><h2>অ্যাপ সম্পর্কে</h2><p class="small muted">কৃষিসখা · সংস্করণ ১.০ · বিল্ড 1811 05:14 UTC</p></section></div>`;
+ <section class="card flat"><h2>অ্যাপ সম্পর্কে</h2><p class="small muted">কৃষিসখা · সংস্করণ ১.০ · বিল্ড 1811 05:19 UTC</p></section></div>`;
 };
 const FB_TYPES=[['problem','সমস্যা জানাতে চাই'],['idea','পরামর্শ দিতে চাই'],['question','প্রশ্ন আছে'],['thanks','ধন্যবাদ জানাতে চাই']];
 V.help=()=>{
@@ -1835,7 +1835,8 @@ function aiCard(g,p){
 }
 
 /* ---------- user-set price / cost on YieldMax ---------- */
-A.yoReset=()=>{delete S.yo[S.profile.crop];render();};
+Object.defineProperty(S,'yo',{configurable:true,get(){return S.profile?(S.profile.yo||(S.profile.yo={})):{};},set(v){if(S.profile)S.profile.yo=v;}});
+A.yoReset=()=>{delete S.yo[S.profile.crop];persist();render();};
 document.addEventListener('change',e=>{
  const c=e.target.dataset&&e.target.dataset.c;
  if(c!=='yprice'&&c!=='ycost')return;
@@ -1843,7 +1844,7 @@ document.addEventListener('change',e=>{
  const key=c==='yprice'?'price':'cost';
  if(v>0)o[key]=v;else delete o[key];
  if(!o.price&&!o.cost)delete S.yo[cr];
- render();
+ persist();render();
 });
 
 {const _r=A.reset;A.reset=function(){S.yo={};return _r.apply(this,arguments);};}
